@@ -1,0 +1,14 @@
+﻿.env
+.env.*
+!.env.example
+secrets/
+*.pem
+*.key
+node_modules/
+__pycache__/
+.DS_Store
+Thumbs.db
+
+# AI reference files - do not upload
+"Home Cook Manager.xlsx"
+excel_dump.json
