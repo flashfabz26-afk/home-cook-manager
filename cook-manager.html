@@ -2119,6 +2119,89 @@ input, select, textarea, button {
   </div>
 </div>
 
+<!-- Cook Log Taken Grocery Modal (घर ले जाने का सामान दर्ज करें) -->
+<div class="modal-overlay" id="takenGroceryModal" onclick="closeTakenGroceryModal(event)">
+  <div class="modal-card" onclick="event.stopPropagation()" style="max-width:500px;">
+    <div class="modal-drag-bar"></div>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+      <h3 style="font-size:17px; font-weight:800; color:var(--ink); display:flex; align-items:center; gap:6px;">
+        <span>📦</span> <span id="takenModalTitle">घर ले जाने का सामान दर्ज करें</span>
+      </h3>
+      <button class="btn-icon" onclick="closeTakenGroceryModal()" style="width:28px; height:28px;">✕</button>
+    </div>
+    
+    <p style="font-size:12px; color:var(--ink-sec); margin-bottom:14px; line-height:1.4;">
+      यदि आप कोई सब्ज़ी, राशन या बचा हुआ खाना घर ले जा रहे हैं, तो कृपया यहाँ चुनें या नाम लिखें।
+    </p>
+
+    <!-- Item selection tabs or search -->
+    <div style="margin-bottom:10px;">
+      <label style="font-size:12px; font-weight:700; color:var(--ink); display:block; margin-bottom:6px;">
+        1. सामान चुनें या नाम लिखें (Select or Enter Item):
+      </label>
+      <input type="text" id="takenItemCustom" class="app-input" style="width:100%;" placeholder="उदा. आलू, बची हुई दाल, रोटी, दूध..." oninput="onTakenCustomItemInput()">
+    </div>
+
+    <!-- Quick visual items grid -->
+    <div style="font-size:11px; font-weight:700; color:var(--ink-mute); margin-bottom:6px;">
+      त्वरित चयन (Quick Popular Items):
+    </div>
+    <div class="taken-quick-grid" id="takenQuickGrid" style="display:flex; gap:8px; overflow-x:auto; padding-bottom:8px; margin-bottom:12px; -webkit-overflow-scrolling:touch; overscroll-behavior-x:contain;">
+      <!-- Populated dynamically via JS -->
+    </div>
+
+    <!-- Selected Item Preview -->
+    <div id="takenSelectedPreview" style="display:flex; align-items:center; gap:10px; background:var(--surface-alt); padding:10px 12px; border-radius:var(--radius-md); margin-bottom:14px; border:1.5px solid var(--border);">
+      <img id="takenItemImg" src="assets/grocery/peas.jpg" style="width:42px; height:42px; border-radius:var(--radius-sm); object-fit:cover;">
+      <div style="flex:1;">
+        <div id="takenItemNameHi" style="font-weight:800; font-size:15px; color:var(--ink);">आलू</div>
+        <div id="takenItemNameEn" style="font-size:12px; color:var(--ink-sec);">Potato</div>
+      </div>
+      <span class="task-tag" style="background:#f3e5f5; color:#7b1fa2; font-weight:700;">चयनित (Selected)</span>
+    </div>
+
+    <!-- Quantity Stepper -->
+    <div style="text-align:center; font-weight:700; font-size:13px; color:var(--ink-sec); margin-top:4px;">
+      2. कितनी मात्रा ले जा रहे हैं? (Quantity):
+    </div>
+    <div class="qty-stepper">
+      <button class="step-btn" onclick="adjustTakenQty(-1)">-</button>
+      <div class="qty-display" id="takenQtyVal" style="color:#7b1fa2;">1 kg</div>
+      <button class="step-btn" onclick="adjustTakenQty(1)">+</button>
+    </div>
+
+    <!-- Quantity Preset Chips -->
+    <div class="qty-presets" id="takenPresetChips">
+      <button class="qty-chip" onclick="setTakenPresetQty('250 g')">250 g</button>
+      <button class="qty-chip" onclick="setTakenPresetQty('500 g')">500 g</button>
+      <button class="qty-chip selected" onclick="setTakenPresetQty('1 kg')">1 kg</button>
+      <button class="qty-chip" onclick="setTakenPresetQty('2 kg')">2 kg</button>
+      <button class="qty-chip" onclick="setTakenPresetQty('1 Packet')">1 Packet</button>
+      <button class="qty-chip" onclick="setTakenPresetQty('1 कटोरी (Bowl)')">1 Bowl</button>
+      <button class="qty-chip" onclick="setTakenPresetQty('1 डिब्बा (Box)')">1 Box</button>
+    </div>
+
+    <!-- Optional Reason / Note -->
+    <div style="margin-bottom:16px;">
+      <label style="font-size:12px; font-weight:700; color:var(--ink); display:block; margin-bottom:6px;">
+        3. कोई टिप्पणी / कारण (Optional Note):
+      </label>
+      <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:8px;">
+        <button class="qty-chip" style="font-size:11px; padding:4px 10px;" onclick="setTakenNoteReason('बचा हुआ खाना (Leftover)')">बचा हुआ खाना</button>
+        <button class="qty-chip" style="font-size:11px; padding:4px 10px;" onclick="setTakenNoteReason('किशन भाई से पूछा (Permitted)')">किशन भाई से पूछा</button>
+        <button class="qty-chip" style="font-size:11px; padding:4px 10px;" onclick="setTakenNoteReason('घर की ज़रूरत (For home)')">घर की ज़रूरत</button>
+      </div>
+      <input type="text" id="takenItemNote" class="app-input" style="width:100%;" placeholder="उदा. रात का बचा हुआ खाना या घर के लिए...">
+    </div>
+
+    <!-- Submit Button -->
+    <button class="modal-btn-confirm" style="background:linear-gradient(135deg, #7b1fa2 0%, #ab47bc 100%); box-shadow:0 4px 14px rgba(123, 31, 162, 0.35);" onclick="submitTakenGrocery()">
+      <span>✅</span>
+      <span>सामान दर्ज करें (Confirm & Save Entry)</span>
+    </button>
+  </div>
+</div>
+
 
 <!-- Admin Edit Meal Modal -->
 <div class="modal-overlay" id="mealEditModal" onclick="closeMealEditModal(event)">
@@ -2393,6 +2476,7 @@ const AppState = {
   groceryRequests: JSON.parse(localStorage.getItem('rc_grocery_requests') || '[]'),
   cookedStatus: JSON.parse(localStorage.getItem('rc_cooked_status') || '{}'),
   workProofs: JSON.parse(localStorage.getItem('rc_work_proofs') || '[]'),
+  takenGroceries: JSON.parse(localStorage.getItem('rc_taken_groceries') || '[]'),
   
   // Active modal item
   activeModalItem: null,
@@ -2420,6 +2504,7 @@ function saveState(broadcast = true) {
   localStorage.setItem('rc_work_logs', JSON.stringify(AppState.workLogs));
   localStorage.setItem('rc_grocery_requests', JSON.stringify(AppState.groceryRequests));
   localStorage.setItem('rc_cooked_status', JSON.stringify(AppState.cookedStatus));
+  localStorage.setItem('rc_taken_groceries', JSON.stringify(AppState.takenGroceries || []));
   try {
     localStorage.setItem('rc_work_proofs', JSON.stringify(AppState.workProofs || []));
   } catch (e) {
@@ -2444,6 +2529,7 @@ if (syncChannel) {
       AppState.groceryRequests = JSON.parse(localStorage.getItem('rc_grocery_requests') || '[]');
       AppState.cookedStatus = JSON.parse(localStorage.getItem('rc_cooked_status') || '{}');
       AppState.workProofs = JSON.parse(localStorage.getItem('rc_work_proofs') || '[]');
+      AppState.takenGroceries = JSON.parse(localStorage.getItem('rc_taken_groceries') || '[]');
       AppState.menu = JSON.parse(localStorage.getItem('rc_menu') || 'null') || DEFAULT_MENU;
       renderApp();
     }
@@ -3436,6 +3522,351 @@ function copyGroceryList() {
 }
 
 /* ==========================================================================
+   COOK GROCERIES TAKEN HOME (कुक द्वारा घर ले जाया गया सामान)
+   ========================================================================== */
+
+window.currentTakenItem = null;
+window.currentTakenQty = '1 kg';
+
+const POPULAR_TAKEN_ITEMS = [
+  { id: 'v_potato', en: 'Potato', hi: 'आलू', defaultQty: '1 kg', img: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=400', fallback: '🥔' },
+  { id: 'v_onion', en: 'Onion', hi: 'प्याज़', defaultQty: '1 kg', img: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=400', fallback: '🧅' },
+  { id: 'v_tomato', en: 'Tomato', hi: 'टमाटर', defaultQty: '500 g', img: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=400', fallback: '🍅' },
+  { id: 'p_milk', en: 'Milk', hi: 'दूध', defaultQty: '1 Packet', img: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=400', fallback: '🥛' },
+  { id: 'p_curd', en: 'Curd / Dahi', hi: 'दही', defaultQty: '1 Packet', img: 'assets/grocery/curd.jpg', fallback: '🥣' },
+  { id: 's_oil', en: 'Cooking Oil', hi: 'तेल', defaultQty: '500 ml', img: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=400', fallback: '🛢️' },
+  { id: 's_rice', en: 'Rice', hi: 'चावल', defaultQty: '1 kg', img: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400', fallback: '🍚' },
+  { id: 's_atta', en: 'Atta / Flour', hi: 'आटा', defaultQty: '1 kg', img: 'https://images.unsplash.com/photo-1627485937980-221c88ac04f9?w=400', fallback: '🌾' },
+  { id: 'leftover_curry', en: 'Cooked Sabzi/Dal', hi: 'बची हुई सब्ज़ी/दाल', defaultQty: '1 डिब्बा (Box)', img: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400', fallback: '🍲' },
+  { id: 'leftover_roti', en: 'Roti / Chapatis', hi: 'रोटी', defaultQty: '4 pcs', img: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400', fallback: '🫓' },
+  { id: 'other_custom', en: 'Other Item', hi: 'अन्य सामान', defaultQty: '1 kg', img: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=400', fallback: '📦' }
+];
+
+function openTakenGroceryModal(presetItemId) {
+  const modal = document.getElementById('takenGroceryModal');
+  if (!modal) return;
+  
+  const customInput = document.getElementById('takenItemCustom');
+  if (customInput) customInput.value = '';
+  const noteInput = document.getElementById('takenItemNote');
+  if (noteInput) noteInput.value = '';
+  
+  const found = POPULAR_TAKEN_ITEMS.find(x => x.id === presetItemId) || 
+                VISUAL_GROCERY_CATALOG.find(x => x.id === presetItemId) || 
+                POPULAR_TAKEN_ITEMS[0];
+  
+  selectTakenQuickItem(found.id, found.hi, found.en, found.img, found.defaultQty || '1 kg');
+  renderTakenQuickGrid(found.id);
+  modal.classList.add('open');
+}
+
+function closeTakenGroceryModal(e) {
+  if (e && e.target && e.target !== document.getElementById('takenGroceryModal')) return;
+  const modal = document.getElementById('takenGroceryModal');
+  if (modal) modal.classList.remove('open');
+}
+
+function renderTakenQuickGrid(selectedId) {
+  const grid = document.getElementById('takenQuickGrid');
+  if (!grid) return;
+  
+  grid.innerHTML = POPULAR_TAKEN_ITEMS.map(item => {
+    const isSel = item.id === selectedId;
+    return `
+      <button type="button" class="cat-btn ${isSel ? 'active' : ''}" style="${isSel ? 'background:#7b1fa2;border-color:#7b1fa2;color:#fff;' : ''}" onclick="selectTakenQuickItem('${item.id}', '${esc(item.hi)}', '${esc(item.en)}', '${esc(item.img)}', '${esc(item.defaultQty)}')">
+        <span>${item.fallback || '📦'}</span>
+        <span>${AppState.lang === 'hi' ? item.hi : item.en}</span>
+      </button>
+    `;
+  }).join('');
+}
+
+function selectTakenQuickItem(id, hi, en, img, defaultQty) {
+  window.currentTakenItem = { id, hi, en, img };
+  window.currentTakenQty = defaultQty || '1 kg';
+  
+  const customInput = document.getElementById('takenItemCustom');
+  if (customInput) customInput.value = '';
+  
+  updateTakenModalPreview();
+  renderTakenQuickGrid(id);
+}
+
+function onTakenCustomItemInput() {
+  const customText = (document.getElementById('takenItemCustom')?.value || '').trim();
+  if (customText) {
+    window.currentTakenItem = {
+      id: 'custom',
+      hi: customText,
+      en: customText,
+      img: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400'
+    };
+    renderTakenQuickGrid(null);
+  } else {
+    window.currentTakenItem = POPULAR_TAKEN_ITEMS[0];
+    renderTakenQuickGrid(POPULAR_TAKEN_ITEMS[0].id);
+  }
+  updateTakenModalPreview();
+}
+
+function updateTakenModalPreview() {
+  const item = window.currentTakenItem || POPULAR_TAKEN_ITEMS[0];
+  const nameHi = document.getElementById('takenItemNameHi');
+  const nameEn = document.getElementById('takenItemNameEn');
+  const img = document.getElementById('takenItemImg');
+  const qtyVal = document.getElementById('takenQtyVal');
+  
+  if (nameHi) nameHi.textContent = item.hi;
+  if (nameEn) nameEn.textContent = item.en;
+  if (img) img.src = item.img || 'assets/grocery/potato.jpg';
+  if (qtyVal) qtyVal.textContent = window.currentTakenQty;
+  
+  const chips = document.querySelectorAll('#takenPresetChips .qty-chip');
+  chips.forEach(c => {
+    c.classList.toggle('selected', c.textContent.trim().toLowerCase() === window.currentTakenQty.toLowerCase());
+  });
+}
+
+function adjustTakenQty(delta) {
+  const cur = window.currentTakenQty || '1 kg';
+  const match = cur.match(/^(\d+(\.\d+)?)\s*(kg|g|Litre|Packet|Bunch|Dozen|pc|pcs|कटोरी|डिब्बा)?$/i);
+  if (match) {
+    let num = parseFloat(match[1]);
+    const unit = match[3] || 'kg';
+    const step = (unit.toLowerCase() === 'g') ? 250 : 0.5;
+    num = Math.max(step, num + (delta * step));
+    window.currentTakenQty = `${num} ${unit}`;
+  } else {
+    window.currentTakenQty = delta > 0 ? '2 kg' : '500 g';
+  }
+  updateTakenModalPreview();
+}
+
+function setTakenPresetQty(qtyStr) {
+  window.currentTakenQty = qtyStr;
+  updateTakenModalPreview();
+}
+
+function setTakenNoteReason(reasonText) {
+  const noteInput = document.getElementById('takenItemNote');
+  if (noteInput) {
+    noteInput.value = reasonText;
+  }
+}
+
+function submitTakenGrocery() {
+  const customText = (document.getElementById('takenItemCustom')?.value || '').trim();
+  const noteText = (document.getElementById('takenItemNote')?.value || '').trim();
+  const item = window.currentTakenItem || POPULAR_TAKEN_ITEMS[0];
+  
+  const offset = AppState.viewDateOffset || 0;
+  const dateStr = getDateStrWithOffset(offset);
+  const now = new Date();
+  
+  const entry = {
+    id: 'tg_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+    date: dateStr,
+    time: formatTime(now),
+    timestamp: now.toISOString(),
+    shift: AppState.selectedShift,
+    itemId: customText ? 'custom' : (item.id || 'custom'),
+    itemHi: customText || item.hi || 'अन्य सामान',
+    itemEn: customText || item.en || 'Custom Item',
+    qty: window.currentTakenQty || '1 kg',
+    img: customText ? 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400' : (item.img || 'assets/grocery/potato.jpg'),
+    note: noteText,
+    by: AppState.role === 'admin' ? 'Kishan / Joju' : 'Sobendra (Cook)',
+    status: 'Reported',
+    createdAt: now.toISOString()
+  };
+  
+  if (!Array.isArray(AppState.takenGroceries)) {
+    AppState.takenGroceries = [];
+  }
+  AppState.takenGroceries.unshift(entry);
+  
+  // Activity log entry
+  const logKey = 'tg_' + entry.id;
+  AppState.workLogs[logKey] = {
+    taskId: 'taken_groceries',
+    nameHi: `घर सामान ले गए: ${entry.itemHi} (${entry.qty})`,
+    nameEn: `Took Groceries Home: ${entry.itemEn} (${entry.qty})`,
+    completedAt: entry.time,
+    date: dateStr,
+    visit: entry.shift,
+    by: entry.by
+  };
+  
+  saveState();
+  closeTakenGroceryModal();
+  playChime(true);
+  showToast(AppState.lang === 'hi' ? `📦 दर्ज हुआ: ${entry.itemHi} (${entry.qty})` : `📦 Logged: ${entry.itemEn} (${entry.qty})`);
+  renderApp();
+}
+
+function toggleTakenGroceryAck(id) {
+  if (AppState.role !== 'admin') {
+    openAdminPinModal();
+    return;
+  }
+  const item = (AppState.takenGroceries || []).find(x => x.id === id);
+  if (item) {
+    item.status = item.status === 'Acknowledged' ? 'Reported' : 'Acknowledged';
+    item.acknowledgedAt = item.status === 'Acknowledged' ? new Date().toISOString() : null;
+    item.acknowledgedBy = 'Admin';
+    saveState();
+    renderApp();
+    showToast(item.status === 'Acknowledged' ? '✓ Entry Acknowledged' : 'Marked pending review');
+  }
+}
+
+function deleteTakenGrocery(id) {
+  const item = (AppState.takenGroceries || []).find(x => x.id === id);
+  if (!item) return;
+  
+  const isHi = AppState.lang === 'hi';
+  if (!confirm(isHi ? `क्या आप इस प्रविष्टि (${item.itemHi} - ${item.qty}) को हटाना चाहते हैं?` : `Remove this entry (${item.itemEn} - ${item.qty})?`)) {
+    return;
+  }
+  
+  AppState.takenGroceries = (AppState.takenGroceries || []).filter(x => x.id !== id);
+  delete AppState.workLogs['tg_' + id];
+  saveState();
+  renderApp();
+  showToast(isHi ? 'प्रविष्टि हटा दी गई' : 'Entry removed');
+}
+
+function renderTakenGroceriesSection(dateStr, isHi) {
+  const itemsToday = (AppState.takenGroceries || []).filter(item => item.date === dateStr);
+  const isAdmin = AppState.role === 'admin';
+  
+  let html = `
+  <div class="req-section" style="border-left: 4px solid #8e24aa; margin-bottom: 24px;">
+    <div class="req-header" style="flex-wrap: wrap; gap: 8px;">
+      <div>
+        <h3 style="font-size:16px; font-weight:800; display:flex; align-items:center; gap:6px; color:var(--ink);">
+          <span>📦</span> <span>${isHi ? 'घर ले जाया गया सामान' : 'Groceries Taken Home'}</span>
+          <span class="task-tag" style="background:#f3e5f5; color:#7b1fa2; font-weight:700;">${itemsToday.length}</span>
+        </h3>
+        <p style="font-size:12px; color:var(--ink-sec); margin-top:2px;">
+          ${isHi ? 'कुक द्वारा घर ले जाए गए राशन, सब्ज़ी या खाने का विवरण' : 'Groceries or leftovers taken home by the cook'}
+        </p>
+      </div>
+      <button class="btn-secondary" style="border-color:#ba68c8; color:#7b1fa2; font-weight:700; font-size:12px; padding:6px 12px;" onclick="openTakenGroceryModal()">
+        ➕ ${isHi ? 'सामान दर्ज करें' : 'Log Taken Item'}
+      </button>
+    </div>
+  `;
+
+  if (itemsToday.length === 0) {
+    html += `
+      <div style="text-align:center; padding:16px; background:var(--surface-alt); border-radius:var(--radius-md); font-size:13px; color:var(--ink-mute);">
+        🧺 ${isHi ? 'आज कोई सामान घर नहीं ले जाया गया है।' : 'No groceries logged as taken home today.'}
+      </div>
+    `;
+  } else {
+    html += `<div class="req-list">`;
+    itemsToday.forEach(item => {
+      const isAck = item.status === 'Acknowledged';
+      html += `
+        <div class="req-item" style="border-left: 3px solid ${isAck ? 'var(--ok)' : '#ab47bc'};">
+          <div class="req-left">
+            <img class="req-thumb" src="${item.img || 'assets/grocery/potato.jpg'}" alt="${item.itemEn}" onerror="this.src='https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=100'">
+            <div class="req-names">
+              ${isHi ? item.itemHi : item.itemEn}
+              <span>${isHi ? item.itemEn : item.itemHi} • 🕒 ${item.time || ''} (${item.shift === 'Morning' ? (isHi ? 'सुबह' : 'Morning') : (isHi ? 'शाम' : 'Evening')})</span>
+              ${item.note ? `<div style="font-size:11px; color:#6a1b9a; font-style:italic; margin-top:2px;">💬 ${esc(item.note)}</div>` : ''}
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <span class="req-qty" style="color:#7b1fa2; border-color:#e1bee7; background:#f3e5f5;">${item.qty}</span>
+            ${isAdmin ? `
+              <button class="btn-secondary" style="padding:4px 8px; font-size:11px; ${isAck ? 'background:var(--ok-light);color:var(--ok);border-color:var(--ok);' : 'color:#7b1fa2;'}" onclick="toggleTakenGroceryAck('${item.id}')">
+                ${isAck ? '✓ Acknowledged' : '✓ Acknowledge'}
+              </button>
+              <button class="btn-icon" style="width:28px; height:28px; font-size:11px; color:#d32f2f;" onclick="deleteTakenGrocery('${item.id}')" title="Delete">✕</button>
+            ` : `
+              <span class="req-status-tag" style="background:${isAck ? 'var(--ok-light)' : '#f3e5f5'}; color:${isAck ? 'var(--ok)' : '#7b1fa2'};">
+                ${isAck ? (isHi ? '✓ स्वीकृत' : '✓ Verified') : (isHi ? '📝 दर्ज है' : 'Reported')}
+              </span>
+              <button class="btn-icon" style="width:26px; height:26px; font-size:11px; color:var(--ink-mute);" onclick="deleteTakenGrocery('${item.id}')" title="${isHi ? 'हटाएं' : 'Remove'}">✕</button>
+            `}
+          </div>
+        </div>
+      `;
+    });
+    html += `</div>`;
+  }
+
+  html += `</div>`;
+  return html;
+}
+
+function renderAdminTakenGroceriesList(isHi) {
+  const allItems = AppState.takenGroceries || [];
+  if (allItems.length === 0) {
+    return `
+      <div style="text-align:center; padding:20px; background:var(--surface-alt); border-radius:var(--radius-md); font-size:13px; color:var(--ink-sec);">
+        🧺 ${isHi ? 'कुक द्वारा अभी तक कोई सामान घर ले जाने का रिकॉर्ड नहीं है।' : 'No records of groceries taken home by the cook yet.'}
+      </div>
+    `;
+  }
+  
+  let html = `
+    <div class="table-wrap">
+      <table class="sched-table">
+        <thead>
+          <tr>
+            <th>${isHi ? 'तारीख व समय' : 'Date & Time'}</th>
+            <th>${isHi ? 'सामान' : 'Item'}</th>
+            <th>${isHi ? 'मात्रा' : 'Qty'}</th>
+            <th>${isHi ? 'कारण / नोट' : 'Note / Reason'}</th>
+            <th>${isHi ? 'स्थिति व समीक्षा' : 'Status & Review'}</th>
+          </tr>
+        </thead>
+        <tbody>
+  `;
+  
+  allItems.slice(0, 30).forEach(item => {
+    const isAck = item.status === 'Acknowledged';
+    html += `
+      <tr>
+        <td>
+          <b>${item.date}</b><br>
+          <span style="font-size:11px; color:var(--ink-mute);">${item.time || ''} • ${item.shift}</span>
+        </td>
+        <td>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <img src="${item.img || 'assets/grocery/potato.jpg'}" style="width:32px; height:32px; border-radius:6px; object-fit:cover;" onerror="this.src='https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=100'">
+            <div>
+              <b>${item.itemHi}</b><br>
+              <span style="font-size:11px; color:var(--ink-sec);">${item.itemEn}</span>
+            </div>
+          </div>
+        </td>
+        <td><b style="color:#7b1fa2;">${item.qty}</b></td>
+        <td><span style="font-size:12px; color:var(--ink-sec);">${item.note ? esc(item.note) : '—'}</span></td>
+        <td>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <button class="btn-secondary" style="padding:4px 8px; font-size:11px; ${isAck ? 'background:var(--ok-light);color:var(--ok);border-color:var(--ok);' : 'background:#f3e5f5;color:#7b1fa2;border-color:#ce93d8;'}" onclick="toggleTakenGroceryAck('${item.id}')">
+              ${isAck ? '✓ Acknowledged' : '⏳ Acknowledge'}
+            </button>
+            <button class="btn-icon" style="width:26px; height:26px; font-size:11px; color:#d32f2f;" onclick="deleteTakenGrocery('${item.id}')" title="Delete">✕</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  });
+  
+  html += `
+        </tbody>
+      </table>
+    </div>
+  `;
+  return html;
+}
+
+/* ==========================================================================
    RENDER VIEWS: TODAY, GROCERY, MENU, ADMIN
    ========================================================================== */
 
@@ -3757,6 +4188,9 @@ function renderTodayView() {
     `;
   }
   
+  // Cook Taken Groceries Log Section (सामान घर ले जाना)
+  html += renderTakenGroceriesSection(dateStr, isHi);
+  
   return html;
 }
 
@@ -3775,6 +4209,24 @@ function renderGroceryView() {
   <p style="font-size:13px; color:var(--ink-sec); margin-bottom:14px;">
     ${isHi ? 'जिस भी सब्ज़ी या राशन की ज़रूरत हो, उस पर टैप करें और मात्रा चुनकर अनुरोध भेजें।' : 'Tap any vegetable or grocery item to select quantity and request directly.'}
   </p>
+  
+  <!-- Cook Taken Groceries Banner -->
+  <div style="display:flex; justify-content:space-between; align-items:center; background:linear-gradient(135deg, #f3e5f5 0%, #ede7f6 100%); border:1px solid #ce93d8; border-radius:var(--radius-md); padding:12px 14px; margin-bottom:16px; flex-wrap:wrap; gap:8px;">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <span style="font-size:24px;">📦</span>
+      <div>
+        <div style="font-size:14px; font-weight:700; color:#4a148c;">
+          ${isHi ? 'घर ले जाने के लिए राशन/सब्ज़ी दर्ज करें' : 'Taking groceries or food home?'}
+        </div>
+        <div style="font-size:11px; color:#6a1b9a;">
+          ${isHi ? 'जो भी सामान घर ले जा रहे हैं, यहाँ पारदर्शी रूप से दर्ज करें' : 'Mention items you are taking home for transparent records'}
+        </div>
+      </div>
+    </div>
+    <button class="btn-secondary" style="background:#fff; border-color:#ba68c8; color:#7b1fa2; font-weight:700; font-size:12px; padding:6px 14px;" onclick="openTakenGroceryModal()">
+      ➕ ${isHi ? 'सामान दर्ज करें' : 'Log Taken Item'}
+    </button>
+  </div>
   `;
   
   // ADMIN ACTION BAR (WhatsApp Share, Copy)
@@ -4222,6 +4674,25 @@ function renderAdminHubView() {
     </div>
   </div>
   
+  <!-- Groceries Taken Home by Cook (Admin Audit Log) -->
+  <div class="day-plan-card" style="border-left: 4px solid #8e24aa;">
+    <div class="day-plan-hdr">
+      <div>
+        <b style="font-size:16px; color:#4a148c; display:flex; align-items:center; gap:6px;">
+          <span>📦</span> <span>${isHi ? 'कुक द्वारा घर ले जाया गया सामान (ऑडिट)' : 'Groceries Taken Home by Cook (Audit Log)'}</span>
+        </b>
+        <div style="font-size:12px; color:var(--ink-sec); margin-top:2px;">
+          ${(AppState.takenGroceries || []).length} ${isHi ? 'कुल प्रविष्टियां' : 'total items logged'} • 
+          <span style="color:#e65100; font-weight:700;">${(AppState.takenGroceries || []).filter(x => x.status !== 'Acknowledged').length} ${isHi ? 'समीक्षा लंबित' : 'pending acknowledgment'}</span>
+        </div>
+      </div>
+      <button class="btn-secondary" style="border-color:#ba68c8; color:#7b1fa2; font-weight:700; font-size:12px;" onclick="openTakenGroceryModal()">
+        ➕ ${isHi ? 'नया दर्ज करें' : 'Log Entry'}
+      </button>
+    </div>
+    ${renderAdminTakenGroceriesList(isHi)}
+  </div>
+
   <!-- Activity History Log -->
   <div class="day-plan-card">
     <div class="day-plan-hdr">
@@ -4236,7 +4707,7 @@ function renderAdminHubView() {
       <b>🔐 ${isHi ? 'एडमिन सुरक्षा एवं पासकोड सेटिंग्स' : 'Admin Security & Device Passcode'}</b>
       <span class="task-tag" style="background:var(--ok-light); color:var(--ok); font-weight:700;">Protected</span>
     </div>
-    <p style="font-size:13px; color:var(--ink-sec); margin:8px 0 14px;">
+    <p style="font-size:13px; color:var(--ink-sec); margin: 8px 0 14px;">
       ${isHi 
         ? 'कुक को एडमिन डैशबोर्ड (सैलरी, अटेंडेंस और सेटिंग्स) देखने से रोकने के लिए यह 4-अंकों के पिन से सुरक्षित है।' 
         : 'The Admin Operations Hub is protected with a 4-digit PIN so the cook cannot view salary, attendance logs, or private controls.'}
@@ -4296,6 +4767,17 @@ function renderActivityLogs() {
       title: `📸 Photo Uploaded: ${p.category} (${p.visit})`,
       time: p.timestamp,
       date: p.date
+    });
+  });
+
+  // Taken Groceries
+  (AppState.takenGroceries || []).forEach(tg => {
+    const timeMs = tg.timestamp ? new Date(tg.timestamp).getTime() : Date.now();
+    items.push({
+      type: 'taken',
+      title: `📦 Took Home: ${tg.qty} of ${isHi ? tg.itemHi : tg.itemEn} (${tg.shift})`,
+      time: timeMs,
+      date: tg.date
     });
   });
   
