@@ -4,6 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
 <title>Rasoi Mitra - Home Cook & Kitchen Manager</title>
+<meta name="theme-color" content="#d35400">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Rasoi Mitra">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="assets/icon.svg">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -171,6 +179,73 @@ body {
   background: var(--pri);
   color: #fff;
   box-shadow: 0 2px 8px rgba(211, 84, 0, 0.35);
+}
+
+.exit-admin-btn {
+  background: #fbe9e7 !important;
+  color: #d84315 !important;
+  border: 1px solid #ffccbc !important;
+  font-weight: 700 !important;
+}
+.exit-admin-btn:hover {
+  background: #ffccbc !important;
+}
+
+.admin-lock-btn {
+  color: var(--ink-sec);
+  font-size: 13px;
+  font-weight: 600;
+}
+.admin-lock-btn:hover {
+  color: var(--pri);
+}
+
+/* PIN Modal Styling */
+.pin-modal-card {
+  max-width: 380px !important;
+  margin: auto;
+  border-radius: var(--radius-lg);
+  padding: 24px 20px !important;
+}
+.pin-input-wrap {
+  margin: 18px 0 10px;
+  display: flex;
+  justify-content: center;
+}
+.pin-input-wrap input {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 10px;
+  text-align: center;
+  width: 190px;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--border);
+  background: var(--surface-alt);
+  color: var(--ink);
+  outline: none;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+.pin-input-wrap input:focus {
+  border-color: var(--pri);
+  background: var(--surface);
+  box-shadow: 0 0 0 3px rgba(211, 84, 0, 0.18);
+}
+.pin-error-msg {
+  color: #d32f2f;
+  background: #ffebee;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 700;
+  margin-top: 8px;
+  animation: shake 0.35s;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
 }
 
 .btn-icon {
@@ -1773,14 +1848,14 @@ body {
       <button class="subtab-btn" id="dtab-today" onclick="setTab('today')">📅 <span data-t="today">Today</span></button>
       <button class="subtab-btn" id="dtab-grocery" onclick="setTab('grocery')">🛒 <span data-t="grocery">Grocery</span> <span id="deskGrocBadge" class="nav-badge" style="position:static;display:none">0</span></button>
       <button class="subtab-btn" id="dtab-menu" onclick="setTab('menu')">📋 <span data-t="menu">Menu</span></button>
-      <button class="subtab-btn" id="dtab-admin" onclick="setTab('admin')">👑 <span data-t="admin">Admin</span></button>
+      <button class="subtab-btn" id="dtab-admin" onclick="setTab('admin')" style="display:none">👑 <span data-t="admin">Admin</span></button>
     </div>
 
     <div class="header-actions">
       <!-- Role Switcher -->
-      <div class="role-badge" title="Switch User View">
+      <div class="role-badge" id="headerRoleControls" title="Switch User View">
         <button class="role-btn active" id="roleBtnCook" onclick="setRole('cook')">🧑‍🍳 <span data-t="cookRole">Cook</span></button>
-        <button class="role-btn" id="roleBtnAdmin" onclick="setRole('admin')">👑 <span data-t="adminRole">Admin</span></button>
+        <button class="role-btn admin-lock-btn" id="roleBtnAdmin" onclick="promptAdminLogin()">🔒 <span data-t="adminRole">Admin</span></button>
       </div>
 
       <!-- Language Toggle -->
@@ -1821,11 +1896,42 @@ body {
     <div class="nav-icon">📋</div>
     <span data-t="menu">Weekly Menu</span>
   </button>
-  <button class="nav-item" id="bnav-admin" onclick="setTab('admin')">
+  <button class="nav-item" id="bnav-admin" onclick="setTab('admin')" style="display:none">
     <div class="nav-icon">👑</div>
     <span data-t="admin">Admin</span>
   </button>
 </nav>
+
+<!-- Admin Passcode Verification Modal -->
+<div class="modal-overlay" id="adminPinModal" onclick="closeAdminPinModal(event)">
+  <div class="modal-card pin-modal-card" onclick="event.stopPropagation()">
+    <div class="modal-drag-bar"></div>
+    <div style="text-align:center; padding:10px 0;">
+      <div style="font-size:38px; margin-bottom:8px;">🔐</div>
+      <h3 style="font-size:18px; font-weight:800; color:var(--ink);">Admin Passcode Required</h3>
+      <p style="font-size:13px; color:var(--ink-sec); margin-top:4px;">
+        Owner dashboard is restricted. Enter PIN to access.
+      </p>
+      
+      <div class="pin-input-wrap">
+        <input type="password" id="adminPinInput" maxlength="6" pattern="[0-9]*" inputmode="numeric" placeholder="••••" onkeyup="if(event.key==='Enter') submitAdminPin()">
+      </div>
+      
+      <div id="pinErrorMsg" class="pin-error-msg" style="display:none;">❌ Incorrect PIN. Please try again.</div>
+      
+      <div style="display:flex; gap:10px; margin-top:16px;">
+        <button class="btn-secondary" style="flex:1; padding:11px;" onclick="closeAdminPinModal()">Cancel</button>
+        <button class="modal-btn-confirm" style="flex:2; padding:11px; margin-top:0;" onclick="submitAdminPin()">
+          <span>🔓 Unlock Admin</span>
+        </button>
+      </div>
+      
+      <div style="margin-top:14px; font-size:12px; color:var(--ink-mute);">
+        Default PIN: <b>1234</b> (Change anytime in Admin Settings)
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Quantity Selector Modal (Bottom Sheet for Cook) -->
 <div class="modal-overlay" id="qtyModal" onclick="closeQtyModal(event)">
@@ -2412,21 +2518,112 @@ function showToast(msg, icon = '✨') {
 }
 
 /* ==========================================================================
-   APP NAVIGATION & EVENT HANDLERS
+   APP NAVIGATION, ROLE PIN PROTECTION & EVENT HANDLERS
    ========================================================================== */
 
 function setRole(newRole) {
-  AppState.role = newRole;
-  // If cook, switch language to Hindi automatically for maximum ease of use
-  if (newRole === 'cook' && !localStorage.getItem('rc_lang_manually_set')) {
-    AppState.lang = 'hi';
-  } else if (newRole === 'admin' && !localStorage.getItem('rc_lang_manually_set')) {
-    AppState.lang = 'en';
+  if (newRole === 'admin') {
+    if (AppState.role !== 'admin') {
+      openAdminPinModal();
+      return;
+    }
+    AppState.currentTab = 'admin';
+  } else {
+    lockToCookMode();
+    return;
   }
   saveState();
   updateHeaderControls();
+  updateNavState();
   renderApp();
   showToast(newRole === 'cook' ? '🧑‍🍳 Cook Mode Active (रसोइया दृश्य)' : '👑 Admin Dashboard Active');
+}
+
+function promptAdminLogin() {
+  if (AppState.role === 'admin') {
+    AppState.currentTab = 'admin';
+    updateNavState();
+    renderApp();
+  } else {
+    openAdminPinModal();
+  }
+}
+
+function lockToCookMode() {
+  AppState.role = 'cook';
+  AppState.currentTab = 'today';
+  if (!localStorage.getItem('rc_lang_manually_set')) {
+    AppState.lang = 'hi';
+  }
+  saveState();
+  updateHeaderControls();
+  updateNavState();
+  renderApp();
+  showToast('🧑‍🍳 Cook Mode Locked (Admin views hidden)');
+}
+
+function openAdminPinModal() {
+  const modal = document.getElementById('adminPinModal');
+  const input = document.getElementById('adminPinInput');
+  const errorMsg = document.getElementById('pinErrorMsg');
+  if (errorMsg) errorMsg.style.display = 'none';
+  if (input) input.value = '';
+  if (modal) modal.classList.add('open');
+  setTimeout(() => { if (input) input.focus(); }, 250);
+}
+
+function closeAdminPinModal(e) {
+  if (e && e.target && e.target !== document.getElementById('adminPinModal')) return;
+  const modal = document.getElementById('adminPinModal');
+  if (modal) modal.classList.remove('open');
+}
+
+function submitAdminPin() {
+  const input = document.getElementById('adminPinInput');
+  const errorMsg = document.getElementById('pinErrorMsg');
+  const entered = (input?.value || '').trim();
+  const validPin = localStorage.getItem('rc_admin_pin') || '1234';
+
+  if (entered === validPin) {
+    if (errorMsg) errorMsg.style.display = 'none';
+    const modal = document.getElementById('adminPinModal');
+    if (modal) modal.classList.remove('open');
+    AppState.role = 'admin';
+    AppState.currentTab = 'admin'; // IMMEDIATELY SHOW ADMIN DASHBOARD!
+    if (!localStorage.getItem('rc_lang_manually_set')) {
+      AppState.lang = 'en';
+    }
+    saveState();
+    updateHeaderControls();
+    updateNavState();
+    renderApp();
+    playChime(true);
+    showToast('👑 Admin Dashboard Unlocked! (Welcome Kishan & Joju)');
+  } else {
+    if (errorMsg) errorMsg.style.display = 'block';
+    if (input) {
+      input.value = '';
+      input.focus();
+    }
+  }
+}
+
+function changeAdminPin() {
+  const currentPin = localStorage.getItem('rc_admin_pin') || '1234';
+  const oldPin = prompt('Enter CURRENT 4-digit Admin PIN:');
+  if (oldPin === null) return;
+  if (oldPin.trim() !== currentPin) {
+    alert('❌ Incorrect current PIN!');
+    return;
+  }
+  const newPin = prompt('Enter NEW 4-digit Admin PIN:');
+  if (!newPin || newPin.trim().length < 4) {
+    alert('❌ PIN must be at least 4 digits!');
+    return;
+  }
+  localStorage.setItem('rc_admin_pin', newPin.trim());
+  showToast('✅ Admin PIN updated successfully to: ' + newPin.trim());
+  renderApp();
 }
 
 function toggleLang() {
@@ -2456,6 +2653,10 @@ function setShift(shift) {
 }
 
 function setTab(tab) {
+  if (tab === 'admin' && AppState.role !== 'admin') {
+    openAdminPinModal();
+    return;
+  }
   AppState.currentTab = tab;
   updateNavState();
   renderApp();
@@ -2463,13 +2664,42 @@ function setTab(tab) {
 }
 
 function updateHeaderControls() {
-  document.getElementById('roleBtnCook').classList.toggle('active', AppState.role === 'cook');
-  document.getElementById('roleBtnAdmin').classList.toggle('active', AppState.role === 'admin');
-  document.getElementById('brandTitle').textContent = t('brand');
-  document.getElementById('brandSubtitle').textContent = t('brandSub');
+  const isAdmin = AppState.role === 'admin';
+  const roleBox = document.getElementById('headerRoleControls');
+  if (roleBox) {
+    if (isAdmin) {
+      roleBox.innerHTML = `
+        <button class="role-btn active" onclick="setTab('admin')" style="background:var(--pri);color:#fff;" title="Active: Admin Dashboard">
+          👑 <span>Admin</span>
+        </button>
+        <button class="role-btn exit-admin-btn" onclick="lockToCookMode()" title="Switch back to Cook View">
+          🧑‍🍳 <span>Cook View</span>
+        </button>
+      `;
+    } else {
+      roleBox.innerHTML = `
+        <button class="role-btn active" onclick="setTab('today')" title="Active: Cook Mode">
+          🧑‍🍳 <span>${AppState.lang === 'hi' ? 'रसोइया' : 'Cook'}</span>
+        </button>
+        <button class="role-btn admin-lock-btn" onclick="promptAdminLogin()" title="Unlock Admin Dashboard">
+          🔒 <span>Admin</span>
+        </button>
+      `;
+    }
+  }
+  const brandTitle = document.getElementById('brandTitle');
+  const brandSub = document.getElementById('brandSubtitle');
+  if (brandTitle) brandTitle.textContent = t('brand');
+  if (brandSub) brandSub.textContent = t('brandSub');
 }
 
 function updateNavState() {
+  const isAdmin = AppState.role === 'admin';
+  const botAdmin = document.getElementById('bnav-admin');
+  const deskAdmin = document.getElementById('dtab-admin');
+  if (botAdmin) botAdmin.style.display = isAdmin ? 'flex' : 'none';
+  if (deskAdmin) deskAdmin.style.display = isAdmin ? 'inline-flex' : 'none';
+
   const tabs = ['today', 'grocery', 'menu', 'admin'];
   tabs.forEach(tName => {
     const b = document.getElementById(`bnav-${tName}`);
@@ -3842,6 +4072,27 @@ function renderAdminHubView() {
     </div>
     ${renderActivityLogs()}
   </div>
+  
+  <!-- Admin Security & Device Lock -->
+  <div class="day-plan-card" style="margin-top:16px; border-left: 4px solid var(--pri);">
+    <div class="day-plan-hdr">
+      <b>🔐 ${isHi ? 'एडमिन सुरक्षा एवं पासकोड सेटिंग्स' : 'Admin Security & Device Passcode'}</b>
+      <span class="task-tag" style="background:var(--ok-light); color:var(--ok); font-weight:700;">Protected</span>
+    </div>
+    <p style="font-size:13px; color:var(--ink-sec); margin:8px 0 14px;">
+      ${isHi 
+        ? 'कुक को एडमिन डैशबोर्ड (सैलरी, अटेंडेंस और सेटिंग्स) देखने से रोकने के लिए यह 4-अंकों के पिन से सुरक्षित है।' 
+        : 'The Admin Operations Hub is protected with a 4-digit PIN so the cook cannot view salary, attendance logs, or private controls.'}
+    </p>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+      <button class="btn-secondary" onclick="changeAdminPin()">
+        🔑 ${isHi ? 'पिन बदलें (Change PIN)' : 'Change Admin PIN'}
+      </button>
+      <button class="btn-secondary" style="border-color:#ffccbc; color:#d84315;" onclick="lockToCookMode()">
+        🔒 ${isHi ? 'अभी कुक मोड पर लॉक करें' : 'Lock to Cook View Now'}
+      </button>
+    </div>
+  </div>
   `;
   
   return html;
@@ -4125,9 +4376,30 @@ function getDayHi(d) {
 
 // Initial Boot
 document.addEventListener('DOMContentLoaded', () => {
+  // Check URL params: e.g. ?role=cook locks directly into cook mode
+  const urlParams = new URLSearchParams(window.location.search);
+  const paramRole = urlParams.get('role');
+  if (paramRole === 'cook') {
+    AppState.role = 'cook';
+    AppState.currentTab = 'today';
+  } else if (paramRole === 'admin') {
+    // If not authenticated, keep role as current (cook by default) and prompt PIN
+    if (AppState.role !== 'admin') {
+      setTimeout(() => openAdminPinModal(), 400);
+    }
+  }
+
   updateHeaderControls();
+  updateNavState();
   updateSoundButton();
   renderApp();
+
+  // Register PWA Service Worker for mobile install and offline use
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js')
+      .then(() => console.log('Rasoi Mitra Service Worker Registered'))
+      .catch(err => console.log('SW registration error:', err));
+  }
 });
 renderApp();
 

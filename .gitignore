@@ -1,4 +1,4 @@
-﻿.env
+.env
 .env.*
 !.env.example
 secrets/
@@ -10,5 +10,6 @@ __pycache__/
 Thumbs.db
 
 # AI reference files - do not upload
-"Home Cook Manager.xlsx"
+Home Cook Manager.xlsx
+*.backup.html
 excel_dump.json

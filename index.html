@@ -1,0 +1,4408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<title>Rasoi Mitra - Home Cook & Kitchen Manager</title>
+<meta name="theme-color" content="#d35400">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Rasoi Mitra">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="assets/icon.svg">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<style>
+:root {
+  --font-main: 'Outfit', 'Noto Sans Devanagari', -apple-system, sans-serif;
+  --font-hi: 'Noto Sans Devanagari', 'Outfit', sans-serif;
+  
+  /* Color Palette */
+  --pri: #d35400;
+  --pri-light: #fff3eb;
+  --pri-dark: #a04000;
+  --pri-grad: linear-gradient(135deg, #e65100 0%, #ff7043 100%);
+  
+  --ok: #2e7d32;
+  --ok-light: #e8f5e9;
+  --ok-grad: linear-gradient(135deg, #2e7d32 0%, #4caf50 100%);
+  
+  --warn: #ed6c02;
+  --warn-light: #fff4e5;
+  --info: #0288d1;
+  --info-light: #e1f5fe;
+  
+  --bg: #fcf9f5;
+  --surface: #ffffff;
+  --surface-alt: #f5efe6;
+  --card: #ffffff;
+  --ink: #1f1b16;
+  --ink-sec: #5c5247;
+  --ink-mute: #8c8072;
+  --border: #e8ded1;
+  --border-focus: #d35400;
+  --shadow-sm: 0 2px 6px rgba(40, 25, 10, 0.05);
+  --shadow: 0 6px 18px rgba(40, 25, 10, 0.08);
+  --shadow-lg: 0 12px 32px rgba(40, 25, 10, 0.12);
+  
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+  
+  --header-h: 68px;
+  --bottom-nav-h: 70px;
+}
+
+[data-theme="dark"] {
+  --bg: #141210;
+  --surface: #1e1b17;
+  --surface-alt: #29241f;
+  --card: #1e1b17;
+  --ink: #f7f2eb;
+  --ink-sec: #c4b8a9;
+  --ink-mute: #8e8376;
+  --border: #383129;
+  --pri-light: #3a2214;
+  --ok-light: #15331d;
+  --warn-light: #3a2b16;
+  --info-light: #122838;
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.4);
+  --shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.6);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: var(--font-main);
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.5;
+  min-height: 100vh;
+  padding-bottom: calc(var(--bottom-nav-h) + env(safe-area-inset-bottom, 20px) + 20px);
+}
+
+/* App Header */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 10px 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.header-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.brand-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-md);
+  background: var(--pri-grad);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  box-shadow: 0 4px 12px rgba(211, 84, 0, 0.3);
+  color: white;
+}
+
+.brand-text h1 {
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--ink);
+}
+
+.brand-text p {
+  font-size: 11px;
+  color: var(--ink-mute);
+  font-weight: 500;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Role Selector & Controls */
+.role-badge {
+  display: flex;
+  align-items: center;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 3px 4px;
+}
+
+.role-btn {
+  border: none;
+  background: transparent;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  color: var(--ink-sec);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s ease;
+}
+
+.role-btn.active {
+  background: var(--pri);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(211, 84, 0, 0.35);
+}
+
+.exit-admin-btn {
+  background: #fbe9e7 !important;
+  color: #d84315 !important;
+  border: 1px solid #ffccbc !important;
+  font-weight: 700 !important;
+}
+.exit-admin-btn:hover {
+  background: #ffccbc !important;
+}
+
+.admin-lock-btn {
+  color: var(--ink-sec);
+  font-size: 13px;
+  font-weight: 600;
+}
+.admin-lock-btn:hover {
+  color: var(--pri);
+}
+
+/* PIN Modal Styling */
+.pin-modal-card {
+  max-width: 380px !important;
+  margin: auto;
+  border-radius: var(--radius-lg);
+  padding: 24px 20px !important;
+}
+.pin-input-wrap {
+  margin: 18px 0 10px;
+  display: flex;
+  justify-content: center;
+}
+.pin-input-wrap input {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 10px;
+  text-align: center;
+  width: 190px;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--border);
+  background: var(--surface-alt);
+  color: var(--ink);
+  outline: none;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+.pin-input-wrap input:focus {
+  border-color: var(--pri);
+  background: var(--surface);
+  box-shadow: 0 0 0 3px rgba(211, 84, 0, 0.18);
+}
+.pin-error-msg {
+  color: #d32f2f;
+  background: #ffebee;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 700;
+  margin-top: 8px;
+  animation: shake 0.35s;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+.btn-icon {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+.btn-icon:hover { background: var(--border); }
+
+/* Main Container */
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* Quick Shift Bar */
+.shift-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 8px 12px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.shift-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.date-pill {
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink);
+}
+
+.shift-toggle {
+  display: flex;
+  background: var(--surface-alt);
+  border-radius: var(--radius-full);
+  padding: 4px;
+  gap: 4px;
+}
+
+.shift-btn {
+  border: none;
+  background: transparent;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--ink-sec);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s ease;
+}
+
+.shift-btn.active {
+  background: var(--pri);
+  color: white;
+  box-shadow: 0 2px 6px rgba(211, 84, 0, 0.3);
+}
+
+.shift-btn.active.evening {
+  background: #3949ab;
+  box-shadow: 0 2px 6px rgba(57, 73, 171, 0.3);
+}
+
+/* Sunday Banner */
+.sunday-hero {
+  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+  color: white;
+  border-radius: var(--radius-lg);
+  padding: 24px 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 24px rgba(37, 117, 252, 0.25);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.sunday-hero h2 {
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.sunday-hero p {
+  font-size: 14px;
+  opacity: 0.95;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* Attendance Card */
+.att-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.att-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.att-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--pri-light);
+  border: 2px solid var(--pri);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.att-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.att-sub {
+  font-size: 13px;
+  color: var(--ink-sec);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.btn-arrive {
+  background: var(--pri-grad);
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(211, 84, 0, 0.35);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.btn-arrive:active { transform: scale(0.96); }
+
+.badge-arrived {
+  background: var(--ok-light);
+  color: var(--ok);
+  border: 1px solid rgba(46, 125, 50, 0.2);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Sections */
+.section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 22px 0 12px;
+}
+
+.section-title h2 {
+  font-size: 18px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink);
+}
+
+.section-title span.tag {
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--pri-light);
+  color: var(--pri);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+}
+
+/* Meal Hero Card with Image */
+.meal-hero {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  margin-bottom: 20px;
+}
+
+.meal-img-box {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  background: var(--surface-alt);
+  overflow: hidden;
+}
+
+.meal-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.meal-hero:hover .meal-img {
+  transform: scale(1.03);
+}
+
+.meal-shift-pill {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  backdrop-filter: blur(6px);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.meal-status-pill {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--ok);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: var(--shadow-sm);
+}
+
+.meal-body {
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.meal-info {
+  flex: 1;
+  min-width: 220px;
+}
+
+.meal-title-hi {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.meal-title-en {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink-sec);
+  margin-top: 4px;
+}
+
+.meal-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--warn-light);
+  color: var(--warn);
+  border: 1px dashed rgba(237, 108, 2, 0.3);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.meal-cook-btn {
+  background: var(--surface-alt);
+  border: 2px solid var(--border);
+  color: var(--ink);
+  padding: 12px 22px;
+  border-radius: var(--radius-full);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.meal-cook-btn.done {
+  background: var(--ok-grad);
+  border-color: var(--ok);
+  color: white;
+  box-shadow: 0 4px 14px rgba(46, 125, 50, 0.35);
+}
+
+.meal-cook-btn:active { transform: scale(0.96); }
+
+/* Progress Card */
+.progress-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.progress-track {
+  height: 10px;
+  background: var(--surface-alt);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--ok-grad);
+  border-radius: var(--radius-full);
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Tasks Checklist */
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.task-item {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.task-item:hover {
+  border-color: var(--pri);
+  box-shadow: var(--shadow);
+}
+
+.task-item.completed {
+  background: var(--ok-light);
+  border-color: rgba(46, 125, 50, 0.3);
+}
+
+.task-chk {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--border);
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+  color: transparent;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.task-item.completed .task-chk {
+  background: var(--ok);
+  border-color: var(--ok);
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+}
+
+.task-details {
+  flex: 1;
+}
+
+.task-name-hi {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.3;
+}
+
+.task-name-en {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-sec);
+}
+
+.task-item.completed .task-name-hi,
+.task-item.completed .task-name-en {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+.task-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  font-size: 11px;
+}
+
+.task-tag {
+  background: var(--surface-alt);
+  color: var(--ink-mute);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+}
+
+.task-tag.weekly {
+  background: var(--info-light);
+  color: var(--info);
+}
+
+.task-time {
+  color: var(--ok);
+  font-weight: 600;
+}
+
+/* Visual Grocery Catalog */
+.groc-categories {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  margin-bottom: 14px;
+  scrollbar-width: none;
+}
+.groc-categories::-webkit-scrollbar { display: none; }
+
+.cat-btn {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: var(--radius-full);
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-sec);
+  white-space: nowrap;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.cat-btn.active {
+  background: var(--pri);
+  color: white;
+  border-color: var(--pri);
+  box-shadow: 0 2px 8px rgba(211, 84, 0, 0.3);
+}
+
+.grocery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.groc-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  position: relative;
+  box-shadow: var(--shadow-sm);
+}
+
+.groc-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--pri);
+  box-shadow: var(--shadow);
+}
+
+.groc-card:active {
+  transform: scale(0.97);
+}
+
+.groc-img-wrap {
+  width: 100%;
+  height: 105px;
+  background: var(--surface-alt);
+  position: relative;
+  overflow: hidden;
+}
+
+.groc-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.2s ease;
+}
+
+.groc-card:hover .groc-img {
+  transform: scale(1.06);
+}
+
+.groc-req-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: var(--pri);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: var(--radius-full);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.groc-info {
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.groc-name-hi {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.groc-name-en {
+  font-size: 11px;
+  color: var(--ink-mute);
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.groc-quick-btn {
+  margin-top: 6px;
+  background: var(--pri-light);
+  color: var(--pri);
+  border: 1px solid rgba(211, 84, 0, 0.2);
+  border-radius: var(--radius-sm);
+  padding: 5px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+/* Active Requests Drawer / Section */
+.req-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.req-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.req-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.req-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--surface-alt);
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+  gap: 10px;
+}
+
+.req-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.req-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  background: var(--surface);
+}
+
+.req-names {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.req-names span {
+  font-size: 11px;
+  color: var(--ink-sec);
+  font-weight: normal;
+  display: block;
+}
+
+.req-qty {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--pri);
+}
+
+.req-status-tag {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: var(--radius-full);
+}
+.req-status-tag.requested { background: var(--warn-light); color: var(--warn); }
+.req-status-tag.bought { background: var(--ok-light); color: var(--ok); }
+
+/* Quantity Selection Modal / Bottom Sheet */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.modal-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-card {
+  width: 100%;
+  max-width: 480px;
+  background: var(--surface);
+  border-radius: 24px 24px 0 0;
+  padding: 20px;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.25);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-overlay.open .modal-card {
+  transform: translateY(0);
+}
+
+.modal-drag-bar {
+  width: 40px;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin: 0 auto 16px;
+}
+
+.modal-item-info {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.modal-item-img {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  background: var(--surface-alt);
+}
+
+.modal-title-hi {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.modal-title-en {
+  font-size: 14px;
+  color: var(--ink-sec);
+  font-weight: 500;
+}
+
+.qty-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 16px 0;
+}
+
+.step-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface-alt);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+.step-btn:hover { background: var(--border); }
+.step-btn:active { transform: scale(0.92); }
+
+.qty-display {
+  font-size: 28px;
+  font-weight: 800;
+  min-width: 120px;
+  text-align: center;
+  color: var(--pri);
+}
+
+.qty-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.qty-chip {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--ink-sec);
+  transition: all 0.15s;
+}
+
+.qty-chip.selected {
+  background: var(--pri);
+  color: white;
+  border-color: var(--pri);
+}
+
+.modal-btn-confirm {
+  width: 100%;
+  background: var(--pri-grad);
+  color: white;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(211, 84, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 0.15s;
+}
+.modal-btn-confirm:active { transform: scale(0.97); }
+
+/* Bottom Mobile Navigation */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--bottom-nav-h);
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  z-index: 45;
+  box-shadow: 0 -4px 16px rgba(0,0,0,0.06);
+}
+
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  text-decoration: none;
+  color: var(--ink-mute);
+  font-size: 11px;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 6px 0;
+  position: relative;
+  transition: color 0.2s;
+}
+
+.nav-icon {
+  font-size: 22px;
+  height: 26px;
+}
+
+.nav-item.active {
+  color: var(--pri);
+}
+
+.nav-badge {
+  position: absolute;
+  top: 4px;
+  right: 28%;
+  background: var(--pri);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: var(--radius-full);
+}
+
+/* ADMIN VIEW SPECIFIC STYLES */
+.admin-badge-hdr {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #3949ab;
+  color: white;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-val {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--pri);
+  line-height: 1.1;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--ink-sec);
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+/* Admin Tabs */
+.admin-subtabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin-bottom: 16px;
+  scrollbar-width: none;
+}
+.admin-subtabs::-webkit-scrollbar { display: none; }
+
+.subtab-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--ink-sec);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.subtab-btn.active {
+  background: var(--ink);
+  color: var(--surface);
+  border-color: var(--ink);
+}
+
+/* Admin Menu Editor Table/Cards */
+.day-plan-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.day-plan-hdr {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+}
+
+.meal-slot-edit {
+  background: var(--surface-alt);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.input-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.app-input {
+  flex: 1;
+  min-width: 160px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+}
+.app-input:focus { border-color: var(--border-focus); }
+
+/* Toast Notifications */
+.toast-wrap {
+  position: fixed;
+  bottom: calc(var(--bottom-nav-h) + 20px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+  width: 90%;
+  max-width: 420px;
+}
+
+.toast {
+  background: #1f1b16;
+  color: white;
+  padding: 12px 18px;
+  border-radius: var(--radius-full);
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* WhatsApp Share Button */
+.btn-whatsapp {
+  background: #25d366;
+  color: white;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(37, 211, 102, 0.3);
+}
+
+.btn-secondary {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  color: var(--ink);
+  padding: 8px 14px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Weekly Schedule Matrix */
+.sched-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 13px;
+}
+.sched-table th, .sched-table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+.sched-table th { background: var(--surface-alt); color: var(--ink-sec); font-weight: 700; }
+
+@media (min-width: 768px) {
+  body {
+    padding-bottom: 40px;
+  }
+  .bottom-nav {
+    display: none;
+  }
+  .desktop-nav {
+    display: flex !important;
+    gap: 8px;
+  }
+}
+.desktop-nav {
+  display: none;
+}
+
+/* Date Navigator */
+.date-navigator {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.date-nav-btn {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  cursor: pointer;
+  color: var(--ink-sec);
+  transition: all 0.2s ease;
+}
+.date-nav-btn:hover {
+  background: var(--pri);
+  color: #fff;
+  border-color: var(--pri);
+}
+.badge-today {
+  background: var(--ok-light);
+  color: var(--ok);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: var(--radius-full);
+  margin-left: 4px;
+}
+.badge-subtle {
+  background: var(--surface-alt);
+  color: var(--ink-sec);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: var(--radius-full);
+  margin-left: 4px;
+}
+
+/* Voice Speak Button */
+.btn-voice-speak {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  color: var(--ink);
+  padding: 8px 14px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s ease;
+}
+.btn-voice-speak:hover {
+  background: var(--pri-light);
+  color: var(--pri);
+  border-color: var(--pri);
+}
+
+/* Grocery Search Bar */
+.groc-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.groc-search-input {
+  flex: 1;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.groc-search-input:focus {
+  border-color: var(--pri);
+  box-shadow: 0 0 0 3px rgba(211, 84, 0, 0.15);
+}
+.groc-mic-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.groc-mic-btn:hover {
+  background: var(--pri-light);
+  border-color: var(--pri);
+}
+.groc-mic-btn.listening {
+  background: #ff5252;
+  color: white;
+  animation: pulseMic 1.2s infinite;
+}
+@keyframes pulseMic {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+/* Proof of Work Photos & Camera Styles */
+.proof-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.proof-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.proof-header h3 {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.proof-sub {
+  font-size: 13px;
+  color: var(--ink-sec);
+  margin-bottom: 14px;
+}
+
+.proof-actions-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+}
+
+.proof-ctrl-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-camera {
+  background: var(--pri-grad);
+  border: none;
+  color: white;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(211, 84, 0, 0.35);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.btn-camera:active { transform: scale(0.97); }
+
+.proof-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 12px;
+}
+
+.proof-item {
+  position: relative;
+  background: var(--surface-alt);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  aspect-ratio: 1;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.proof-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+  border-color: var(--pri);
+}
+
+.proof-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.proof-tag {
+  position: absolute;
+  bottom: 6px;
+  left: 6px;
+  background: rgba(0, 0, 0, 0.78);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: var(--radius-full);
+  backdrop-filter: blur(4px);
+  max-width: calc(100% - 12px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.proof-del-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(220, 38, 38, 0.88);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  transition: background 0.2s, transform 0.1s;
+}
+.proof-del-btn:hover {
+  background: #b91c1c;
+  transform: scale(1.1);
+}
+
+.proof-empty {
+  text-align: center;
+  padding: 24px 16px;
+  background: var(--surface-alt);
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-md);
+  color: var(--ink-sec);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Lightbox Modal */
+.lightbox-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20px;
+}
+.lightbox-modal.open {
+  display: flex;
+}
+.lightbox-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.lightbox-img {
+  max-width: 100%;
+  max-height: 75vh;
+  border-radius: var(--radius-md);
+  object-fit: contain;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+}
+.lightbox-caption {
+  margin-top: 12px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 6px 16px;
+  border-radius: var(--radius-full);
+}
+.lightbox-close {
+  position: absolute;
+  top: -44px;
+  right: 0;
+  background: rgba(255, 255, 255, 0.25);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+/* Per-Task Photo & Admin Report Styles */
+.task-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 12px 16px;
+}
+.task-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 220px;
+}
+.task-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.task-thumb-wrap {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 2px solid var(--ok);
+  flex-shrink: 0;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s;
+}
+.task-thumb-wrap:hover {
+  transform: scale(1.08);
+}
+.task-thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.btn-task-camera {
+  background: var(--surface-alt);
+  border: 1.5px solid var(--border);
+  color: var(--ink);
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.btn-task-camera:hover {
+  background: var(--pri-light);
+  border-color: var(--pri);
+  color: var(--pri);
+}
+.btn-task-camera.has-photo {
+  background: var(--ok-light);
+  border-color: var(--ok);
+  color: var(--ok);
+}
+.btn-send-admin {
+  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+  color: white;
+  border: none;
+  padding: 12px 22px;
+  border-radius: var(--radius-full);
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.btn-send-admin:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(37, 211, 102, 0.45);
+}
+.btn-send-admin:active {
+  transform: scale(0.97);
+}
+.shift-send-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  margin-top: 18px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  box-shadow: var(--shadow-sm);
+  background: linear-gradient(135deg, var(--surface) 0%, var(--surface-alt) 100%);
+}
+.shift-send-info h3 {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.shift-send-info p {
+  font-size: 12px;
+  color: var(--ink-sec);
+  margin-top: 4px;
+}
+.btn-approve-task {
+  background: var(--ok-light);
+  border: 1px solid var(--ok);
+  color: var(--ok);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-approve-task.approved {
+  background: var(--ok);
+  color: #fff;
+}
+
+</style>
+</head>
+<body>
+
+<!-- App Header -->
+<header class="app-header">
+  <div class="header-inner">
+    <div class="brand" onclick="setTab('today')">
+      <div class="brand-icon">🍳</div>
+      <div class="brand-text">
+        <h1 id="brandTitle">रसोई मित्र</h1>
+        <p id="brandSubtitle">Home Cook Manager</p>
+      </div>
+    </div>
+
+    <!-- Desktop Navigation Tabs -->
+    <div class="desktop-nav">
+      <button class="subtab-btn" id="dtab-today" onclick="setTab('today')">📅 <span data-t="today">Today</span></button>
+      <button class="subtab-btn" id="dtab-grocery" onclick="setTab('grocery')">🛒 <span data-t="grocery">Grocery</span> <span id="deskGrocBadge" class="nav-badge" style="position:static;display:none">0</span></button>
+      <button class="subtab-btn" id="dtab-menu" onclick="setTab('menu')">📋 <span data-t="menu">Menu</span></button>
+      <button class="subtab-btn" id="dtab-admin" onclick="setTab('admin')" style="display:none">👑 <span data-t="admin">Admin</span></button>
+    </div>
+
+    <div class="header-actions">
+      <!-- Role Switcher -->
+      <div class="role-badge" id="headerRoleControls" title="Switch User View">
+        <button class="role-btn active" id="roleBtnCook" onclick="setRole('cook')">🧑‍🍳 <span data-t="cookRole">Cook</span></button>
+        <button class="role-btn admin-lock-btn" id="roleBtnAdmin" onclick="promptAdminLogin()">🔒 <span data-t="adminRole">Admin</span></button>
+      </div>
+
+      <!-- Language Toggle -->
+      <button class="btn-icon" id="langBtn" onclick="toggleLang()" title="Toggle Language (English / हिन्दी)">
+        अ/A
+      </button>
+
+      
+      <!-- Sound Toggle -->
+      <button class="btn-icon" id="soundBtn" onclick="toggleSound()" title="Toggle Sound (चालू / बंद)">
+        🔊
+      </button>
+      <!-- Theme Toggle -->
+      <button class="btn-icon" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+        🌓
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Main Container -->
+<main class="container" id="appContent">
+  <!-- Content dynamically rendered here -->
+</main>
+
+<!-- Bottom Mobile Navigation -->
+<nav class="bottom-nav" id="bottomNav">
+  <button class="nav-item active" id="bnav-today" onclick="setTab('today')">
+    <div class="nav-icon">📅</div>
+    <span data-t="today">Today</span>
+  </button>
+  <button class="nav-item" id="bnav-grocery" onclick="setTab('grocery')">
+    <div class="nav-icon">🛒</div>
+    <span data-t="grocery">Grocery</span>
+    <span id="botGrocBadge" class="nav-badge" style="display:none">0</span>
+  </button>
+  <button class="nav-item" id="bnav-menu" onclick="setTab('menu')">
+    <div class="nav-icon">📋</div>
+    <span data-t="menu">Weekly Menu</span>
+  </button>
+  <button class="nav-item" id="bnav-admin" onclick="setTab('admin')" style="display:none">
+    <div class="nav-icon">👑</div>
+    <span data-t="admin">Admin</span>
+  </button>
+</nav>
+
+<!-- Admin Passcode Verification Modal -->
+<div class="modal-overlay" id="adminPinModal" onclick="closeAdminPinModal(event)">
+  <div class="modal-card pin-modal-card" onclick="event.stopPropagation()">
+    <div class="modal-drag-bar"></div>
+    <div style="text-align:center; padding:10px 0;">
+      <div style="font-size:38px; margin-bottom:8px;">🔐</div>
+      <h3 style="font-size:18px; font-weight:800; color:var(--ink);">Admin Passcode Required</h3>
+      <p style="font-size:13px; color:var(--ink-sec); margin-top:4px;">
+        Owner dashboard is restricted. Enter PIN to access.
+      </p>
+      
+      <div class="pin-input-wrap">
+        <input type="password" id="adminPinInput" maxlength="6" pattern="[0-9]*" inputmode="numeric" placeholder="••••" onkeyup="if(event.key==='Enter') submitAdminPin()">
+      </div>
+      
+      <div id="pinErrorMsg" class="pin-error-msg" style="display:none;">❌ Incorrect PIN. Please try again.</div>
+      
+      <div style="display:flex; gap:10px; margin-top:16px;">
+        <button class="btn-secondary" style="flex:1; padding:11px;" onclick="closeAdminPinModal()">Cancel</button>
+        <button class="modal-btn-confirm" style="flex:2; padding:11px; margin-top:0;" onclick="submitAdminPin()">
+          <span>🔓 Unlock Admin</span>
+        </button>
+      </div>
+      
+      <div style="margin-top:14px; font-size:12px; color:var(--ink-mute);">
+        Default PIN: <b>1234</b> (Change anytime in Admin Settings)
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Quantity Selector Modal (Bottom Sheet for Cook) -->
+<div class="modal-overlay" id="qtyModal" onclick="closeQtyModal(event)">
+  <div class="modal-card" onclick="event.stopPropagation()">
+    <div class="modal-drag-bar"></div>
+    <div class="modal-item-info">
+      <img id="modalImg" class="modal-item-img" src="" alt="item">
+      <div>
+        <div class="modal-title-hi" id="modalTitleHi">प्याज़</div>
+        <div class="modal-title-en" id="modalTitleEn">Onion</div>
+      </div>
+    </div>
+
+    <div style="text-align:center; font-weight:700; font-size:14px; color:var(--ink-sec);">
+      <span data-t="selectQty">कितनी मात्रा चाहिए? (Select Quantity)</span>
+    </div>
+
+    <!-- Interactive Stepper -->
+    <div class="qty-stepper">
+      <button class="step-btn" onclick="adjustQty(-1)">-</button>
+      <div class="qty-display" id="modalQtyVal">1 kg</div>
+      <button class="step-btn" onclick="adjustQty(1)">+</button>
+    </div>
+
+    <!-- Preset Chips -->
+    <div class="qty-presets" id="qtyPresetChips">
+      <button class="qty-chip" onclick="setPresetQty('500 g')">500 g</button>
+      <button class="qty-chip selected" onclick="setPresetQty('1 kg')">1 kg</button>
+      <button class="qty-chip" onclick="setPresetQty('2 kg')">2 kg</button>
+      <button class="qty-chip" onclick="setPresetQty('5 kg')">5 kg</button>
+      <button class="qty-chip" onclick="setPresetQty('1 Dozen')">1 Dozen</button>
+      <button class="qty-chip" onclick="setPresetQty('1 Packet')">1 Packet</button>
+      <button class="qty-chip" onclick="setPresetQty('1 Bunch')">1 Bunch</button>
+    </div>
+
+    <!-- Confirm Button -->
+    <button class="modal-btn-confirm" onclick="confirmGroceryRequest()">
+      <span>✅</span>
+      <span id="confirmBtnText">अनुरोध भेजें (Send Request)</span>
+    </button>
+  </div>
+</div>
+
+
+<!-- Admin Edit Meal Modal -->
+<div class="modal-overlay" id="mealEditModal" onclick="closeMealEditModal(event)">
+  <div class="modal-card" onclick="event.stopPropagation()" style="max-width:480px;">
+    <div class="modal-drag-bar"></div>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+      <h3 style="font-size:17px; font-weight:800; color:var(--ink);">✏️ Edit Meal / मेन्यू बदलें</h3>
+      <button class="btn-icon" onclick="closeMealEditModal()" style="width:28px; height:28px;">✕</button>
+    </div>
+    
+    <div style="margin-bottom:10px;">
+      <label style="font-size:12px; font-weight:700; color:var(--ink-sec);">English Meal Name (अंग्रेज़ी नाम)</label>
+      <input type="text" id="editMealEn" class="app-input" style="width:100%; margin-top:4px;" placeholder="e.g. Paneer Butter Masala & Roti">
+    </div>
+
+    <div style="margin-bottom:10px;">
+      <label style="font-size:12px; font-weight:700; color:var(--ink-sec);">Hindi Meal Name (हिन्दी नाम)</label>
+      <input type="text" id="editMealHi" class="app-input" style="width:100%; margin-top:4px;" placeholder="उदा. पनीर बटर मसाला और रोटी">
+    </div>
+
+    <div style="margin-bottom:12px;">
+      <label style="font-size:12px; font-weight:700; color:var(--ink-sec);">Admin Instructions / Notes (खास निर्देश)</label>
+      <input type="text" id="editMealNotes" class="app-input" style="width:100%; margin-top:4px;" placeholder="e.g. Make less spicy, low oil">
+    </div>
+
+    <!-- Quick Meal Presets -->
+    <div style="margin-bottom:14px;">
+      <label style="font-size:11px; font-weight:700; color:var(--ink-mute);">QUICK PRESETS (त्वरित सुझाव):</label>
+      <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:6px;">
+        <button type="button" class="qty-chip" onclick="applyMealPreset('Rajma Chawal', 'राजमा चावल', 'Serve hot with ghee')">🍛 राजमा चावल</button>
+        <button type="button" class="qty-chip" onclick="applyMealPreset('Aloo Paratha & Curd', 'आलू पराठा और दही', 'Crispy with butter')">🫓 आलू पराठा</button>
+        <button type="button" class="qty-chip" onclick="applyMealPreset('Dal Tadka & Rice', 'दाल तड़का और चावल', 'Comfort meal, yellow dal')">🍲 दाल चावल</button>
+        <button type="button" class="qty-chip" onclick="applyMealPreset('Paneer Bhurji & Chapati', 'पनीर भुर्जी और चपाती', 'Less oil')">🧀 पनीर भुर्जी</button>
+        <button type="button" class="qty-chip" onclick="applyMealPreset('Vegetable Khichdi', 'सब्ज़ी वाली खिचड़ी', 'Light evening meal')">🥣 खिचड़ी</button>
+        <button type="button" class="qty-chip" onclick="applyMealPreset('Dosa & Sambar', 'डोसा और सांभर', 'Crispy with coconut chutney')">🥞 डोसा सांभर</button>
+      </div>
+    </div>
+
+    <button class="modal-btn-confirm" onclick="saveMealEdit()">
+      <span>💾</span>
+      <span>Save Changes (मेन्यू सुरक्षित करें)</span>
+    </button>
+  </div>
+</div>
+
+<!-- Hidden Camera & Gallery File Inputs for clicking/uploading photos -->
+<input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none" onchange="handleProofPhotoUpload(event)">
+<input type="file" id="galleryInput" accept="image/*" style="display:none" onchange="handleProofPhotoUpload(event)">
+
+<!-- Lightbox Modal for Full Screen Image Preview -->
+<div class="lightbox-modal" id="lightboxModal" onclick="closeLightbox(event)">
+  <div class="lightbox-content" onclick="event.stopPropagation()">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <img id="lightboxImg" class="lightbox-img" src="" alt="Proof Preview">
+    <div id="lightboxCaption" class="lightbox-caption"></div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-wrap" id="toastBox"></div>
+
+<script>
+/* ==========================================================================
+   DEFAULT SEED DATA (Exact match to Home Cook Manager.xlsx)
+   ========================================================================== */
+
+const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const VISITS = ['Morning', 'Evening'];
+
+// Tasks master catalog
+const DEFAULT_TASKS = [
+  // Daily Essential Tasks
+  { id: 'C01', en: 'Clean the floor', hi: 'फर्श साफ़ करें (झाड़ू व पोछा)', freq: 'Daily', active: true, icon: '🧹' },
+  { id: 'C02', en: 'Wash the vessels', hi: 'बर्तन धोएं', freq: 'Daily', active: true, icon: '🍽️' },
+  { id: 'C03', en: 'Clean kitchen basin & counter', hi: 'रसोई का बेसिन व स्लैब साफ़ करें', freq: 'Daily', active: true, icon: '🚰' },
+
+  // Weekly Deep Cleaning Tasks (Done only once in a week)
+  { id: 'C04', en: 'Clean the staircase', hi: 'सीढ़ियां साफ़ करें', freq: 'Weekly', active: true, icon: '🪜' },
+  { id: 'C05', en: 'Clean the toilet', hi: 'टॉयलेट साफ़ करें', freq: 'Weekly', active: true, icon: '🚽' },
+  { id: 'C06', en: 'Clean the fans', hi: 'पंखे साफ़ करें', freq: 'Weekly', active: true, icon: '🌀' },
+  { id: 'C07', en: 'Clean windows and doors', hi: 'खिड़कियाँ और दरवाज़े साफ़ करें', freq: 'Weekly', active: true, icon: '🪟' },
+  { id: 'C08', en: 'Clean the glass surfaces', hi: 'शीशे व कांच की सतहें साफ़ करें', freq: 'Weekly', active: true, icon: '✨' }
+];
+
+// Schedule: Daily Floor & Vessels Every Day + Exactly One Weekly Task Per Weekday
+const DEFAULT_SCHEDULE = [
+  // Monday: Daily tasks + Clean the staircase (Weekly - Once a week)
+  { day: 'Monday', taskId: 'C01', visit: 'Morning' },
+  { day: 'Monday', taskId: 'C02', visit: 'Both' },
+  { day: 'Monday', taskId: 'C03', visit: 'Morning' },
+  { day: 'Monday', taskId: 'C04', visit: 'Morning' },
+  
+  // Tuesday: Daily tasks + Clean the toilet (Weekly - Once a week)
+  { day: 'Tuesday', taskId: 'C01', visit: 'Morning' },
+  { day: 'Tuesday', taskId: 'C02', visit: 'Both' },
+  { day: 'Tuesday', taskId: 'C03', visit: 'Morning' },
+  { day: 'Tuesday', taskId: 'C05', visit: 'Morning' },
+  
+  // Wednesday: Daily tasks + Clean the fans (Weekly - Once a week)
+  { day: 'Wednesday', taskId: 'C01', visit: 'Morning' },
+  { day: 'Wednesday', taskId: 'C02', visit: 'Both' },
+  { day: 'Wednesday', taskId: 'C03', visit: 'Morning' },
+  { day: 'Wednesday', taskId: 'C06', visit: 'Morning' },
+  
+  // Thursday: Daily tasks + Clean windows and doors (Weekly - Once a week)
+  { day: 'Thursday', taskId: 'C01', visit: 'Morning' },
+  { day: 'Thursday', taskId: 'C02', visit: 'Both' },
+  { day: 'Thursday', taskId: 'C03', visit: 'Morning' },
+  { day: 'Thursday', taskId: 'C07', visit: 'Morning' },
+  
+  // Friday: Daily tasks + Clean the glass surfaces (Weekly - Once a week)
+  { day: 'Friday', taskId: 'C01', visit: 'Morning' },
+  { day: 'Friday', taskId: 'C02', visit: 'Both' },
+  { day: 'Friday', taskId: 'C03', visit: 'Morning' },
+  { day: 'Friday', taskId: 'C08', visit: 'Morning' },
+  
+  // Saturday: Daily tasks (Weekend kitchen clean)
+  { day: 'Saturday', taskId: 'C01', visit: 'Morning' },
+  { day: 'Saturday', taskId: 'C02', visit: 'Both' },
+  { day: 'Saturday', taskId: 'C03', visit: 'Morning' }
+];
+
+// Food Menu with mouth-watering realistic photos
+const DEFAULT_MENU = [
+  {
+    day: 'Monday', visit: 'Morning',
+    en: 'Rice and chutney', hi: 'चावल और चटनी',
+    img: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=700&auto=format&fit=crop&q=80',
+    notes: 'Serve with fresh coconut chutney'
+  },
+  {
+    day: 'Monday', visit: 'Evening',
+    en: 'Puliyogare', hi: 'पुलियोगरे',
+    img: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=700&auto=format&fit=crop&q=80',
+    notes: 'Tangy tamarind rice with peanuts'
+  },
+  {
+    day: 'Tuesday', visit: 'Morning',
+    en: 'Chapati and gobi Manchurian', hi: 'चपाती और गोभी मंचूरियन',
+    img: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=700&auto=format&fit=crop&q=80',
+    notes: 'Crispy cauliflower with 3 chapatis'
+  },
+  {
+    day: 'Tuesday', visit: 'Evening',
+    en: 'Chapati and egg curry', hi: 'चपाती और अंडे की करी',
+    img: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=700&auto=format&fit=crop&q=80',
+    notes: 'Boiled egg curry with gravy'
+  },
+  {
+    day: 'Wednesday', visit: 'Morning',
+    en: 'Rice and dal', hi: 'चावल और दाल',
+    img: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=700&auto=format&fit=crop&q=80',
+    notes: 'Comforting yellow tadka dal'
+  },
+  {
+    day: 'Wednesday', visit: 'Evening',
+    en: 'Rice and vegetable curry', hi: 'चावल और सब्ज़ी की करी',
+    img: 'https://images.unsplash.com/photo-1546833998-877b37c2e5c6?w=700&auto=format&fit=crop&q=80',
+    notes: 'Mixed veg with beans, carrots and peas'
+  },
+  {
+    day: 'Thursday', visit: 'Morning',
+    en: 'Poori and subji', hi: 'पूरी और सब्ज़ी',
+    img: 'https://images.unsplash.com/photo-1626132647523-66f5bf380027?w=700&auto=format&fit=crop&q=80',
+    notes: 'Puffy hot pooris with potato masala'
+  },
+  {
+    day: 'Thursday', visit: 'Evening',
+    en: 'Chapati and subji', hi: 'चपाती और सब्ज़ी',
+    img: 'https://images.unsplash.com/photo-1505253758473-96b3015f240a?w=700&auto=format&fit=crop&q=80',
+    notes: 'Light evening meal, low oil'
+  },
+  {
+    day: 'Friday', visit: 'Morning',
+    en: 'Pulao', hi: 'पुलाव',
+    img: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=700&auto=format&fit=crop&q=80',
+    notes: 'Fragrant vegetable pulao with raita'
+  },
+  {
+    day: 'Friday', visit: 'Evening',
+    en: 'Rice and curry', hi: 'चावल और करी',
+    img: 'https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?w=700&auto=format&fit=crop&q=80',
+    notes: 'Steamed rice with south style curry'
+  },
+  {
+    day: 'Saturday', visit: 'Morning',
+    en: 'Rice and chutney', hi: 'चावल और चटनी',
+    img: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=700&auto=format&fit=crop&q=80',
+    notes: 'Morning energy breakfast'
+  },
+  {
+    day: 'Saturday', visit: 'Evening',
+    en: 'Chicken curry', hi: 'चिकन करी',
+    img: 'https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=700&auto=format&fit=crop&q=80',
+    notes: 'Special weekend aromatic chicken curry'
+  }
+];
+
+// Rich Visual Grocery Catalog for quick tapping (No manual typing required!)
+const VISUAL_GROCERY_CATALOG = [
+  // Vegetables
+  { id: 'v_onion', cat: 'veg', en: 'Onion', hi: 'प्याज़', defaultQty: '2 kg', img: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=400&auto=format&fit=crop&q=80', fallback: '🧅' },
+  { id: 'v_tomato', cat: 'veg', en: 'Tomato', hi: 'टमाटर', defaultQty: '1 kg', img: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=400&auto=format&fit=crop&q=80', fallback: '🍅' },
+  { id: 'v_potato', cat: 'veg', en: 'Potato', hi: 'आलू', defaultQty: '2 kg', img: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=400&auto=format&fit=crop&q=80', fallback: '🥔' },
+  { id: 'v_ginger', cat: 'veg', en: 'Ginger', hi: 'अदरक', defaultQty: '250 g', img: 'assets/grocery/ginger.jpg', onlineFallback: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Ginger_Root.jpg/500px-Ginger_Root.jpg', fallback: '🫚' },
+  { id: 'v_garlic', cat: 'veg', en: 'Garlic', hi: 'लहसुन', defaultQty: '250 g', img: 'assets/grocery/garlic.jpg', onlineFallback: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Garlic_bulb.jpg/500px-Garlic_bulb.jpg', fallback: '🧄' },
+  { id: 'v_chilli', cat: 'veg', en: 'Green Chilli', hi: 'हरी मिर्च', defaultQty: '200 g', img: 'https://images.unsplash.com/photo-1588252303782-cb80119abd6d?w=400&auto=format&fit=crop&q=80', fallback: '🌶️' },
+  { id: 'v_coriander', cat: 'veg', en: 'Coriander leaves', hi: 'धनिया पत्ता', defaultQty: '1 Bunch', img: 'assets/grocery/coriander.jpg', onlineFallback: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Coriander_Leaves.jpg/500px-Coriander_Leaves.jpg', fallback: '🌿' },
+  { id: 'v_cauliflower', cat: 'veg', en: 'Cauliflower (Gobi)', hi: 'फूलगोभी', defaultQty: '1 pc', img: 'https://images.unsplash.com/photo-1568584711075-3d021a7c3ca3?w=400&auto=format&fit=crop&q=80', fallback: '🥦' },
+  { id: 'v_carrot', cat: 'veg', en: 'Carrot', hi: 'गाजर', defaultQty: '500 g', img: 'https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=400&auto=format&fit=crop&q=80', fallback: '🥕' },
+  { id: 'v_beans', cat: 'veg', en: 'French Beans', hi: 'बीन्स', defaultQty: '500 g', img: 'https://images.unsplash.com/photo-1567375698348-5d9d5ae99de0?w=400&auto=format&fit=crop&q=80', fallback: '🫛' },
+  { id: 'v_lemon', cat: 'veg', en: 'Lemon', hi: 'नींबू', defaultQty: '6 pcs', img: 'assets/grocery/lemon.jpg', onlineFallback: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Lemon.jpg/500px-Lemon.jpg', fallback: '🍋' },
+  { id: 'v_peas', cat: 'veg', en: 'Green Peas', hi: 'हरी मटर', defaultQty: '500 g', img: 'assets/grocery/peas.jpg', onlineFallback: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Pisum_sativum_green.jpg/500px-Pisum_sativum_green.jpg', fallback: '🟢' },
+  
+  // Dairy & Proteins
+  { id: 'p_milk', cat: 'dairy', en: 'Fresh Milk', hi: 'दूध', defaultQty: '1 Litre', img: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=400&auto=format&fit=crop&q=80', fallback: '🥛' },
+  { id: 'p_paneer', cat: 'dairy', en: 'Paneer', hi: 'पनीर', defaultQty: '500 g', img: 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=400&auto=format&fit=crop&q=80', fallback: '🧀' },
+  { id: 'p_eggs', cat: 'dairy', en: 'Eggs', hi: 'अंडे', defaultQty: '1 Dozen', img: 'https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=400&auto=format&fit=crop&q=80', fallback: '🥚' },
+  { id: 'p_chicken', cat: 'dairy', en: 'Fresh Chicken', hi: 'चिकन', defaultQty: '1 kg', img: 'https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=400&auto=format&fit=crop&q=80', fallback: '🍗' },
+  { id: 'p_curd', cat: 'dairy', en: 'Curd / Dahi', hi: 'दही', defaultQty: '1 Packet', img: 'assets/grocery/curd.jpg', onlineFallback: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Curd_India.jpg/500px-Curd_India.jpg', fallback: '🥣' },
+
+  // Staples & Grains
+  { id: 's_rice', cat: 'staples', en: 'Rice (Sona Masoori)', hi: 'चावल', defaultQty: '5 kg', img: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400&auto=format&fit=crop&q=80', fallback: '🍚' },
+  { id: 's_atta', cat: 'staples', en: 'Wheat Flour / Atta', hi: 'गेहूं का आटा', defaultQty: '5 kg', img: 'https://images.unsplash.com/photo-1627485937980-221c88ac04f9?w=400&auto=format&fit=crop&q=80', fallback: '🌾' },
+  { id: 's_dal', cat: 'staples', en: 'Toor Dal', hi: 'तूर / अरहर दाल', defaultQty: '1 kg', img: 'assets/grocery/toor_dal.jpg', onlineFallback: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Toor_dal.jpg/500px-Toor_dal.jpg', fallback: '🍲' },
+  { id: 's_oil', cat: 'staples', en: 'Cooking Oil', hi: 'खाना पकाने का तेल', defaultQty: '1 Litre', img: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=400&auto=format&fit=crop&q=80', fallback: '🛢️' },
+  { id: 's_salt', cat: 'staples', en: 'Salt', hi: 'नमक', defaultQty: '1 Packet', img: 'https://images.unsplash.com/photo-1518110925495-5fe2fda0442c?w=400&auto=format&fit=crop&q=80', fallback: '🧂' },
+
+  // Spices & Masala
+  { id: 'm_turmeric', cat: 'spices', en: 'Turmeric Powder', hi: 'हल्दी पाउडर', defaultQty: '250 g', img: 'assets/grocery/turmeric.jpg', onlineFallback: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Turmeric_Powder.jpg/500px-Turmeric_Powder.jpg', fallback: '🟡' },
+  { id: 'm_chilli_pwd', cat: 'spices', en: 'Red Chilli Powder', hi: 'लाल मिर्च पाउडर', defaultQty: '250 g', img: 'assets/grocery/red_chilli.jpg', onlineFallback: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Red_chilli_powder.jpg/500px-Red_chilli_powder.jpg', fallback: '🔴' },
+  { id: 'm_garam', cat: 'spices', en: 'Garam Masala', hi: 'गरम मसाला', defaultQty: '100 g', img: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=400&auto=format&fit=crop&q=80', fallback: '🌿' },
+  { id: 'm_tea', cat: 'spices', en: 'Tea Powder', hi: 'चाय पत्ती', defaultQty: '500 g', img: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=400&auto=format&fit=crop&q=80', fallback: '☕' }
+];
+
+const USERS = [
+  { name: 'sobendra', email: 'sobendrabohara56@gmail.com', role: 'cook', lang: 'hi', display: 'Sobendra (रसोइया)' },
+  { name: 'kishan', email: 'kishanprakashkr@gmail.com', role: 'employee', lang: 'en', display: 'Kishan' },
+  { name: 'joju', email: 'jojumohan882@gmail.com', role: 'founder', lang: 'en', display: 'Joju (Founder)' }
+];
+
+/* ==========================================================================
+   APP STATE MANAGEMENT (LocalStorage + BroadcastChannel sync)
+   ========================================================================== */
+
+const syncChannel = ('BroadcastChannel' in window) ? new BroadcastChannel('cook_tracker_sync') : null;
+
+// Auto-migrate schema if updated
+const TASK_SCHEMA_VERSION = 'v4_clean_floors_vessels_daily';
+if (localStorage.getItem('rc_task_version') !== TASK_SCHEMA_VERSION) {
+  localStorage.setItem('rc_tasks', JSON.stringify(DEFAULT_TASKS));
+  localStorage.setItem('rc_schedule', JSON.stringify(DEFAULT_SCHEDULE));
+  localStorage.setItem('rc_task_version', TASK_SCHEMA_VERSION);
+}
+
+const AppState = {
+  role: localStorage.getItem('rc_role') || 'cook',
+  lang: localStorage.getItem('rc_lang') || 'hi', // Hindi default for cook friendliness
+  soundEnabled: localStorage.getItem('rc_sound') !== '0', // Default sound on
+  currentTab: 'today',
+  viewDateOffset: 0,
+  grocerySearch: '',
+  selectedShift: new Date().getHours() < 15 ? 'Morning' : 'Evening', // 3 PM cutoff
+  selectedCat: 'all',
+  
+  // Dynamic persistent stores
+  tasks: JSON.parse(localStorage.getItem('rc_tasks') || 'null') || DEFAULT_TASKS,
+  schedule: JSON.parse(localStorage.getItem('rc_schedule') || 'null') || DEFAULT_SCHEDULE,
+  menu: JSON.parse(localStorage.getItem('rc_menu') || 'null') || DEFAULT_MENU,
+  attendance: JSON.parse(localStorage.getItem('rc_attendance') || '{}'),
+  workLogs: JSON.parse(localStorage.getItem('rc_work_logs') || '{}'),
+  groceryRequests: JSON.parse(localStorage.getItem('rc_grocery_requests') || '[]'),
+  cookedStatus: JSON.parse(localStorage.getItem('rc_cooked_status') || '{}'),
+  workProofs: JSON.parse(localStorage.getItem('rc_work_proofs') || '[]'),
+  
+  // Active modal item
+  activeModalItem: null,
+  activeModalQty: '1 kg'
+};
+
+// Sync and repair any cached grocery requests with the latest verified catalog images
+if (Array.isArray(AppState.groceryRequests)) {
+  AppState.groceryRequests.forEach(r => {
+    const matched = VISUAL_GROCERY_CATALOG.find(x => x.id === r.itemId || x.en === r.itemEn);
+    if (matched) {
+      r.img = matched.img;
+      r.fallback = matched.fallback;
+    }
+  });
+}
+
+function saveState(broadcast = true) {
+  localStorage.setItem('rc_role', AppState.role);
+  localStorage.setItem('rc_lang', AppState.lang);
+  localStorage.setItem('rc_tasks', JSON.stringify(AppState.tasks));
+  localStorage.setItem('rc_schedule', JSON.stringify(AppState.schedule));
+  localStorage.setItem('rc_menu', JSON.stringify(AppState.menu));
+  localStorage.setItem('rc_attendance', JSON.stringify(AppState.attendance));
+  localStorage.setItem('rc_work_logs', JSON.stringify(AppState.workLogs));
+  localStorage.setItem('rc_grocery_requests', JSON.stringify(AppState.groceryRequests));
+  localStorage.setItem('rc_cooked_status', JSON.stringify(AppState.cookedStatus));
+  try {
+    localStorage.setItem('rc_work_proofs', JSON.stringify(AppState.workProofs || []));
+  } catch (e) {
+    console.warn('LocalStorage limit reached for photos, pruning oldest...');
+    if (AppState.workProofs && AppState.workProofs.length > 15) {
+      AppState.workProofs = AppState.workProofs.slice(0, 15);
+      localStorage.setItem('rc_work_proofs', JSON.stringify(AppState.workProofs));
+    }
+  }
+  
+  if (broadcast && syncChannel) {
+    syncChannel.postMessage({ type: 'STATE_UPDATED' });
+  }
+}
+
+if (syncChannel) {
+  syncChannel.onmessage = (e) => {
+    if (e.data.type === 'STATE_UPDATED') {
+      // Reload state from localStorage
+      AppState.attendance = JSON.parse(localStorage.getItem('rc_attendance') || '{}');
+      AppState.workLogs = JSON.parse(localStorage.getItem('rc_work_logs') || '{}');
+      AppState.groceryRequests = JSON.parse(localStorage.getItem('rc_grocery_requests') || '[]');
+      AppState.cookedStatus = JSON.parse(localStorage.getItem('rc_cooked_status') || '{}');
+      AppState.workProofs = JSON.parse(localStorage.getItem('rc_work_proofs') || '[]');
+      AppState.menu = JSON.parse(localStorage.getItem('rc_menu') || 'null') || DEFAULT_MENU;
+      renderApp();
+    }
+  };
+}
+
+// Translations dictionary
+const I18N = {
+  hi: {
+    brand: 'रसोई मित्र',
+    brandSub: 'कुक और रसोई ट्रैकर',
+    cookRole: 'कुक',
+    adminRole: 'एडमिन',
+    today: 'आज का काम',
+    grocery: 'राशन/सब्ज़ी',
+    menu: 'साप्ताहिक मेन्यू',
+    admin: 'एडमिन पैनल',
+    morning: 'सुबह की विज़िट',
+    evening: 'शाम की विज़िट',
+    arriveBtn: '📍 मैं आ गया (Arrival)',
+    arrivedStatus: '✅ पहुंचे:',
+    notArrived: 'अभी तक आगमन नहीं हुआ',
+    cookedBtn: '🍳 खाना बन गया (Mark Cooked)',
+    cookedDone: '✅ खाना तैयार है!',
+    selectQty: 'कितनी मात्रा चाहिए? (Select Quantity)',
+    sendReq: 'सामान मंगाएं',
+    reqSuccess: 'अनुरोध सफलतापूर्वक भेजा गया!',
+    taskDone: 'काम पूरा हुआ!',
+    sundayHeroTitle: '🎉 आज रविवार की छुट्टी है!',
+    sundayHeroSub: 'कुक की आज छुट्टी है। कोई काम निर्धारित नहीं है। आप कल के लिए राशन मंगा सकते हैं।',
+    cleanTasks: 'सफ़ाई और किचन के काम',
+    dailyDone: 'काम पूरा हुआ',
+    allBought: 'सब खरीद लिया गया'
+  },
+  en: {
+    brand: 'Home Cook Manager',
+    brandSub: 'Daily Work & Grocery Tracker',
+    cookRole: 'Cook',
+    adminRole: 'Admin',
+    today: 'Today',
+    grocery: 'Groceries',
+    menu: 'Weekly Menu',
+    admin: 'Admin Hub',
+    morning: 'Morning Visit',
+    evening: 'Evening Visit',
+    arriveBtn: '📍 I have Arrived',
+    arrivedStatus: '✅ Arrived at',
+    notArrived: 'Not checked in yet',
+    cookedBtn: '🍳 Meal is Cooked',
+    cookedDone: '✅ Meal Cooked!',
+    selectQty: 'Select Quantity Needed',
+    sendReq: 'Request Item',
+    reqSuccess: 'Item requested successfully!',
+    taskDone: 'Task Completed!',
+    sundayHeroTitle: '🎉 Sunday Holiday!',
+    sundayHeroSub: 'Cook has holiday on Sunday. No cooking scheduled. You can prepare grocery for Monday.',
+    cleanTasks: 'Kitchen & Cleaning Tasks',
+    dailyDone: 'completed',
+    allBought: 'All Purchased'
+  }
+};
+
+function t(key) {
+  return I18N[AppState.lang][key] || key;
+}
+
+// Utilities
+const pad = n => String(n).padStart(2, '0');
+const getTodayDateStr = () => {
+  const d = new Date();
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+};
+const getDayName = (offset = 0) => {
+  const d = new Date();
+  d.setDate(d.getDate() + offset);
+  return DAYS[d.getDay()];
+};
+const formatTime = (ts) => {
+  if (!ts) return '';
+  return new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+};
+
+// Subtle Web Audio Chime Sound (no external assets needed)
+function playChime(success = true) {
+  if (AppState && AppState.soundEnabled === false) return;
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'sine';
+    if (success) {
+      osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+      osc.frequency.exponentialRampToValueAtTime(659.25, ctx.currentTime + 0.1); // E5
+      osc.frequency.exponentialRampToValueAtTime(783.99, ctx.currentTime + 0.2); // G5
+    } else {
+      osc.frequency.setValueAtTime(350, ctx.currentTime);
+    }
+    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.35);
+  } catch(e) {}
+}
+
+
+const getDateObjWithOffset = (offset = 0) => {
+  const d = new Date();
+  d.setDate(d.getDate() + offset);
+  return d;
+};
+const getDateStrWithOffset = (offset = 0) => {
+  const d = getDateObjWithOffset(offset);
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+};
+const getDateDisplay = (offset = 0, isHi = false) => {
+  const d = getDateObjWithOffset(offset);
+  return d.toLocaleDateString(isHi ? 'hi-IN' : 'en-US', { day: 'numeric', month: 'short' });
+};
+
+function changeDateOffset(delta) {
+  AppState.viewDateOffset = (AppState.viewDateOffset || 0) + delta;
+  renderApp();
+}
+
+function resetToToday() {
+  AppState.viewDateOffset = 0;
+  renderApp();
+}
+
+function toggleSound() {
+  AppState.soundEnabled = !AppState.soundEnabled;
+  localStorage.setItem('rc_sound', AppState.soundEnabled ? '1' : '0');
+  updateSoundButton();
+  showToast(AppState.soundEnabled ? '🔊 Sound effects turned ON' : '🔇 Sound effects turned OFF');
+}
+
+function updateSoundButton() {
+  const btn = document.getElementById('soundBtn');
+  if (btn) {
+    btn.textContent = AppState.soundEnabled ? '🔊' : '🔇';
+    btn.title = AppState.soundEnabled ? 'Sound ON (Click to mute)' : 'Sound Muted (Click to unmute)';
+  }
+}
+
+function speakMealMenu(title, notes) {
+  let text = AppState.lang === 'hi' 
+    ? `आज का खाना: ${title}. ${notes ? 'टिप्पणी: ' + notes : ''}`
+    : `Today's meal: ${title}. ${notes ? 'Note: ' + notes : ''}`;
+  speakText(text, AppState.lang === 'hi' ? 'hi-IN' : 'en-US');
+}
+
+function speakText(text, lang = 'hi-IN') {
+  if (!('speechSynthesis' in window)) {
+    showToast('Voice speech not supported');
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = lang;
+  utter.rate = 0.95;
+  window.speechSynthesis.speak(utter);
+  showToast(AppState.lang === 'hi' ? '🔊 बोलकर सुनाया जा रहा है' : '🔊 Speaking...', '🔊');
+}
+
+function filterGrocerySearch(val) {
+  AppState.grocerySearch = val;
+  renderApp();
+  const inp = document.getElementById('grocSearchInput');
+  if (inp) {
+    inp.focus();
+    inp.setSelectionRange(inp.value.length, inp.value.length);
+  }
+}
+
+function startGroceryVoiceSearch() {
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRec) {
+    showToast('Voice recognition not supported in browser');
+    return;
+  }
+  const rec = new SpeechRec();
+  rec.lang = AppState.lang === 'hi' ? 'hi-IN' : 'en-US';
+  const micBtn = document.getElementById('grocMicBtn');
+  if (micBtn) micBtn.classList.add('listening');
+  showToast(AppState.lang === 'hi' ? '🎙️ बोलिए... (उदा. आलू, टमाटर)' : '🎙️ Listening... (e.g. potato, tomato)', '🎙️');
+  
+  rec.onresult = (e) => {
+    const transcript = e.results[0][0].transcript;
+    if (micBtn) micBtn.classList.remove('listening');
+    filterGrocerySearch(transcript);
+    showToast(`🔍 "${transcript}"`);
+  };
+  rec.onerror = () => {
+    if (micBtn) micBtn.classList.remove('listening');
+    showToast('Voice search cancelled');
+  };
+  rec.onend = () => {
+    if (micBtn) micBtn.classList.remove('listening');
+  };
+  rec.start();
+}
+
+function showToast(msg, icon = '✨') {
+  const box = document.getElementById('toastBox');
+  const div = document.createElement('div');
+  div.className = 'toast';
+  div.innerHTML = `<span>${icon}</span><span>${msg}</span>`;
+  box.appendChild(div);
+  setTimeout(() => {
+    div.style.opacity = '0';
+    div.style.transition = 'opacity 0.3s ease';
+    setTimeout(() => div.remove(), 300);
+  }, 4000);
+}
+
+/* ==========================================================================
+   APP NAVIGATION, ROLE PIN PROTECTION & EVENT HANDLERS
+   ========================================================================== */
+
+function setRole(newRole) {
+  if (newRole === 'admin') {
+    if (AppState.role !== 'admin') {
+      openAdminPinModal();
+      return;
+    }
+    AppState.currentTab = 'admin';
+  } else {
+    lockToCookMode();
+    return;
+  }
+  saveState();
+  updateHeaderControls();
+  updateNavState();
+  renderApp();
+  showToast(newRole === 'cook' ? '🧑‍🍳 Cook Mode Active (रसोइया दृश्य)' : '👑 Admin Dashboard Active');
+}
+
+function promptAdminLogin() {
+  if (AppState.role === 'admin') {
+    AppState.currentTab = 'admin';
+    updateNavState();
+    renderApp();
+  } else {
+    openAdminPinModal();
+  }
+}
+
+function lockToCookMode() {
+  AppState.role = 'cook';
+  AppState.currentTab = 'today';
+  if (!localStorage.getItem('rc_lang_manually_set')) {
+    AppState.lang = 'hi';
+  }
+  saveState();
+  updateHeaderControls();
+  updateNavState();
+  renderApp();
+  showToast('🧑‍🍳 Cook Mode Locked (Admin views hidden)');
+}
+
+function openAdminPinModal() {
+  const modal = document.getElementById('adminPinModal');
+  const input = document.getElementById('adminPinInput');
+  const errorMsg = document.getElementById('pinErrorMsg');
+  if (errorMsg) errorMsg.style.display = 'none';
+  if (input) input.value = '';
+  if (modal) modal.classList.add('open');
+  setTimeout(() => { if (input) input.focus(); }, 250);
+}
+
+function closeAdminPinModal(e) {
+  if (e && e.target && e.target !== document.getElementById('adminPinModal')) return;
+  const modal = document.getElementById('adminPinModal');
+  if (modal) modal.classList.remove('open');
+}
+
+function submitAdminPin() {
+  const input = document.getElementById('adminPinInput');
+  const errorMsg = document.getElementById('pinErrorMsg');
+  const entered = (input?.value || '').trim();
+  const validPin = localStorage.getItem('rc_admin_pin') || '1234';
+
+  if (entered === validPin) {
+    if (errorMsg) errorMsg.style.display = 'none';
+    const modal = document.getElementById('adminPinModal');
+    if (modal) modal.classList.remove('open');
+    AppState.role = 'admin';
+    AppState.currentTab = 'admin'; // IMMEDIATELY SHOW ADMIN DASHBOARD!
+    if (!localStorage.getItem('rc_lang_manually_set')) {
+      AppState.lang = 'en';
+    }
+    saveState();
+    updateHeaderControls();
+    updateNavState();
+    renderApp();
+    playChime(true);
+    showToast('👑 Admin Dashboard Unlocked! (Welcome Kishan & Joju)');
+  } else {
+    if (errorMsg) errorMsg.style.display = 'block';
+    if (input) {
+      input.value = '';
+      input.focus();
+    }
+  }
+}
+
+function changeAdminPin() {
+  const currentPin = localStorage.getItem('rc_admin_pin') || '1234';
+  const oldPin = prompt('Enter CURRENT 4-digit Admin PIN:');
+  if (oldPin === null) return;
+  if (oldPin.trim() !== currentPin) {
+    alert('❌ Incorrect current PIN!');
+    return;
+  }
+  const newPin = prompt('Enter NEW 4-digit Admin PIN:');
+  if (!newPin || newPin.trim().length < 4) {
+    alert('❌ PIN must be at least 4 digits!');
+    return;
+  }
+  localStorage.setItem('rc_admin_pin', newPin.trim());
+  showToast('✅ Admin PIN updated successfully to: ' + newPin.trim());
+  renderApp();
+}
+
+function toggleLang() {
+  AppState.lang = AppState.lang === 'hi' ? 'en' : 'hi';
+  localStorage.setItem('rc_lang_manually_set', 'true');
+  saveState();
+  updateHeaderControls();
+  renderApp();
+}
+
+function toggleTheme() {
+  const root = document.documentElement;
+  const current = root.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  root.setAttribute('data-theme', next);
+  localStorage.setItem('rc_theme', next);
+}
+
+// Restore theme
+if (localStorage.getItem('rc_theme') === 'dark') {
+  document.documentElement.setAttribute('data-theme', 'dark');
+}
+
+function setShift(shift) {
+  AppState.selectedShift = shift;
+  renderApp();
+}
+
+function setTab(tab) {
+  if (tab === 'admin' && AppState.role !== 'admin') {
+    openAdminPinModal();
+    return;
+  }
+  AppState.currentTab = tab;
+  updateNavState();
+  renderApp();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateHeaderControls() {
+  const isAdmin = AppState.role === 'admin';
+  const roleBox = document.getElementById('headerRoleControls');
+  if (roleBox) {
+    if (isAdmin) {
+      roleBox.innerHTML = `
+        <button class="role-btn active" onclick="setTab('admin')" style="background:var(--pri);color:#fff;" title="Active: Admin Dashboard">
+          👑 <span>Admin</span>
+        </button>
+        <button class="role-btn exit-admin-btn" onclick="lockToCookMode()" title="Switch back to Cook View">
+          🧑‍🍳 <span>Cook View</span>
+        </button>
+      `;
+    } else {
+      roleBox.innerHTML = `
+        <button class="role-btn active" onclick="setTab('today')" title="Active: Cook Mode">
+          🧑‍🍳 <span>${AppState.lang === 'hi' ? 'रसोइया' : 'Cook'}</span>
+        </button>
+        <button class="role-btn admin-lock-btn" onclick="promptAdminLogin()" title="Unlock Admin Dashboard">
+          🔒 <span>Admin</span>
+        </button>
+      `;
+    }
+  }
+  const brandTitle = document.getElementById('brandTitle');
+  const brandSub = document.getElementById('brandSubtitle');
+  if (brandTitle) brandTitle.textContent = t('brand');
+  if (brandSub) brandSub.textContent = t('brandSub');
+}
+
+function updateNavState() {
+  const isAdmin = AppState.role === 'admin';
+  const botAdmin = document.getElementById('bnav-admin');
+  const deskAdmin = document.getElementById('dtab-admin');
+  if (botAdmin) botAdmin.style.display = isAdmin ? 'flex' : 'none';
+  if (deskAdmin) deskAdmin.style.display = isAdmin ? 'inline-flex' : 'none';
+
+  const tabs = ['today', 'grocery', 'menu', 'admin'];
+  tabs.forEach(tName => {
+    const b = document.getElementById(`bnav-${tName}`);
+    if (b) b.classList.toggle('active', AppState.currentTab === tName);
+    const d = document.getElementById(`dtab-${tName}`);
+    if (d) d.classList.toggle('active', AppState.currentTab === tName);
+  });
+  
+  // Pending grocery requests badge
+  const pendingCount = AppState.groceryRequests.filter(r => r.status === 'Requested').length;
+  const botB = document.getElementById('botGrocBadge');
+  const deskB = document.getElementById('deskGrocBadge');
+  if (botB) {
+    botB.style.display = pendingCount > 0 ? 'inline-block' : 'none';
+    botB.textContent = pendingCount;
+  }
+  if (deskB) {
+    deskB.style.display = pendingCount > 0 ? 'inline-block' : 'none';
+    deskB.textContent = pendingCount;
+  }
+}
+
+/* ==========================================================================
+   ACTIONS: Check-in, Tasks, Meals, Groceries
+   ========================================================================== */
+
+function handleArrival() {
+  const dateStr = getTodayDateStr();
+  const shift = AppState.selectedShift;
+  const key = `${dateStr}__${shift}`;
+  
+  AppState.attendance[key] = {
+    date: dateStr,
+    visit: shift,
+    at: Date.now(),
+    by: 'Sobendra (Cook)',
+    status: 'Arrived'
+  };
+  
+  saveState();
+  playChime(true);
+  try { confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } }); } catch(e){}
+  showToast(AppState.lang === 'hi' ? '📍 उपस्थिति दर्ज हो गई! (Arrival recorded)' : '📍 Arrival logged at ' + formatTime(Date.now()));
+  renderApp();
+}
+
+function handleDeparture() {
+  const dateStr = getTodayDateStr();
+  const shift = AppState.selectedShift;
+  const key = `${dateStr}__${shift}`;
+  
+  if (AppState.attendance[key]) {
+    AppState.attendance[key].departedAt = Date.now();
+    saveState();
+    playChime(true);
+    showToast(AppState.lang === 'hi' ? '🏁 काम पूरा! प्रस्थान दर्ज हुआ।' : '🏁 Shift ended. Departure logged.');
+    renderApp();
+  }
+}
+
+function toggleTask(taskId) {
+  const dateStr = getTodayDateStr();
+  const shift = AppState.selectedShift;
+  const key = `${dateStr}__${shift}__${taskId}`;
+  
+  if (AppState.workLogs[key]) {
+    delete AppState.workLogs[key];
+    showToast(AppState.lang === 'hi' ? 'टास्क पूर्ववत किया' : 'Task unmarked');
+  } else {
+    const taskObj = AppState.tasks.find(x => x.id === taskId);
+    AppState.workLogs[key] = {
+      date: dateStr,
+      visit: shift,
+      taskId: taskId,
+      nameEn: taskObj?.en || taskId,
+      nameHi: taskObj?.hi || taskId,
+      completedAt: Date.now(),
+      by: 'Sobendra'
+    };
+    playChime(true);
+    
+    // Check if all scheduled tasks are done
+    checkAllTasksDone();
+    showToast(AppState.lang === 'hi' ? `✓ ${taskObj?.hi || 'काम'} पूरा हुआ!` : `✓ Completed: ${taskObj?.en || taskId}`);
+  }
+  
+  saveState();
+  renderApp();
+}
+
+function checkAllTasksDone() {
+  const day = getDayName();
+  const shift = AppState.selectedShift;
+  const scheduledTasks = AppState.schedule.filter(s => s.day === day && (s.visit === shift || s.visit === 'Both'));
+  const dateStr = getTodayDateStr();
+  const doneCount = scheduledTasks.filter(s => AppState.workLogs[`${dateStr}__${shift}__${s.taskId}`]).length;
+  
+  if (doneCount + 1 >= scheduledTasks.length && scheduledTasks.length > 0) {
+    try {
+      confetti({ particleCount: 80, spread: 80, origin: { y: 0.5 } });
+    } catch(e){}
+  }
+}
+
+function toggleMealCooked() {
+  const dateStr = getTodayDateStr();
+  const shift = AppState.selectedShift;
+  const key = `${dateStr}__${shift}`;
+  
+  if (AppState.cookedStatus[key]) {
+    delete AppState.cookedStatus[key];
+    showToast('Meal status reset');
+  } else {
+    AppState.cookedStatus[key] = {
+      at: Date.now(),
+      by: 'Sobendra'
+    };
+    playChime(true);
+    try { confetti({ particleCount: 70, spread: 70 }); } catch(e){}
+    showToast(AppState.lang === 'hi' ? '🍳 खाना तैयार मार्क हो गया! ✓' : '🍳 Meal marked as ready!');
+  }
+  saveState();
+  renderApp();
+}
+
+/* ==========================================================================
+   WORK PROOF PHOTOS & CAMERA LOGIC
+   ========================================================================== */
+
+let pendingProofCategory = null;
+
+function compressImage(file, maxDimension = 800, quality = 0.72) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        let width = img.width;
+        let height = img.height;
+        if (width > height) {
+          if (width > maxDimension) {
+            height = Math.round((height * maxDimension) / width);
+            width = maxDimension;
+          }
+        } else {
+          if (height > maxDimension) {
+            width = Math.round((width * maxDimension) / height);
+            height = maxDimension;
+          }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = () => reject(new Error('Failed to load image'));
+      img.src = e.target.result;
+    };
+    reader.onerror = () => reject(new Error('Failed to read file'));
+    reader.readAsDataURL(file);
+  });
+}
+
+function triggerCameraCapture(customCategory = null) {
+  pendingProofCategory = customCategory || document.getElementById('proofCategorySelect')?.value || '📸 Work Proof';
+  const input = document.getElementById('cameraInput');
+  if (input) {
+    input.value = '';
+    input.click();
+  }
+}
+
+function triggerGalleryUpload(customCategory = null) {
+  pendingProofCategory = customCategory || document.getElementById('proofCategorySelect')?.value || '📸 Work Proof';
+  const input = document.getElementById('galleryInput');
+  if (input) {
+    input.value = '';
+    input.click();
+  }
+}
+
+let pendingTaskIdForPhoto = null;
+
+function triggerCameraCapture(customCategory = null) {
+  pendingProofCategory = customCategory || document.getElementById('proofCategorySelect')?.value || '📸 Work Proof';
+  const input = document.getElementById('cameraInput');
+  if (input) {
+    input.value = '';
+    input.click();
+  }
+}
+
+function triggerGalleryUpload(customCategory = null) {
+  pendingProofCategory = customCategory || document.getElementById('proofCategorySelect')?.value || '📸 Work Proof';
+  const input = document.getElementById('galleryInput');
+  if (input) {
+    input.value = '';
+    input.click();
+  }
+}
+
+function triggerMealPhotoClick() {
+  pendingTaskIdForPhoto = 'MEAL';
+  const isHi = AppState.lang === 'hi';
+  triggerCameraCapture(isHi ? '🍽️ तैयार खाना (Meal)' : '🍽️ Cooked Meal');
+}
+
+function triggerTaskPhotoClick(taskId, taskNameHi, taskNameEn, event) {
+  if (event) event.stopPropagation();
+  pendingTaskIdForPhoto = taskId;
+  const isHi = AppState.lang === 'hi';
+  const label = isHi ? taskNameHi : taskNameEn;
+  triggerCameraCapture(label);
+}
+
+async function handleProofPhotoUpload(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  const isHi = AppState.lang === 'hi';
+  showToast(isHi ? '⏳ फोटो प्रोसेस हो रही है...' : '⏳ Processing photo...', '📸');
+
+  try {
+    const compressedDataUrl = await compressImage(file, 800, 0.72);
+    const dateStr = getDateStrWithOffset(AppState.viewDateOffset || 0);
+    const shift = AppState.selectedShift;
+    const cat = pendingProofCategory || (isHi ? '📸 कार्य प्रमाण' : '📸 Work Proof');
+
+    if (!AppState.workProofs) AppState.workProofs = [];
+
+    const newProof = {
+      id: 'proof_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+      date: dateStr,
+      visit: shift,
+      taskId: pendingTaskIdForPhoto || null,
+      category: cat,
+      imgData: compressedDataUrl,
+      timestamp: Date.now(),
+      by: AppState.role === 'cook' ? 'Sobendra (Cook)' : 'Admin'
+    };
+
+    AppState.workProofs.unshift(newProof);
+
+    // If attached to meal
+    if (pendingTaskIdForPhoto === 'MEAL') {
+      const cookedKey = `${dateStr}__${shift}`;
+      if (!AppState.cookedStatus[cookedKey]) {
+        AppState.cookedStatus[cookedKey] = { at: Date.now(), by: 'Sobendra' };
+      }
+      AppState.cookedStatus[cookedKey].photo = compressedDataUrl;
+      AppState.cookedStatus[cookedKey].photoId = newProof.id;
+    } 
+    // If attached to a specific cleaning task
+    else if (pendingTaskIdForPhoto) {
+      const taskKey = `${dateStr}__${shift}__${pendingTaskIdForPhoto}`;
+      if (!AppState.workLogs[taskKey]) {
+        const taskObj = AppState.tasks.find(x => x.id === pendingTaskIdForPhoto);
+        AppState.workLogs[taskKey] = {
+          date: dateStr,
+          visit: shift,
+          taskId: pendingTaskIdForPhoto,
+          nameEn: taskObj?.en || pendingTaskIdForPhoto,
+          nameHi: taskObj?.hi || pendingTaskIdForPhoto,
+          completedAt: Date.now(),
+          by: 'Sobendra'
+        };
+      }
+      AppState.workLogs[taskKey].photo = compressedDataUrl;
+      AppState.workLogs[taskKey].photoId = newProof.id;
+    }
+    pendingTaskIdForPhoto = null;
+
+    // Keep storage clean (max 35 recent proofs)
+    if (AppState.workProofs.length > 35) {
+      AppState.workProofs = AppState.workProofs.slice(0, 35);
+    }
+
+    saveState();
+    playChime(true);
+    try { confetti({ particleCount: 50, spread: 60 }); } catch(e){}
+    showToast(isHi ? '📸 फोटो सुरक्षित हो गई! ✓' : '📸 Photo saved and attached to task! ✓', '✅');
+    renderApp();
+  } catch (err) {
+    console.error('Error processing photo:', err);
+    showToast(isHi ? 'फोटो अपलोड नहीं हो सकी' : 'Failed to process photo', '⚠️');
+  }
+}
+
+function sendShiftReportToAdmin() {
+  const dateStr = getDateStrWithOffset(AppState.viewDateOffset || 0);
+  const shift = AppState.selectedShift;
+  const isHi = AppState.lang === 'hi';
+  
+  const attRecord = AppState.attendance[`${dateStr}__${shift}`];
+  const cookedStatus = AppState.cookedStatus[`${dateStr}__${shift}`];
+  const day = getDayName(AppState.viewDateOffset || 0);
+  const meal = AppState.menu.find(m => m.day === day && m.visit === shift);
+  
+  const scheduledTasks = AppState.schedule
+    .filter(s => s.day === day && (s.visit === shift || s.visit === 'Both'))
+    .map(s => {
+      const tObj = AppState.tasks.find(x => x.id === s.taskId);
+      return { ...s, task: tObj };
+    })
+    .filter(item => item.task && item.task.active);
+    
+  const proofs = (AppState.workProofs || []).filter(p => p.date === dateStr && p.visit === shift);
+
+  let msg = `🧑‍🍳 *RASOI MITRA - COOK WORK REPORT*\n`;
+  msg += `📅 *Date:* ${dateStr} (${day})\n`;
+  msg += `⏰ *Shift:* ${shift} Visit\n`;
+  msg += `👤 *Cook:* Sobendra Bohara\n\n`;
+  
+  msg += `📍 *Attendance:* ${attRecord ? `Arrived at ${formatTime(attRecord.at)}` : 'Not checked in'}\n`;
+  if (attRecord && attRecord.departedAt) {
+    msg += `🏁 *Departure:* ${formatTime(attRecord.departedAt)}\n`;
+  }
+  
+  if (meal) {
+    msg += `\n🍽️ *Meal (${meal.en} / ${meal.hi}):* ${cookedStatus ? `✅ Cooked at ${formatTime(cookedStatus.at)}` : '⏳ In progress'}\n`;
+    if (cookedStatus && cookedStatus.photo) {
+      msg += `   📸 *Meal Photo:* Attached in app\n`;
+    }
+  }
+  
+  msg += `\n🧹 *Tasks Completed:*\n`;
+  scheduledTasks.forEach((st, idx) => {
+    const taskKey = `${dateStr}__${shift}__${st.task.id}`;
+    const log = AppState.workLogs[taskKey];
+    const hasPhoto = !!(log && log.photo);
+    if (log) {
+      msg += `  ${idx + 1}. ✅ *${st.task.en}* (${st.task.hi}) - Done ${formatTime(log.completedAt)} ${hasPhoto ? '📸 [Photo Proof Attached]' : ''}\n`;
+    } else {
+      msg += `  ${idx + 1}. ⏳ *${st.task.en}* - Pending\n`;
+    }
+  });
+  
+  msg += `\n📸 *Total Photo Proofs Uploaded:* ${proofs.length} photo(s)\n`;
+  msg += `\n_Submitted to Admin (Kishan & Joju) via Rasoi Mitra App_`;
+  
+  playChime(true);
+  showToast(isHi ? '📲 व्हाट्सएप पर रिपोर्ट खुल रही है...' : '📲 Opening WhatsApp with report...', '📲');
+  
+  const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+  window.open(whatsappUrl, '_blank');
+}
+
+function approveTaskByAdmin(taskKey) {
+  if (!AppState.workLogs[taskKey]) return;
+  AppState.workLogs[taskKey].approved = !AppState.workLogs[taskKey].approved;
+  AppState.workLogs[taskKey].approvedAt = AppState.workLogs[taskKey].approved ? Date.now() : null;
+  saveState();
+  playChime(true);
+  showToast(AppState.workLogs[taskKey].approved ? '✅ Task Approved by Admin' : 'Approval cleared');
+  renderApp();
+}
+
+function deleteProofPhoto(proofId) {
+  const isHi = AppState.lang === 'hi';
+  if (!confirm(isHi ? 'क्या आप इस फोटो को हटाना चाहते हैं?' : 'Are you sure you want to delete this photo?')) {
+    return;
+  }
+  AppState.workProofs = (AppState.workProofs || []).filter(p => p.id !== proofId);
+  saveState();
+  showToast(isHi ? 'फोटो हटा दी गई' : 'Photo deleted', '🗑️');
+  renderApp();
+}
+
+function openLightbox(proofId) {
+  const proof = (AppState.workProofs || []).find(p => p.id === proofId);
+  if (!proof) return;
+  const modal = document.getElementById('lightboxModal');
+  const img = document.getElementById('lightboxImg');
+  const caption = document.getElementById('lightboxCaption');
+  if (modal && img && caption) {
+    img.src = proof.imgData;
+    caption.innerHTML = `<b>${proof.category}</b> · ${proof.visit} (${proof.date}) · ${formatTime(proof.timestamp)} · ${proof.by}`;
+    modal.classList.add('open');
+  }
+}
+
+function closeLightbox(e) {
+  const modal = document.getElementById('lightboxModal');
+  if (modal) modal.classList.remove('open');
+}
+
+function renderWorkProofSection(dateStr, shift, isHi) {
+  const proofs = (AppState.workProofs || []).filter(p => p.date === dateStr && p.visit === shift);
+
+  return `
+  <div class="proof-card">
+    <div class="proof-header">
+      <h3>📸 <span>${isHi ? 'काम पूरा होने का प्रमाण (तस्वीरें)' : 'Work Completion Photos & Proof'}</span></h3>
+      <span class="tag" style="background:var(--ok-light); color:var(--ok); font-weight:700;">
+        ${proofs.length} ${isHi ? 'फोटो' : 'uploaded'}
+      </span>
+    </div>
+    <p class="proof-sub">
+      ${isHi ? 'काम समाप्त होने के बाद तैयार भोजन या साफ़-सफ़ाई की फोटो खींचें व अपलोड करें।' : 'Cook can snap or upload live photos of cooked meals, clean vessels, counter, and floor after finishing work.'}
+    </p>
+
+    <div class="proof-actions-bar">
+      <div class="proof-ctrl-row">
+        <label style="font-size:12px; font-weight:700; color:var(--ink-sec);">
+          🏷️ ${isHi ? 'फोटो किस कार्य की है?' : 'Photo Category:'}
+        </label>
+        <select id="proofCategorySelect" class="app-input" style="padding:6px 12px; font-size:13px; border-radius:var(--radius-full); font-weight:600; background:var(--surface);">
+          <option value="🍽️ Cooked Meal (तैयार खाना)">🍽️ ${isHi ? 'तैयार खाना' : 'Cooked Meal'}</option>
+          <option value="🍽️ Washed Vessels (धुले बर्तन)">🍽️ ${isHi ? 'धुले बर्तन' : 'Washed Vessels'}</option>
+          <option value="🚰 Kitchen Slab & Basin (रसोई स्लैब)">🚰 ${isHi ? 'रसोई स्लैब व बेसिन' : 'Kitchen Basin & Counter'}</option>
+          <option value="🧹 Cleaned Floor (साफ़ फर्श)">🧹 ${isHi ? 'साफ़ फर्श (झाड़ू-पोछा)' : 'Cleaned Floor'}</option>
+          <option value="✨ Deep Cleaning (विशेष सफ़ाई)">✨ ${isHi ? 'विशेष सफ़ाई (खिड़की/पंखा/सीढ़ी)' : 'Deep Cleaning'}</option>
+          <option value="📸 Other Kitchen Proof (अन्य)">📸 ${isHi ? 'अन्य' : 'Other Proof'}</option>
+        </select>
+      </div>
+
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:2px;">
+        <button type="button" class="btn-camera" onclick="triggerCameraCapture()">
+          📷 <span>${isHi ? 'फोटो खींचें (Camera)' : 'Take Photo (Camera)'}</span>
+        </button>
+        <button type="button" class="btn-secondary" style="border-radius:var(--radius-full); padding:8px 16px; font-weight:700;" onclick="triggerGalleryUpload()">
+          🖼️ <span>${isHi ? 'गैलरी से चुनें' : 'Upload from Gallery'}</span>
+        </button>
+      </div>
+    </div>
+
+    ${proofs.length === 0 ? `
+      <div class="proof-empty">
+        📷 ${isHi ? 'इस विज़िट के लिए अभी कोई फोटो अपलोड नहीं है। काम ख़त्म होने पर ऊपर दिए गए "फोटो खींचें" बटन से तस्वीर जोड़ें।' : 'No photos uploaded yet for this shift. Click "Take Photo (Camera)" to capture work proof.'}
+      </div>
+    ` : `
+      <div class="proof-grid">
+        ${proofs.map(p => `
+          <div class="proof-item" onclick="openLightbox('${p.id}')" title="${isHi ? 'बड़ा देखने के लिए क्लिक करें' : 'Click to view full size'}">
+            <img class="proof-img" src="${p.imgData}" alt="${p.category}">
+            <div class="proof-tag">${p.category}</div>
+            <button class="proof-del-btn" onclick="event.stopPropagation(); deleteProofPhoto('${p.id}')" title="${isHi ? 'हटाएं' : 'Delete'}">✕</button>
+          </div>
+        `).join('')}
+      </div>
+    `}
+  </div>
+  `;
+}
+
+/* ==========================================================================
+   GROCERY VISUAL PICKER & MODAL
+   ========================================================================== */
+
+function openGroceryModal(itemId) {
+  const item = VISUAL_GROCERY_CATALOG.find(x => x.id === itemId);
+  if (!item) return;
+  
+  AppState.activeModalItem = item;
+  AppState.activeModalQty = item.defaultQty || '1 kg';
+  
+  const modalImg = document.getElementById('modalImg');
+  modalImg.src = item.img;
+  modalImg.onerror = function() {
+    if (item.onlineFallback && this.src !== item.onlineFallback) {
+      this.src = item.onlineFallback;
+    }
+  };
+  document.getElementById('modalTitleHi').textContent = item.hi;
+  document.getElementById('modalTitleEn').textContent = item.en;
+  document.getElementById('modalQtyVal').textContent = AppState.activeModalQty;
+  
+  // Highlight matching chip
+  updatePresetChipUI(AppState.activeModalQty);
+  
+  document.getElementById('qtyModal').classList.add('open');
+}
+
+function closeQtyModal(e) {
+  document.getElementById('qtyModal').classList.remove('open');
+}
+
+function setPresetQty(qty) {
+  AppState.activeModalQty = qty;
+  document.getElementById('modalQtyVal').textContent = qty;
+  updatePresetChipUI(qty);
+}
+
+function updatePresetChipUI(qty) {
+  document.querySelectorAll('.qty-chip').forEach(btn => {
+    btn.classList.toggle('selected', btn.textContent.trim() === qty);
+  });
+}
+
+function adjustQty(direction) {
+  let val = AppState.activeModalQty;
+  // Parse number
+  const match = val.match(/([\d\.]+)\s*(.*)/);
+  if (match) {
+    let num = parseFloat(match[1]);
+    const unit = match[2] || 'kg';
+    num = Math.max(1, num + direction);
+    val = `${num} ${unit}`;
+  } else {
+    val = direction > 0 ? '2 kg' : '500 g';
+  }
+  AppState.activeModalQty = val;
+  document.getElementById('modalQtyVal').textContent = val;
+  updatePresetChipUI(val);
+}
+
+function confirmGroceryRequest() {
+  const item = AppState.activeModalItem;
+  if (!item) return;
+  
+  const newReq = {
+    id: 'req_' + Date.now(),
+    itemId: item.id,
+    itemEn: item.en,
+    itemHi: item.hi,
+    img: item.img,
+    fallback: item.fallback,
+    qty: AppState.activeModalQty,
+    date: getTodayDateStr(),
+    time: Date.now(),
+    status: 'Requested',
+    by: AppState.role === 'cook' ? 'Sobendra (Cook)' : 'Admin'
+  };
+  
+  AppState.groceryRequests.unshift(newReq);
+  saveState();
+  closeQtyModal();
+  playChime(true);
+  showToast(AppState.lang === 'hi' ? `🛒 ${item.hi} (${newReq.qty}) का अनुरोध भेजा गया!` : `🛒 Requested: ${item.en} (${newReq.qty})`);
+  updateNavState();
+  renderApp();
+}
+
+function toggleGroceryStatus(reqId) {
+  const req = AppState.groceryRequests.find(r => r.id === reqId);
+  if (!req) return;
+  
+  req.status = req.status === 'Requested' ? 'Bought' : 'Requested';
+  req.boughtAt = req.status === 'Bought' ? Date.now() : null;
+  saveState();
+  playChime(true);
+  updateNavState();
+  renderApp();
+  showToast(req.status === 'Bought' ? `✅ Marked bought: ${req.itemEn}` : `Marked as pending`);
+}
+
+function deleteGroceryRequest(reqId) {
+  AppState.groceryRequests = AppState.groceryRequests.filter(r => r.id !== reqId);
+  saveState();
+  updateNavState();
+  renderApp();
+  showToast('Item removed');
+}
+
+function shareGroceryWhatsApp() {
+  const pending = AppState.groceryRequests.filter(r => r.status === 'Requested');
+  if (pending.length === 0) {
+    showToast('No pending grocery items to share!');
+    return;
+  }
+  
+  let text = `🛒 *KITCHEN GROCERY LIST (${getTodayDateStr()})*\n`;
+  text += `_Requested by Cook for Kitchen:_\n\n`;
+  pending.forEach((p, idx) => {
+    text += `${idx + 1}. *${p.itemEn}* (${p.itemHi}) — *${p.qty}*\n`;
+  });
+  text += `\n_Generated via Rasoi Mitra App_`;
+  
+  const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+  window.open(url, '_blank');
+}
+
+function copyGroceryList() {
+  const pending = AppState.groceryRequests.filter(r => r.status === 'Requested');
+  if (pending.length === 0) {
+    showToast('No pending grocery items to copy');
+    return;
+  }
+  let text = `🛒 KITCHEN GROCERY LIST (${getTodayDateStr()}):\n`;
+  pending.forEach((p, idx) => {
+    text += `${idx + 1}. ${p.itemEn} (${p.itemHi}) - ${p.qty}\n`;
+  });
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('📋 Copied grocery list to clipboard!');
+  }).catch(() => {
+    showToast('List generated');
+  });
+}
+
+/* ==========================================================================
+   RENDER VIEWS: TODAY, GROCERY, MENU, ADMIN
+   ========================================================================== */
+
+function renderApp() {
+  updateNavState();
+  const app = document.getElementById('appContent');
+  
+  switch(AppState.currentTab) {
+    case 'today':
+      app.innerHTML = renderTodayView();
+      break;
+    case 'grocery':
+      app.innerHTML = renderGroceryView();
+      break;
+    case 'menu':
+      app.innerHTML = renderWeeklyMenuView();
+      break;
+    case 'admin':
+      app.innerHTML = renderAdminHubView();
+      break;
+    default:
+      app.innerHTML = renderTodayView();
+  }
+}
+
+// 1. TODAY'S SHIFT & MONITORING VIEW
+function renderTodayView() {
+  const isHi = AppState.lang === 'hi';
+  const offset = AppState.viewDateOffset || 0;
+  const day = getDayName(offset);
+  const dateStr = getDateStrWithOffset(offset);
+  const isSunday = (day === 'Sunday');
+  const shift = AppState.selectedShift;
+  const isMorning = shift === 'Morning';
+  
+  let html = '';
+  
+  // Date & Shift Selector Bar
+  html += `
+  <div class="shift-bar">
+    <div class="shift-info">
+      <div class="date-navigator">
+        <button class="date-nav-btn" onclick="changeDateOffset(-1)" title="Previous Day">◀</button>
+        <span class="date-pill" onclick="resetToToday()" style="cursor:pointer" title="Click to view Today">
+          📅 ${isHi ? getDayHi(day) : day}, ${getDateDisplay(offset, isHi)}
+          ${offset === 0 ? `<span class="badge-today">${isHi ? 'आज' : 'Today'}</span>` : ''}
+          ${offset === -1 ? `<span class="badge-subtle">${isHi ? 'कल' : 'Yesterday'}</span>` : ''}
+          ${offset === 1 ? `<span class="badge-subtle">${isHi ? 'कल (आगामी)' : 'Tomorrow'}</span>` : ''}
+        </span>
+        <button class="date-nav-btn" onclick="changeDateOffset(1)" title="Next Day">▶</button>
+      </div>
+      ${isSunday ? '<span class="task-tag weekly" style="background:#ffd54f;color:#e65100;font-weight:700">🎉 Holiday (छुट्टी)</span>' : ''}
+    </div>
+    
+    <div class="shift-toggle">
+      <button class="shift-btn ${isMorning ? 'active' : ''}" onclick="setShift('Morning')">
+        🌅 <span>${isHi ? 'सुबह' : 'Morning'}</span>
+      </button>
+      <button class="shift-btn ${!isMorning ? 'active evening' : ''}" onclick="setShift('Evening')">
+        🌆 <span>${isHi ? 'शाम' : 'Evening'}</span>
+      </button>
+    </div>
+  </div>
+  `;
+  
+  // SUNDAY HOLIDAY SPECIAL SCREEN
+  if (isSunday) {
+    html += `
+    <div class="sunday-hero">
+      <h2>${t('sundayHeroTitle')}</h2>
+      <p>${t('sundayHeroSub')}</p>
+      <div style="margin-top:16px; display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
+        <button class="btn-arrive" style="background:white; color:#2575fc;" onclick="setTab('grocery')">
+          🛒 ${isHi ? 'सोमवार का राशन मंगाएं' : 'Order Grocery for Monday'}
+        </button>
+        <button class="btn-arrive" style="background:rgba(255,255,255,0.2); color:white;" onclick="setTab('menu')">
+          📋 ${isHi ? 'सोमवार का मेन्यू देखें' : 'View Monday Menu'}
+        </button>
+      </div>
+    </div>
+    `;
+    return html;
+  }
+  
+  // ATTENDANCE CHECK-IN CARD
+  const attKey = `${dateStr}__${shift}`;
+  const attRecord = AppState.attendance[attKey];
+  
+  html += `
+  <div class="att-card">
+    <div class="att-left">
+      <div class="att-avatar">🧑‍🍳</div>
+      <div>
+        <div class="att-title">
+          ${isHi ? 'सोबेंद्र (कुक)' : 'Sobendra (Cook)'} · ${isHi ? (isMorning ? 'सुबह की विज़िट' : 'शाम की विज़िट') : `${shift} Shift`}
+        </div>
+        <div class="att-sub">
+          ${attRecord ? 
+            `<span class="badge-arrived">✓ ${t('arrivedStatus')} ${formatTime(attRecord.at)}</span>` : 
+            `<span style="color:var(--warn)">⏳ ${t('notArrived')}</span>`}
+        </div>
+      </div>
+    </div>
+    
+    <div>
+      ${attRecord ? `
+        <button class="btn-secondary" onclick="handleDeparture()">
+          🏁 ${attRecord.departedAt ? `${isHi ? 'प्रस्थान:' : 'Left at'} ${formatTime(attRecord.departedAt)}` : (isHi ? 'प्रस्थान दर्ज करें' : 'Mark Departed')}
+        </button>
+      ` : `
+        <button class="btn-arrive" onclick="handleArrival()">
+          ${t('arriveBtn')}
+        </button>
+      `}
+    </div>
+  </div>
+  `;
+  
+  // TODAY'S MEAL CARD WITH PHOTOGRAPHY
+  const meal = AppState.menu.find(m => m.day === day && m.visit === shift);
+  const cookedKey = `${dateStr}__${shift}`;
+  const isCooked = !!AppState.cookedStatus[cookedKey];
+  
+  if (meal) {
+    html += `
+    <div class="section-title">
+      <h2>🍽️ ${isHi ? 'आज का मेन्यू' : "Today's Meal"}</h2>
+      <span class="tag">${isHi ? (isMorning ? 'सुबह का नाश्ता/खाना' : 'शाम का खाना') : `${shift} Menu`}</span>
+    </div>
+    
+    <div class="meal-hero">
+      <div class="meal-img-box">
+        <img class="meal-img" src="${meal.img}" alt="${meal.en}" onerror="this.src='https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=700&auto=format&fit=crop&q=80'">
+        <div class="meal-shift-pill">
+          ${isMorning ? '🌅 Morning' : '🌆 Evening'}
+        </div>
+        ${isCooked ? `
+          <div class="meal-status-pill">
+            ✓ ${isHi ? 'पकाया गया' : 'Cooked at'} ${formatTime(AppState.cookedStatus[cookedKey]?.at)}
+          </div>
+        ` : ''}
+      </div>
+      
+      <div class="meal-body">
+        <div class="meal-info">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+            <div class="meal-title-hi">${isHi ? meal.hi : meal.en}</div>
+            ${AppState.role === 'admin' ? `
+              <button class="btn-secondary" style="padding:4px 10px; font-size:12px; gap:4px; border-color:var(--pri); color:var(--pri);" onclick="openMealEditModal('${day}', '${shift}')">
+                ✏️ ${isHi ? 'मेन्यू बदलें' : 'Edit Meal'}
+              </button>
+            ` : ''}
+          </div>
+          <div class="meal-title-en">${isHi ? meal.en : meal.hi}</div>
+          ${meal.notes ? `<div class="meal-note">📝 ${meal.notes}</div>` : ''}
+        </div>
+        
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+          <button class="meal-cook-btn ${isCooked ? 'done' : ''}" onclick="toggleMealCooked()">
+            ${isCooked ? '✅ ' + (isHi ? 'खाना तैयार है ✓' : 'Cooked ✓') : '🍳 ' + (isHi ? 'खाना बन गया' : 'Mark Cooked')}
+          </button>
+          <button class="btn-voice-speak" onclick="triggerMealPhotoClick()" title="${isHi ? 'तैयार खाने की फोटो खींचें' : 'Take Meal Photo'}">
+            📸 ${isHi ? 'खाने की फोटो' : 'Meal Photo'}
+          </button>
+          <button class="btn-voice-speak" onclick="speakMealMenu('${esc(isHi ? meal.hi : meal.en)}', '${esc(meal.notes || '')}')" title="${isHi ? 'बोलकर सुनाएं' : 'Read Aloud'}">
+            🔊 ${isHi ? 'सुनें' : 'Listen'}
+          </button>
+        </div>
+      </div>
+    </div>
+    `;
+  }
+  
+  // TODAY'S CLEANING & KITCHEN TASKS (SCHEDULED PER EXCEL)
+  const scheduledTasks = AppState.schedule
+    .filter(s => s.day === day && (s.visit === shift || s.visit === 'Both'))
+    .map(s => {
+      const tObj = AppState.tasks.find(x => x.id === s.taskId);
+      return { ...s, task: tObj };
+    })
+    .filter(item => item.task && item.task.active);
+  
+  const doneTasks = scheduledTasks.filter(item => AppState.workLogs[`${dateStr}__${shift}__${item.task.id}`]);
+  const progressPercent = scheduledTasks.length > 0 ? Math.round((doneTasks.length / scheduledTasks.length) * 100) : 0;
+  
+  html += `
+  <div class="section-title">
+    <h2>🧹 ${t('cleanTasks')}</h2>
+    <span class="tag">${doneTasks.length}/${scheduledTasks.length} ${t('dailyDone')}</span>
+  </div>
+  
+  <div class="progress-card">
+    <div class="progress-header">
+      <span>${isHi ? 'विज़िट कार्य प्रगति' : 'Task Completion Progress'}</span>
+      <span style="color:var(--ok)">${progressPercent}%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" style="width: ${progressPercent}%;"></div>
+    </div>
+  </div>
+  
+  <div class="task-list">
+  `;
+  
+  if (scheduledTasks.length === 0) {
+    html += `<div style="text-align:center; padding:24px; color:var(--ink-mute);">${isHi ? 'इस विज़िट के लिए कोई अतिरिक्त सफ़ाई टास्क नहीं है।' : 'No tasks scheduled for this shift.'}</div>`;
+  } else {
+    scheduledTasks.forEach(item => {
+      const task = item.task;
+      const taskKey = `${dateStr}__${shift}__${task.id}`;
+      const isDone = !!AppState.workLogs[taskKey];
+      const logData = AppState.workLogs[taskKey];
+      const taskPhoto = (AppState.workProofs || []).find(p => p.date === dateStr && p.visit === shift && p.taskId === task.id) || (logData && logData.photo ? { imgData: logData.photo, id: logData.photoId || '' } : null);
+      
+      html += `
+      <div class="task-item ${isDone ? 'completed' : ''}">
+        <div class="task-left" onclick="toggleTask('${task.id}')" style="cursor:pointer" title="${isDone ? (isHi ? 'पूर्ववत करें' : 'Unmark') : (isHi ? 'पूरा मार्क करें' : 'Mark done')}">
+          <div class="task-chk">
+            ✓
+          </div>
+          <div class="task-details">
+            <div class="task-name-hi">${isHi ? task.hi : task.en}</div>
+            <div class="task-name-en">${isHi ? task.en : task.hi}</div>
+            <div class="task-meta">
+              <span class="task-tag ${task.freq === 'Weekly' ? 'weekly' : ''}">${task.freq}</span>
+              <span class="task-tag">${item.visit}</span>
+              ${isDone ? `<span class="task-time">✓ ${formatTime(logData.completedAt)}</span>` : ''}
+              ${taskPhoto ? `<span class="task-tag" style="background:var(--ok-light);color:var(--ok);font-weight:700">📸 ${isHi ? 'फोटो संलग्न' : 'Photo Attached'}</span>` : ''}
+            </div>
+          </div>
+        </div>
+
+        <div class="task-right">
+          ${taskPhoto ? `
+            <div class="task-thumb-wrap" onclick="openLightbox('${taskPhoto.id}')" title="${isHi ? 'फोटो बड़ा देखें' : 'View full photo'}">
+              <img class="task-thumb-img" src="${taskPhoto.imgData}" alt="${task.en}">
+            </div>
+            <button type="button" class="btn-task-camera has-photo" onclick="triggerTaskPhotoClick('${task.id}', '${esc(task.hi)}', '${esc(task.en)}', event)" title="${isHi ? 'फोटो बदलें' : 'Retake photo'}">
+              📸 <span>${isHi ? 'बदलें' : 'Retake'}</span>
+            </button>
+          ` : `
+            <button type="button" class="btn-task-camera" onclick="triggerTaskPhotoClick('${task.id}', '${esc(task.hi)}', '${esc(task.en)}', event)" title="${isHi ? 'काम की फोटो खींचें' : 'Take work photo'}">
+              📷 <span>${isHi ? 'फोटो खींचें' : 'Take Photo'}</span>
+            </button>
+          `}
+        </div>
+      </div>
+      `;
+    });
+  }
+  
+  html += `</div>`;
+
+  // SEND SHIFT REPORT & PHOTOS TO ADMIN (WHATSAPP 1-TAP ACTION)
+  html += `
+  <div class="shift-send-card">
+    <div class="shift-send-info">
+      <h3>
+        <span>📲</span>
+        <span>${isHi ? 'एडमिन को रिपोर्ट व सभी फोटो भेजें' : 'Send Work Report & Photos to Admin'}</span>
+      </h3>
+      <p>
+        ${isHi ? 'काम पूरा होने पर किशन व जोजू (एडमिन) को व्हाट्सएप पर उपस्थिति, खाना व सभी टास्क की फोटो भेजें।' : '1-Tap to submit completed tasks, meal proof, and photos directly to Kishan & Joju via WhatsApp.'}
+      </p>
+    </div>
+    <button type="button" class="btn-send-admin" onclick="sendShiftReportToAdmin()">
+      <span>📲</span>
+      <span>${isHi ? 'व्हाट्सएप पर भेजें (Send to Admin)' : 'Send to Admin via WhatsApp'}</span>
+    </button>
+  </div>
+  `;
+  
+  // WORK PROOF PHOTOS (COOK CLICKS/UPLOADS LIVE PHOTOS AFTER FINISHING WORK)
+  html += renderWorkProofSection(dateStr, shift, isHi);
+  
+  // QUICK VISUAL GROCERY STRIP (Preview of Pending Requests)
+  const pendingRequests = AppState.groceryRequests.filter(r => r.status === 'Requested');
+  if (pendingRequests.length > 0) {
+    html += `
+    <div class="req-section">
+      <div class="req-header">
+        <h3 style="font-size:16px; font-weight:800; display:flex; align-items:center; gap:6px;">
+          🛒 <span>${isHi ? 'मांगा गया राशन/सब्ज़ी' : 'Pending Grocery Requests'}</span>
+          <span class="groc-req-badge" style="position:static">${pendingRequests.length}</span>
+        </h3>
+        <button class="btn-secondary" onclick="setTab('grocery')" style="padding:4px 10px; font-size:12px;">
+          ${isHi ? 'सभी देखें →' : 'View All →'}
+        </button>
+      </div>
+      <div class="req-list">
+        ${pendingRequests.slice(0, 3).map(r => `
+          <div class="req-item">
+            <div class="req-left">
+              <img class="req-thumb" src="${r.img}" alt="${r.itemEn}" onerror="this.src='https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=100'">
+              <div class="req-names">
+                ${isHi ? r.itemHi : r.itemEn}
+                <span>${isHi ? r.itemEn : r.itemHi}</span>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="req-qty">${r.qty}</span>
+              ${AppState.role === 'admin' ? `
+                <button class="btn-secondary" style="padding:4px 8px; font-size:11px;" onclick="toggleGroceryStatus('${r.id}')">✓ Mark Bought</button>
+              ` : `
+                <span class="req-status-tag requested">⏳ ${isHi ? 'मांग की गई' : 'Requested'}</span>
+              `}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    `;
+  }
+  
+  return html;
+}
+
+// 2. VISUAL GROCERY CATALOG (NO TYPING REQUIRED)
+function renderGroceryView() {
+  const isHi = AppState.lang === 'hi';
+  const isAdmin = AppState.role === 'admin';
+  const pending = AppState.groceryRequests.filter(r => r.status === 'Requested');
+  const bought = AppState.groceryRequests.filter(r => r.status === 'Bought');
+  
+  let html = `
+  <div class="section-title">
+    <h2>🛒 ${isHi ? 'राशन और सब्ज़ी मंगाएं' : 'Grocery & Vegetable Catalog'}</h2>
+    <span class="tag">${isHi ? 'बिना टाइप किए मंगाएं' : 'One-Tap Ordering'}</span>
+  </div>
+  <p style="font-size:13px; color:var(--ink-sec); margin-bottom:14px;">
+    ${isHi ? 'जिस भी सब्ज़ी या राशन की ज़रूरत हो, उस पर टैप करें और मात्रा चुनकर अनुरोध भेजें।' : 'Tap any vegetable or grocery item to select quantity and request directly.'}
+  </p>
+  `;
+  
+  // ADMIN ACTION BAR (WhatsApp Share, Copy)
+  if (isAdmin && pending.length > 0) {
+    html += `
+    <div style="background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:12px; margin-bottom:16px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+      <div>
+        <b style="font-size:14px; color:var(--pri)">${pending.length} ${isHi ? 'सामान खरीदना बाकी है' : 'Items Needed for Cooking'}</b>
+        <div style="font-size:12px; color:var(--ink-mute);">${isHi ? 'सब्ज़ी मंडी या ब्लिंकिट के लिए शेयर करें' : 'Share shopping list to WhatsApp'}</div>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn-whatsapp" onclick="shareGroceryWhatsApp()">
+          📲 WhatsApp
+        </button>
+        <button class="btn-secondary" onclick="copyGroceryList()">
+          📋 Copy
+        </button>
+      </div>
+    </div>
+    `;
+  }
+  
+  // CATEGORY TABS
+  const categories = [
+    { id: 'all', icon: '🛒', en: 'All Items', hi: 'सभी सामान' },
+    { id: 'veg', icon: '🥕', en: 'Vegetables', hi: 'सब्ज़ियां' },
+    { id: 'dairy', icon: '🥛', en: 'Dairy & Poultry', hi: 'डेयरी/अंडे' },
+    { id: 'staples', icon: '🍚', en: 'Grains & Dal', hi: 'अनाज और दाल' },
+    { id: 'spices', icon: '🧂', en: 'Masalas & Spices', hi: 'मसाले' }
+  ];
+  
+  html += `
+  <div class="groc-categories">
+    ${categories.map(c => `
+      <button class="cat-btn ${AppState.selectedCat === c.id ? 'active' : ''}" onclick="setGroceryCat('${c.id}')">
+        <span>${c.icon}</span>
+        <span>${isHi ? c.hi : c.en}</span>
+      </button>
+    `).join('')}
+  </div>
+  `;
+  
+  // FILTERED GROCERY GRID
+  let items = AppState.selectedCat === 'all' 
+    ? VISUAL_GROCERY_CATALOG 
+    : VISUAL_GROCERY_CATALOG.filter(x => x.cat === AppState.selectedCat);
+    
+  if (AppState.grocerySearch && AppState.grocerySearch.trim()) {
+    const q = AppState.grocerySearch.toLowerCase().trim();
+    items = items.filter(x => x.en.toLowerCase().includes(q) || x.hi.includes(q));
+  }
+    
+  html += `<div class="grocery-grid">`;
+  items.forEach(item => {
+    // Check if already requested
+    const isReq = pending.find(p => p.itemId === item.id);
+    html += `
+    <div class="groc-card" onclick="openGroceryModal('${item.id}')">
+      <div class="groc-img-wrap">
+        <img class="groc-img" src="${item.img}" alt="${item.en}" onerror="if(this.dataset.triedFallback !== '1' && '${item.onlineFallback || ''}') { this.dataset.triedFallback = '1'; this.src = '${item.onlineFallback || ''}'; }">
+        ${isReq ? `<div class="groc-req-badge">✓ ${isReq.qty}</div>` : ''}
+      </div>
+      <div class="groc-info">
+        <div class="groc-name-hi">${isHi ? item.hi : item.en}</div>
+        <div class="groc-name-en">${isHi ? item.en : item.hi}</div>
+        <div class="groc-quick-btn">
+          <span>+</span>
+          <span>${isHi ? 'मंगाएं' : 'Request'}</span>
+        </div>
+      </div>
+    </div>
+    `;
+  });
+  html += `</div>`;
+  
+  // CURRENT REQUEST LIST (PENDING & BOUGHT)
+  html += `
+  <div class="req-section">
+    <div class="req-header">
+      <h3 style="font-size:16px; font-weight:800;">
+        📋 ${isHi ? 'अनुरोधित सामान सूची' : 'Current Kitchen Grocery List'}
+      </h3>
+      <span class="tag">${pending.length} ${isHi ? 'लंबित' : 'Pending'}</span>
+    </div>
+  `;
+  
+  if (AppState.groceryRequests.length === 0) {
+    html += `
+      <div style="text-align:center; padding:24px; color:var(--ink-mute);">
+        ${isHi ? 'अभी कोई राशन अनुरोध नहीं है। ऊपर से किसी भी सामान पर टैप करके जोड़ें।' : 'No grocery requests yet. Tap any item above to request.'}
+      </div>
+    `;
+  } else {
+    html += `<div class="req-list">`;
+    AppState.groceryRequests.forEach(r => {
+      const isBought = r.status === 'Bought';
+      html += `
+      <div class="req-item" style="${isBought ? 'opacity:0.75' : ''}">
+        <div class="req-left">
+          <img class="req-thumb" src="${r.img}" alt="${r.itemEn}" onerror="this.src='https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=100'">
+          <div class="req-names">
+            ${isHi ? r.itemHi : r.itemEn}
+            <span>${r.qty} · ${r.by}</span>
+          </div>
+        </div>
+        
+        <div style="display:flex; align-items:center; gap:8px;">
+          ${isBought ? `
+            <span class="req-status-tag bought">✅ ${isHi ? 'खरीद लिया' : 'Bought'}</span>
+          ` : `
+            <span class="req-status-tag requested">⏳ ${isHi ? 'चाहिए' : 'Needed'}</span>
+          `}
+          
+          ${isAdmin ? `
+            <button class="btn-secondary" style="padding:4px 8px; font-size:12px;" onclick="toggleGroceryStatus('${r.id}')" title="Toggle Bought">
+              ${isBought ? '↩ Pending' : '✓ Bought'}
+            </button>
+            <button class="btn-icon" style="width:28px; height:28px; font-size:12px;" onclick="deleteGroceryRequest('${r.id}')" title="Delete">
+              🗑
+            </button>
+          ` : ''}
+        </div>
+      </div>
+      `;
+    });
+    html += `</div>`;
+  }
+  
+  html += `</div>`;
+  return html;
+}
+
+function setGroceryCat(cat) {
+  AppState.selectedCat = cat;
+  renderApp();
+}
+
+// 3. WEEKLY MENU PLANNER & DISPLAY
+function renderWeeklyMenuView() {
+  const isHi = AppState.lang === 'hi';
+  const isAdmin = AppState.role === 'admin';
+  const activeDays = DAYS.filter(d => d !== 'Sunday');
+  
+  let html = `
+  <div class="section-title">
+    <h2>📋 ${isHi ? 'साप्ताहिक मेन्यू' : 'Weekly Menu Planner'}</h2>
+    ${isAdmin ? '<span class="tag">एडमिन संपादन (Admin Editing)</span>' : ''}
+  </div>
+  <p style="font-size:13px; color:var(--ink-sec); margin-bottom:16px;">
+    ${isHi ? 'सोमवार से शनिवार (रविवार छुट्टी)। कुक दिन में 2 बार आता है।' : 'Monday to Saturday meals (Sunday holiday). Cook visits twice daily.'}
+  </p>
+  `;
+  
+  // 6 Days cards
+  activeDays.forEach(day => {
+    const morningMeal = AppState.menu.find(m => m.day === day && m.visit === 'Morning');
+    const eveningMeal = AppState.menu.find(m => m.day === day && m.visit === 'Evening');
+    const isToday = (day === getDayName());
+    
+    html += `
+    <div class="day-plan-card" style="${isToday ? 'border:2px solid var(--pri)' : ''}">
+      <div class="day-plan-hdr">
+        <b style="font-size:16px; display:flex; align-items:center; gap:6px;">
+          ${isHi ? getDayHi(day) : day}
+          ${isToday ? `<span class="task-tag weekly">${isHi ? 'आज' : 'Today'}</span>` : ''}
+        </b>
+        <span style="font-size:12px; color:var(--ink-mute);">2 Meals Scheduled</span>
+      </div>
+      
+      <!-- Morning Slot -->
+      <div class="meal-slot-edit">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <span style="font-weight:700; font-size:13px; color:var(--pri)">🌅 ${isHi ? 'सुबह का नाश्ता/खाना (Morning)' : 'Morning Visit'}</span>
+        </div>
+        ${isAdmin ? `
+          <div class="input-row">
+            <input class="app-input" type="text" value="${esc(morningMeal?.en || '')}" placeholder="English Title" onchange="updateMenuField('${day}', 'Morning', 'en', this.value)">
+            <input class="app-input" type="text" value="${esc(morningMeal?.hi || '')}" placeholder="हिन्दी नाम" onchange="updateMenuField('${day}', 'Morning', 'hi', this.value)">
+          </div>
+          <input class="app-input" style="width:100%" type="text" value="${esc(morningMeal?.notes || '')}" placeholder="Admin Note (e.g. Less oil)" onchange="updateMenuField('${day}', 'Morning', 'notes', this.value)">
+        ` : `
+          <div style="font-size:16px; font-weight:700; color:var(--ink);">${isHi ? morningMeal?.hi : morningMeal?.en}</div>
+          <div style="font-size:12px; color:var(--ink-sec);">${isHi ? morningMeal?.en : morningMeal?.hi}</div>
+          ${morningMeal?.notes ? `<div class="meal-note">📝 ${morningMeal.notes}</div>` : ''}
+        `}
+      </div>
+      
+      <!-- Evening Slot -->
+      <div class="meal-slot-edit">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <span style="font-weight:700; font-size:13px; color:#3949ab">🌆 ${isHi ? 'शाम का खाना (Evening)' : 'Evening Visit'}</span>
+        </div>
+        ${isAdmin ? `
+          <div class="input-row">
+            <input class="app-input" type="text" value="${esc(eveningMeal?.en || '')}" placeholder="English Title" onchange="updateMenuField('${day}', 'Evening', 'en', this.value)">
+            <input class="app-input" type="text" value="${esc(eveningMeal?.hi || '')}" placeholder="हिन्दी नाम" onchange="updateMenuField('${day}', 'Evening', 'hi', this.value)">
+          </div>
+          <input class="app-input" style="width:100%" type="text" value="${esc(eveningMeal?.notes || '')}" placeholder="Admin Note (e.g. Spicy)" onchange="updateMenuField('${day}', 'Evening', 'notes', this.value)">
+        ` : `
+          <div style="font-size:16px; font-weight:700; color:var(--ink);">${isHi ? eveningMeal?.hi : eveningMeal?.en}</div>
+          <div style="font-size:12px; color:var(--ink-sec);">${isHi ? eveningMeal?.en : eveningMeal?.hi}</div>
+          ${eveningMeal?.notes ? `<div class="meal-note">📝 ${eveningMeal.notes}</div>` : ''}
+        `}
+      </div>
+    </div>
+    `;
+  });
+  
+  // Sunday Card
+  html += `
+  <div class="day-plan-card" style="background:var(--surface-alt); text-align:center; padding:20px;">
+    <h3 style="font-size:17px; font-weight:800; color:var(--pri)">🎉 ${isHi ? 'रविवार (Sunday) - साप्ताहिक छुट्टी' : 'Sunday - Weekly Holiday'}</h3>
+    <p style="font-size:13px; color:var(--ink-mute); margin-top:4px;">${isHi ? 'कोई कुकिंग या सफ़ाई निर्धारित नहीं है।' : 'Cook off day. Kitchen rest day.'}</p>
+  </div>
+  `;
+  
+  return html;
+}
+
+
+let currentEditingMealKey = null;
+
+function openMealEditModal(day, visit) {
+  const meal = AppState.menu.find(m => m.day === day && m.visit === visit) || { day, visit, en: '', hi: '', notes: '' };
+  currentEditingMealKey = { day, visit };
+  
+  document.getElementById('editMealEn').value = meal.en || '';
+  document.getElementById('editMealHi').value = meal.hi || '';
+  document.getElementById('editMealNotes').value = meal.notes || '';
+  
+  document.getElementById('mealEditModal').classList.add('open');
+}
+
+function closeMealEditModal(e) {
+  const modal = document.getElementById('mealEditModal');
+  if (modal) modal.classList.remove('open');
+}
+
+function applyMealPreset(en, hi, notes) {
+  document.getElementById('editMealEn').value = en;
+  document.getElementById('editMealHi').value = hi;
+  document.getElementById('editMealNotes').value = notes;
+}
+
+function saveMealEdit() {
+  if (!currentEditingMealKey) return;
+  const { day, visit } = currentEditingMealKey;
+  let meal = AppState.menu.find(m => m.day === day && m.visit === visit);
+  
+  const enVal = document.getElementById('editMealEn').value.trim();
+  const hiVal = document.getElementById('editMealHi').value.trim();
+  const notesVal = document.getElementById('editMealNotes').value.trim();
+  
+  if (!meal) {
+    meal = { 
+      day, 
+      visit, 
+      en: enVal, 
+      hi: hiVal, 
+      notes: notesVal, 
+      img: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=700&auto=format&fit=crop&q=80' 
+    };
+    AppState.menu.push(meal);
+  } else {
+    meal.en = enVal;
+    meal.hi = hiVal;
+    meal.notes = notesVal;
+  }
+  
+  saveState();
+  closeMealEditModal();
+  playChime(true);
+  showToast(AppState.lang === 'hi' ? '✅ मेन्यू अपडेट हो गया!' : '✅ Meal updated successfully!');
+  renderApp();
+}
+
+function updateMenuField(day, visit, field, value) {
+  let m = AppState.menu.find(x => x.day === day && x.visit === visit);
+  if (m) {
+    m[field] = value;
+    saveState();
+    showToast('Menu updated ✓');
+  }
+}
+
+// 4. ADMIN HUB VIEW (OVERVIEW, ATTENDANCE LOGS, EXCEL SYNC)
+function renderAdminHubView() {
+  const isHi = AppState.lang === 'hi';
+  const todayStr = getTodayDateStr();
+  
+  // Calculate today stats
+  const mornAtt = AppState.attendance[`${todayStr}__Morning`];
+  const eveAtt = AppState.attendance[`${todayStr}__Evening`];
+  const pendingGroc = AppState.groceryRequests.filter(r => r.status === 'Requested').length;
+  const completedTasksToday = Object.values(AppState.workLogs).filter(w => w.date === todayStr).length;
+  
+  let html = `
+  <div class="section-title">
+    <h2>👑 ${isHi ? 'एडमिन डैशबोर्ड' : 'Admin Operations Hub'}</h2>
+    <span class="admin-badge-hdr">Kishan & Joju</span>
+  </div>
+  
+  <!-- Quick Metrics -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-val" style="color:${mornAtt ? 'var(--ok)' : 'var(--warn)'}">
+        ${mornAtt ? '✓ ' + formatTime(mornAtt.at) : '—'}
+      </div>
+      <div class="stat-label">🌅 ${isHi ? 'सुबह का आगमन' : 'Morning Shift'}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" style="color:${eveAtt ? 'var(--ok)' : 'var(--warn)'}">
+        ${eveAtt ? '✓ ' + formatTime(eveAtt.at) : '—'}
+      </div>
+      <div class="stat-label">🌆 ${isHi ? 'शाम का आगमन' : 'Evening Shift'}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">${completedTasksToday}</div>
+      <div class="stat-label">🧹 ${isHi ? 'आज पूरे हुए कार्य' : 'Tasks Done Today'}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" style="color:var(--pri)">${pendingGroc}</div>
+      <div class="stat-label">🛒 ${isHi ? 'लंबित राशन' : 'Pending Grocery'}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" style="color:var(--pri)">${(AppState.workProofs || []).filter(p => p.date === todayStr).length}</div>
+      <div class="stat-label">📸 ${isHi ? 'प्रमाण फोटो' : 'Work Proof Photos'}</div>
+    </div>
+  </div>
+  
+  <!-- Admin Navigation Actions -->
+  <div style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;">
+    <button class="btn-whatsapp" onclick="shareGroceryWhatsApp()">
+      📲 Share Shopping List (WhatsApp)
+    </button>
+    <button class="btn-secondary" onclick="exportDataToExcel()">
+      📥 Export Excel Report
+    </button>
+    <button class="btn-secondary" onclick="document.getElementById('importFileInput').click()">
+      📤 Import Excel
+    </button>
+    <input type="file" id="importFileInput" accept=".xlsx,.xls" style="display:none" onchange="handleExcelImport(event)">
+  </div>
+  
+  <!-- Cook Work Proofs Photo Gallery (Admin Verification) -->
+  <div class="day-plan-card">
+    <div class="day-plan-hdr">
+      <b>📸 ${isHi ? 'कुक द्वारा भेजे गए कार्य प्रमाण (तस्वीरें)' : 'Cook Work Proofs & Photos Log'}</b>
+      <span style="font-size:12px; color:var(--ink-mute); font-weight:700;">
+        ${(AppState.workProofs || []).filter(p => p.date === todayStr).length} ${isHi ? 'फोटो आज' : 'today'}
+      </span>
+    </div>
+    ${(() => {
+      const todayProofs = (AppState.workProofs || []).filter(p => p.date === todayStr);
+      if (todayProofs.length === 0) {
+        return `<div style="text-align:center; padding:18px; color:var(--ink-mute); font-size:13px;">${isHi ? 'आज अभी तक कोई फोटो प्रमाण अपलोड नहीं हुआ।' : 'No work photos uploaded yet today.'}</div>`;
+      }
+      return `
+        <div class="proof-grid" style="margin-top:10px;">
+          ${todayProofs.map(p => `
+            <div class="proof-item" onclick="openLightbox('${p.id}')" title="${isHi ? 'बड़ा देखने के लिए क्लिक करें' : 'Click to inspect full size'}">
+              <img class="proof-img" src="${p.imgData}" alt="${p.category}">
+              <div class="proof-tag">${p.category} (${p.visit})</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    })()}
+  </div>
+
+  <!-- Task Verification & Photo Review Hub (Admin Inspection & Approval) -->
+  <div class="day-plan-card">
+    <div class="day-plan-hdr">
+      <b>✅ ${isHi ? 'टास्क सत्यापन व कुक फोटो समीक्षा' : 'Cook Tasks & Photo Verification Review'}</b>
+      <span style="font-size:12px; color:var(--ink-mute);">Kishan & Joju Review</span>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="sched-table">
+        <thead>
+          <tr>
+            <th>${isHi ? 'कार्य (Task)' : 'Task'}</th>
+            <th>${isHi ? 'विज़िट' : 'Shift'}</th>
+            <th>${isHi ? 'स्थिति' : 'Status'}</th>
+            <th>${isHi ? 'फोटो प्रमाण' : 'Photo Proof'}</th>
+            <th>${isHi ? 'सत्यापन' : 'Approval'}</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${renderAdminTaskVerificationRows(todayStr, isHi)}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Cleaning Schedule Matrix -->
+  <div class="day-plan-card">
+    <div class="day-plan-hdr">
+      <b>📋 ${isHi ? 'साप्ताहिक सफ़ाई कार्य आवंटन' : 'Weekly Cleaning Schedule Matrix'}</b>
+      <span style="font-size:12px; color:var(--ink-mute);">Excel Configuration</span>
+    </div>
+    <table class="sched-table">
+      <thead>
+        <tr>
+          <th>${isHi ? 'दिन' : 'Day'}</th>
+          <th>${isHi ? 'सुबह का काम' : 'Morning Shift'}</th>
+          <th>${isHi ? 'शाम का काम' : 'Evening Shift'}</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${DAYS.map(d => {
+          if (d === 'Sunday') {
+            return `
+              <tr style="background:var(--surface-alt)">
+                <td><b>${isHi ? getDayHi(d) : d}</b></td>
+                <td colspan="2" style="color:var(--pri); font-weight:700;">🎉 ${isHi ? 'साप्ताहिक छुट्टी (कोई विज़िट नहीं)' : 'Weekly Holiday (No Visits)'}</td>
+              </tr>
+            `;
+          }
+          const mornSched = AppState.schedule.filter(s => s.day === d && (s.visit === 'Morning' || s.visit === 'Both'));
+          const eveSched = AppState.schedule.filter(s => s.day === d && (s.visit === 'Evening' || s.visit === 'Both'));
+          const fmtTasks = (schedList) => {
+            if (schedList.length === 0) return `<span style="color:var(--ink-mute)">${isHi ? 'कोई नहीं' : 'None'}</span>`;
+            return schedList.map(s => {
+              const taskObj = AppState.tasks.find(t => t.id === s.taskId);
+              const name = isHi ? (taskObj?.hi || s.taskId) : (taskObj?.en || s.taskId);
+              const isSpecial = taskObj?.freq === 'Weekly';
+              return isSpecial ? `<b>${name} (${s.taskId})</b>` : name;
+            }).join(', ');
+          };
+          return `
+            <tr>
+              <td><b>${isHi ? getDayHi(d) : d}</b></td>
+              <td>${fmtTasks(mornSched)}</td>
+              <td>${fmtTasks(eveSched)}</td>
+            </tr>
+          `;
+        }).join('')}
+      </tbody>
+    </table>
+  </div>
+  
+  <!-- Activity History Log -->
+  <div class="day-plan-card">
+    <div class="day-plan-hdr">
+      <b>📜 ${isHi ? 'हाल की गतिविधि एवं उपस्थिति इतिहास' : 'Recent Activity & Attendance Log'}</b>
+    </div>
+    ${renderActivityLogs()}
+  </div>
+  
+  <!-- Admin Security & Device Lock -->
+  <div class="day-plan-card" style="margin-top:16px; border-left: 4px solid var(--pri);">
+    <div class="day-plan-hdr">
+      <b>🔐 ${isHi ? 'एडमिन सुरक्षा एवं पासकोड सेटिंग्स' : 'Admin Security & Device Passcode'}</b>
+      <span class="task-tag" style="background:var(--ok-light); color:var(--ok); font-weight:700;">Protected</span>
+    </div>
+    <p style="font-size:13px; color:var(--ink-sec); margin:8px 0 14px;">
+      ${isHi 
+        ? 'कुक को एडमिन डैशबोर्ड (सैलरी, अटेंडेंस और सेटिंग्स) देखने से रोकने के लिए यह 4-अंकों के पिन से सुरक्षित है।' 
+        : 'The Admin Operations Hub is protected with a 4-digit PIN so the cook cannot view salary, attendance logs, or private controls.'}
+    </p>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+      <button class="btn-secondary" onclick="changeAdminPin()">
+        🔑 ${isHi ? 'पिन बदलें (Change PIN)' : 'Change Admin PIN'}
+      </button>
+      <button class="btn-secondary" style="border-color:#ffccbc; color:#d84315;" onclick="lockToCookMode()">
+        🔒 ${isHi ? 'अभी कुक मोड पर लॉक करें' : 'Lock to Cook View Now'}
+      </button>
+    </div>
+  </div>
+  `;
+  
+  return html;
+}
+
+function renderActivityLogs() {
+  const isHi = AppState.lang === 'hi';
+  const items = [];
+  
+  // Attendance
+  Object.entries(AppState.attendance).forEach(([k, a]) => {
+    items.push({
+      type: 'att',
+      title: `${a.visit} Arrival: ${a.by}`,
+      time: a.at,
+      date: a.date
+    });
+  });
+  
+  // Tasks
+  Object.entries(AppState.workLogs).forEach(([k, w]) => {
+    items.push({
+      type: 'task',
+      title: `✓ Completed: ${isHi ? w.nameHi : w.nameEn} (${w.visit})`,
+      time: w.completedAt,
+      date: w.date
+    });
+  });
+  
+  // Meal cooked
+  Object.entries(AppState.cookedStatus).forEach(([k, c]) => {
+    items.push({
+      type: 'meal',
+      title: `🍳 Meal Cooked (${k.split('__')[1]}) by ${c.by}`,
+      time: c.at,
+      date: k.split('__')[0]
+    });
+  });
+  
+  // Work proof photos
+  (AppState.workProofs || []).forEach(p => {
+    items.push({
+      type: 'proof',
+      title: `📸 Photo Uploaded: ${p.category} (${p.visit})`,
+      time: p.timestamp,
+      date: p.date
+    });
+  });
+  
+  items.sort((a, b) => b.time - a.time);
+  
+  if (items.length === 0) {
+    return `<div style="text-align:center; padding:16px; color:var(--ink-mute); font-size:13px;">No recorded logs yet today.</div>`;
+  }
+  
+  return `
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      ${items.slice(0, 15).map(item => `
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid var(--border); font-size:13px;">
+          <span>${item.title}</span>
+          <span style="color:var(--ink-mute); font-size:11px;">${item.date} ${formatTime(item.time)}</span>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function renderAdminTaskVerificationRows(dateStr, isHi) {
+  const day = getDayName(0);
+  const scheduledTasks = AppState.schedule.filter(s => s.day === day);
+  
+  if (scheduledTasks.length === 0) {
+    return `<tr><td colspan="5" style="text-align:center; padding:14px; color:var(--ink-mute);">${isHi ? 'आज कोई कार्य निर्धारित नहीं है।' : 'No tasks scheduled today.'}</td></tr>`;
+  }
+  
+  let rows = [];
+  scheduledTasks.forEach(item => {
+    const task = AppState.tasks.find(t => t.id === item.taskId);
+    const taskName = isHi ? (task?.hi || item.taskId) : (task?.en || item.taskId);
+    const visits = item.visit === 'Both' ? ['Morning', 'Evening'] : [item.visit];
+    
+    visits.forEach(v => {
+      const taskKey = `${dateStr}__${v}__${item.taskId}`;
+      const log = AppState.workLogs[taskKey];
+      const isDone = !!log;
+      const photoProof = (AppState.workProofs || []).find(p => p.date === dateStr && p.visit === v && p.taskId === item.taskId) || (log && log.photo ? { imgData: log.photo, id: log.photoId || '' } : null);
+      const isApproved = log && log.approved;
+
+      rows.push(`
+        <tr>
+          <td><b>${taskName}</b> <span style="font-size:11px; color:var(--ink-mute);">(${item.taskId})</span></td>
+          <td><span class="task-tag">${v}</span></td>
+          <td>
+            ${isDone ? `
+              <span style="color:var(--ok); font-weight:700;">✅ ${isHi ? 'पूरा हुआ' : 'Done'}</span>
+              <div style="font-size:11px; color:var(--ink-mute);">${formatTime(log.completedAt)}</div>
+            ` : `
+              <span style="color:var(--warn); font-weight:600;">⏳ ${isHi ? 'लंबित' : 'Pending'}</span>
+            `}
+          </td>
+          <td>
+            ${photoProof ? `
+              <div class="task-thumb-wrap" onclick="openLightbox('${photoProof.id}')" title="${isHi ? 'बड़ा देखने के लिए क्लिक करें' : 'Click to inspect photo'}">
+                <img class="task-thumb-img" src="${photoProof.imgData}" alt="${taskName}">
+              </div>
+            ` : `
+              <span style="color:var(--ink-mute); font-size:12px;">${isHi ? 'कोई फोटो नहीं' : 'No photo yet'}</span>
+            `}
+          </td>
+          <td>
+            ${isDone ? `
+              <button type="button" class="btn-approve-task ${isApproved ? 'approved' : ''}" onclick="approveTaskByAdmin('${taskKey}')">
+                ${isApproved ? (isHi ? '✓ स्वीकृत' : '✓ Approved') : (isHi ? 'सत्यापित करें' : 'Approve')}
+              </button>
+            ` : '—'}
+          </td>
+        </tr>
+      `);
+    });
+  });
+  
+  return rows.join('');
+}
+
+/* ==========================================================================
+   EXCEL IMPORT / EXPORT (Seamless SheetJS Integration)
+   ========================================================================== */
+
+function exportDataToExcel() {
+  try {
+    const wb = XLSX.utils.book_new();
+    
+    // Cleaning Tasks
+    const tasksData = AppState.tasks.map(t => ({
+      'Task ID': t.id,
+      'Task English': t.en,
+      'Task Hindi': t.hi,
+      'Frequency': t.freq,
+      'Active': t.active ? 'TRUE' : 'FALSE'
+    }));
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(tasksData), 'Cleaning Tasks');
+    
+    // Menu
+    const menuData = AppState.menu.map(m => ({
+      'Day': m.day,
+      'Visit': m.visit,
+      'Menu English': m.en,
+      'Menu Hindi': m.hi,
+      'Active': 'TRUE',
+      'Admin Notes': m.notes || ''
+    }));
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(menuData), 'menu');
+    
+    // Attendance
+    const attData = Object.values(AppState.attendance).map(a => ({
+      'Date': a.date,
+      'Visit': a.visit,
+      'Cook Email': 'sobendrabohara56@gmail.com',
+      'Arrival Time': formatTime(a.at),
+      'Status': a.status
+    }));
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(attData), 'Attendance');
+    
+    // Work Log
+    const logData = Object.values(AppState.workLogs).map(w => ({
+      'Date': w.date,
+      'Task ID': w.taskId,
+      'Task Name': w.nameEn,
+      'Visit': w.visit,
+      'Completed At': formatTime(w.completedAt),
+      'By': w.by
+    }));
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(logData), 'Work Log');
+    
+    // Grocery Requests
+    const grocData = AppState.groceryRequests.map(g => ({
+      'Date': g.date,
+      'Item English': g.itemEn,
+      'Item Hindi': g.itemHi,
+      'Quantity': g.qty,
+      'Status': g.status,
+      'Requested By': g.by
+    }));
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(grocData), 'Grocery Requests');
+
+    // Users
+    const usersData = USERS.map(u => ({
+      'Name': u.name,
+      'email': u.email,
+      'role': u.role,
+      'Language': u.lang === 'hi' ? 'hindi' : 'english'
+    }));
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(usersData), 'Users');
+    
+    XLSX.writeFile(wb, `Cook_Manager_Report_${getTodayDateStr()}.xlsx`);
+    showToast('Excel report downloaded ✓');
+  } catch(e) {
+    showToast('Export failed: ' + e.message);
+  }
+}
+
+async function handleExcelImport(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  
+  try {
+    const data = await file.arrayBuffer();
+    const wb = XLSX.read(data, { type: 'array' });
+    const sheetJson = name => XLSX.utils.sheet_to_json(wb.Sheets[name] || {}, { defval: '' });
+    
+    // Import menu
+    const menuRows = sheetJson('menu');
+    if (menuRows.length > 0) {
+      AppState.menu = menuRows.map(r => ({
+        day: r['Day'],
+        visit: r['Visit'],
+        en: r['Menu English'],
+        hi: r['Menu Hindi'],
+        notes: r['Admin Notes'] || '',
+        img: DEFAULT_MENU.find(x => x.day === r['Day'] && x.visit === r['Visit'])?.img || ''
+      }));
+    }
+    
+    // Import tasks
+    const taskRows = sheetJson('Cleaning Tasks');
+    if (taskRows.length > 0) {
+      AppState.tasks = taskRows.map(r => {
+        const actVal = r['Active'];
+        const actStr = String(actVal).trim().toUpperCase();
+        return {
+          id: r['Task ID'],
+          en: r['Task English'],
+          hi: r['Task Hindi'],
+          freq: r['Frequency'],
+          active: actVal === true || actVal === 1 || actStr === 'TRUE' || actStr === '1',
+          icon: '🧹'
+        };
+      });
+    }
+
+    // Import Cleaning Schedule
+    const schedRows = sheetJson('Cleaning Schedule');
+    if (schedRows.length > 0) {
+      AppState.schedule = schedRows.map(r => ({
+        day: r['Day'],
+        taskId: r['Task ID'],
+        visit: r['Visit']
+      }));
+    }
+    
+    saveState();
+    renderApp();
+    showToast(`Imported ${menuRows.length} menu items and ${taskRows.length} tasks!`);
+  } catch(e) {
+    showToast('Import error: ' + e.message);
+  }
+}
+
+/* ==========================================================================
+   HELPERS & INITIALIZATION
+   ========================================================================== */
+
+function esc(s) {
+  return String(s || '').replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+}
+
+function getDayHi(d) {
+  const map = {
+    Sunday: 'रविवार',
+    Monday: 'सोमवार',
+    Tuesday: 'मंगलवार',
+    Wednesday: 'बुधवार',
+    Thursday: 'गुरुवार',
+    Friday: 'शुक्रवार',
+    Saturday: 'शनिवार'
+  };
+  return map[d] || d;
+}
+
+// Initial Boot
+document.addEventListener('DOMContentLoaded', () => {
+  // Check URL params: e.g. ?role=cook locks directly into cook mode
+  const urlParams = new URLSearchParams(window.location.search);
+  const paramRole = urlParams.get('role');
+  if (paramRole === 'cook') {
+    AppState.role = 'cook';
+    AppState.currentTab = 'today';
+  } else if (paramRole === 'admin') {
+    // If not authenticated, keep role as current (cook by default) and prompt PIN
+    if (AppState.role !== 'admin') {
+      setTimeout(() => openAdminPinModal(), 400);
+    }
+  }
+
+  updateHeaderControls();
+  updateNavState();
+  updateSoundButton();
+  renderApp();
+
+  // Register PWA Service Worker for mobile install and offline use
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js')
+      .then(() => console.log('Rasoi Mitra Service Worker Registered'))
+      .catch(err => console.log('SW registration error:', err));
+  }
+});
+renderApp();
+
+</script>
+</body>
+</html>
