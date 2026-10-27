@@ -3454,7 +3454,14 @@ function renderApp() {
       app.innerHTML = renderWeeklyMenuView();
       break;
     case 'admin':
-      app.innerHTML = renderAdminHubView();
+      if (AppState.role === 'admin') {
+        app.innerHTML = renderAdminHubView();
+      } else {
+        AppState.currentTab = 'today';
+        updateNavState();
+        app.innerHTML = renderTodayView();
+        openAdminPinModal();
+      }
       break;
     default:
       app.innerHTML = renderTodayView();
@@ -3991,6 +3998,10 @@ function renderWeeklyMenuView() {
 let currentEditingMealKey = null;
 
 function openMealEditModal(day, visit) {
+  if (AppState.role !== 'admin') {
+    openAdminPinModal();
+    return;
+  }
   const meal = AppState.menu.find(m => m.day === day && m.visit === visit) || { day, visit, en: '', hi: '', notes: '' };
   currentEditingMealKey = { day, visit };
   
