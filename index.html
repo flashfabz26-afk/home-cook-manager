@@ -2202,6 +2202,76 @@ input, select, textarea, button {
   </div>
 </div>
 
+<!-- Cook Apply for Leave Modal (कुक छुट्टी आवेदन) -->
+<div class="modal-overlay" id="leaveApplyModal" onclick="closeLeaveApplyModal(event)">
+  <div class="modal-card" onclick="event.stopPropagation()" style="max-width:500px;">
+    <div class="modal-drag-bar"></div>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+      <h3 style="font-size:17px; font-weight:800; color:var(--ink); display:flex; align-items:center; gap:6px;">
+        <span>🏖️</span> <span>छुट्टी के लिए आवेदन (Apply for Leave)</span>
+      </h3>
+      <button class="btn-icon" onclick="closeLeaveApplyModal()" style="width:28px; height:28px;">✕</button>
+    </div>
+    
+    <p style="font-size:12px; color:var(--ink-sec); margin-bottom:14px; line-height:1.4;">
+      यदि आपको किसी दिन या विज़िट पर छुट्टी चाहिए, तो यहाँ तारीख और कारण चुनकर आवेदन भेजें। एडमिन (Kishan / Joju) इसकी समीक्षा करेंगे।
+    </p>
+
+    <!-- 1. Date Selection -->
+    <div style="margin-bottom:12px;">
+      <label style="font-size:12px; font-weight:700; color:var(--ink); display:block; margin-bottom:6px;">
+        1. छुट्टी की तारीख चुनें (Select Date):
+      </label>
+      <div style="display:flex; gap:8px; margin-bottom:8px; flex-wrap:wrap;">
+        <button type="button" class="qty-chip selected" id="leaveDateTodayBtn" onclick="setLeaveDatePreset(0)">आज (Today)</button>
+        <button type="button" class="qty-chip" id="leaveDateTomorrowBtn" onclick="setLeaveDatePreset(1)">कल (Tomorrow)</button>
+        <button type="button" class="qty-chip" id="leaveDateCustomBtn" onclick="toggleCustomLeaveDate(true)">अन्य तारीख (Calendar)</button>
+      </div>
+      <input type="date" id="leaveDatePicker" class="app-input" style="width:100%; display:none;" onchange="onLeaveDatePicked(this.value)">
+      <div id="leaveDateDisplayPill" style="font-size:12px; font-weight:700; color:var(--pri); margin-top:4px;"></div>
+    </div>
+
+    <!-- 2. Shift / Duration Selection -->
+    <div style="margin-bottom:14px;">
+      <label style="font-size:12px; font-weight:700; color:var(--ink); display:block; margin-bottom:6px;">
+        2. किस समय की छुट्टी चाहिए? (Shift / Duration):
+      </label>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;" id="leaveShiftGroup">
+        <button type="button" class="qty-chip selected" id="leaveShiftFull" onclick="setLeaveShift('Full Day')">
+          🌞 पूरा दिन (Full Day)
+        </button>
+        <button type="button" class="qty-chip" id="leaveShiftMorning" onclick="setLeaveShift('Morning')">
+          🌅 केवल सुबह (Morning Visit)
+        </button>
+        <button type="button" class="qty-chip" id="leaveShiftEvening" onclick="setLeaveShift('Evening')">
+          🌆 केवल शाम (Evening Visit)
+        </button>
+      </div>
+    </div>
+
+    <!-- 3. Reason for Leave -->
+    <div style="margin-bottom:16px;">
+      <label style="font-size:12px; font-weight:700; color:var(--ink); display:block; margin-bottom:6px;">
+        3. छुट्टी का कारण चुनें (Reason for Leave):
+      </label>
+      <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:8px;" id="leaveReasonGroup">
+        <button type="button" class="qty-chip selected" onclick="setLeaveReasonPreset('🤒 तबीयत ठीक नहीं है (Sick / Unwell)')">🤒 तबीयत खराब</button>
+        <button type="button" class="qty-chip" onclick="setLeaveReasonPreset('🏡 गांव जाना है (Visiting Village)')">🏡 गांव जाना है</button>
+        <button type="button" class="qty-chip" onclick="setLeaveReasonPreset('🚨 ज़रूरी निजी काम (Urgent Work)')">🚨 ज़रूरी काम</button>
+        <button type="button" class="qty-chip" onclick="setLeaveReasonPreset('👨‍👩‍👧 पारिवारिक कार्यक्रम (Family Function)')">👨‍👩‍👧 पारिवारिक काम</button>
+        <button type="button" class="qty-chip" onclick="setLeaveReasonPreset('✏️ अन्य कारण (Other)')">✏️ अन्य कारण</button>
+      </div>
+      <input type="text" id="leaveCustomReason" class="app-input" style="width:100%;" placeholder="विस्तार या खास नोट (उदा. बुखार है, डॉक्टर के पास जाना है...)">
+    </div>
+
+    <!-- Submit Button -->
+    <button class="modal-btn-confirm" style="background:linear-gradient(135deg, #e65100 0%, #f57c00 100%); box-shadow:0 4px 14px rgba(230, 81, 0, 0.35);" onclick="submitLeaveRequest()">
+      <span>📩</span>
+      <span>आवेदन भेजें (Submit Leave Request)</span>
+    </button>
+  </div>
+</div>
+
 
 <!-- Admin Edit Meal Modal -->
 <div class="modal-overlay" id="mealEditModal" onclick="closeMealEditModal(event)">
@@ -2477,6 +2547,7 @@ const AppState = {
   cookedStatus: JSON.parse(localStorage.getItem('rc_cooked_status') || '{}'),
   workProofs: JSON.parse(localStorage.getItem('rc_work_proofs') || '[]'),
   takenGroceries: JSON.parse(localStorage.getItem('rc_taken_groceries') || '[]'),
+  leaves: JSON.parse(localStorage.getItem('rc_leaves') || '[]'),
   
   // Active modal item
   activeModalItem: null,
@@ -2505,6 +2576,7 @@ function saveState(broadcast = true) {
   localStorage.setItem('rc_grocery_requests', JSON.stringify(AppState.groceryRequests));
   localStorage.setItem('rc_cooked_status', JSON.stringify(AppState.cookedStatus));
   localStorage.setItem('rc_taken_groceries', JSON.stringify(AppState.takenGroceries || []));
+  localStorage.setItem('rc_leaves', JSON.stringify(AppState.leaves || []));
   try {
     localStorage.setItem('rc_work_proofs', JSON.stringify(AppState.workProofs || []));
   } catch (e) {
@@ -2530,6 +2602,7 @@ if (syncChannel) {
       AppState.cookedStatus = JSON.parse(localStorage.getItem('rc_cooked_status') || '{}');
       AppState.workProofs = JSON.parse(localStorage.getItem('rc_work_proofs') || '[]');
       AppState.takenGroceries = JSON.parse(localStorage.getItem('rc_taken_groceries') || '[]');
+      AppState.leaves = JSON.parse(localStorage.getItem('rc_leaves') || '[]');
       AppState.menu = JSON.parse(localStorage.getItem('rc_menu') || 'null') || DEFAULT_MENU;
       renderApp();
     }
@@ -3867,6 +3940,515 @@ function renderAdminTakenGroceriesList(isHi) {
 }
 
 /* ==========================================================================
+   COOK LEAVE MANAGEMENT (कुक छुट्टी आवेदन एवं प्रबंधन)
+   ========================================================================== */
+
+window.currentLeaveDate = null;
+window.currentLeaveShift = 'Full Day';
+window.currentLeaveReason = '🤒 तबीयत ठीक नहीं है (Sick / Unwell)';
+
+function openLeaveApplyModal(presetDateStr) {
+  const modal = document.getElementById('leaveApplyModal');
+  if (!modal) return;
+  
+  const today = getTodayDateStr();
+  window.currentLeaveDate = presetDateStr || today;
+  window.currentLeaveShift = 'Full Day';
+  window.currentLeaveReason = '🤒 तबीयत ठीक नहीं है (Sick / Unwell)';
+  
+  const customReasonInput = document.getElementById('leaveCustomReason');
+  if (customReasonInput) customReasonInput.value = '';
+  
+  // Set date preset buttons
+  if (presetDateStr) {
+    toggleCustomLeaveDate(true);
+    const picker = document.getElementById('leaveDatePicker');
+    if (picker) picker.value = presetDateStr;
+  } else {
+    setLeaveDatePreset(0);
+  }
+  
+  // Reset shift group selection
+  setLeaveShift('Full Day');
+  
+  // Reset reason group selection
+  const reasonChips = document.querySelectorAll('#leaveReasonGroup .qty-chip');
+  reasonChips.forEach((c, idx) => c.classList.toggle('selected', idx === 0));
+  
+  modal.classList.add('open');
+}
+
+function closeLeaveApplyModal(e) {
+  if (e && e.target && e.target !== document.getElementById('leaveApplyModal')) return;
+  const modal = document.getElementById('leaveApplyModal');
+  if (modal) modal.classList.remove('open');
+}
+
+function setLeaveDatePreset(offsetDays) {
+  const dStr = getDateStrWithOffset(offsetDays);
+  window.currentLeaveDate = dStr;
+  
+  document.getElementById('leaveDateTodayBtn')?.classList.toggle('selected', offsetDays === 0);
+  document.getElementById('leaveDateTomorrowBtn')?.classList.toggle('selected', offsetDays === 1);
+  document.getElementById('leaveDateCustomBtn')?.classList.remove('selected');
+  
+  const picker = document.getElementById('leaveDatePicker');
+  if (picker) {
+    picker.style.display = 'none';
+    picker.value = dStr;
+  }
+  
+  const pill = document.getElementById('leaveDateDisplayPill');
+  if (pill) {
+    const isHi = AppState.lang === 'hi';
+    const dayName = getDayName(offsetDays);
+    pill.textContent = `📅 ${isHi ? getDayHi(dayName) : dayName}, ${dStr}`;
+  }
+}
+
+function toggleCustomLeaveDate(show) {
+  const picker = document.getElementById('leaveDatePicker');
+  if (!picker) return;
+  
+  picker.style.display = 'block';
+  picker.focus();
+  
+  document.getElementById('leaveDateTodayBtn')?.classList.remove('selected');
+  document.getElementById('leaveDateTomorrowBtn')?.classList.remove('selected');
+  document.getElementById('leaveDateCustomBtn')?.classList.add('selected');
+  
+  if (!picker.value) {
+    picker.value = getTodayDateStr();
+  }
+  window.currentLeaveDate = picker.value;
+  
+  const pill = document.getElementById('leaveDateDisplayPill');
+  if (pill) pill.textContent = `📅 तारीख: ${picker.value}`;
+}
+
+function onLeaveDatePicked(val) {
+  if (!val) return;
+  window.currentLeaveDate = val;
+  const pill = document.getElementById('leaveDateDisplayPill');
+  if (pill) pill.textContent = `📅 तारीख: ${val}`;
+}
+
+function setLeaveShift(shift) {
+  window.currentLeaveShift = shift;
+  document.getElementById('leaveShiftFull')?.classList.toggle('selected', shift === 'Full Day');
+  document.getElementById('leaveShiftMorning')?.classList.toggle('selected', shift === 'Morning');
+  document.getElementById('leaveShiftEvening')?.classList.toggle('selected', shift === 'Evening');
+}
+
+function setLeaveReasonPreset(reason) {
+  window.currentLeaveReason = reason;
+  const chips = document.querySelectorAll('#leaveReasonGroup .qty-chip');
+  chips.forEach(c => {
+    c.classList.toggle('selected', c.getAttribute('onclick')?.includes(reason.split(' ')[0]));
+  });
+  const customInput = document.getElementById('leaveCustomReason');
+  if (customInput && !customInput.value) {
+    customInput.placeholder = `नोट: ${reason}`;
+  }
+}
+
+function submitLeaveRequest() {
+  const todayStr = getTodayDateStr();
+  const targetDate = window.currentLeaveDate || todayStr;
+  const shift = window.currentLeaveShift || 'Full Day';
+  const customDetail = (document.getElementById('leaveCustomReason')?.value || '').trim();
+  const reason = customDetail ? `${window.currentLeaveReason || 'निजी कारण'}: ${customDetail}` : (window.currentLeaveReason || 'निजी कारण');
+  
+  // Check if leave already requested for this date and shift
+  const existing = (AppState.leaves || []).find(l => l.date === targetDate && (l.shift === shift || l.shift === 'Full Day' || shift === 'Full Day') && l.status !== 'Rejected');
+  if (existing) {
+    alert(AppState.lang === 'hi' ? `⚠️ इस तारीख (${targetDate}) के लिए पहले से छुट्टी का आवेदन दर्ज है!` : `⚠️ Leave already requested for this date (${targetDate})!`);
+    return;
+  }
+  
+  const leaveEntry = {
+    id: 'leave_' + Date.now(),
+    date: targetDate,
+    shift: shift,
+    reason: reason,
+    note: customDetail,
+    status: 'Pending',
+    appliedAt: Date.now(),
+    appliedBy: 'Sobendra (Cook)',
+    reviewedAt: null,
+    reviewedBy: null,
+    reviewNote: ''
+  };
+  
+  if (!Array.isArray(AppState.leaves)) {
+    AppState.leaves = [];
+  }
+  AppState.leaves.unshift(leaveEntry);
+  
+  // Log into activity history
+  const logKey = 'act_leave_' + leaveEntry.id;
+  AppState.workLogs[logKey] = {
+    taskId: 'leave_applied',
+    nameHi: `छुट्टी का आवेदन भेजा: ${targetDate} (${shift === 'Full Day' ? 'पूरा दिन' : shift})`,
+    nameEn: `Leave Requested: ${targetDate} (${shift})`,
+    completedAt: formatTime(new Date()),
+    date: targetDate,
+    visit: shift,
+    by: 'Sobendra (Cook)'
+  };
+  
+  saveState();
+  closeLeaveApplyModal();
+  playChime(true);
+  showToast(AppState.lang === 'hi' ? `🏖️ छुट्टी का आवेदन भेज दिया गया (${targetDate})` : `🏖️ Leave request submitted for ${targetDate}`);
+  renderApp();
+}
+
+function cancelLeaveRequest(leaveId) {
+  const leave = (AppState.leaves || []).find(l => l.id === leaveId);
+  if (!leave) return;
+  
+  const isHi = AppState.lang === 'hi';
+  if (!confirm(isHi ? `क्या आप छुट्टी का यह आवेदन रद्द करना चाहते हैं? (${leave.date})` : `Cancel this leave request for ${leave.date}?`)) {
+    return;
+  }
+  
+  AppState.leaves = (AppState.leaves || []).filter(l => l.id !== leaveId);
+  delete AppState.workLogs['act_leave_' + leaveId];
+  saveState();
+  renderApp();
+  showToast(isHi ? 'छुट्टी का आवेदन रद्द कर दिया गया' : 'Leave request cancelled');
+}
+
+function approveLeaveRequest(leaveId) {
+  if (AppState.role !== 'admin') {
+    openAdminPinModal();
+    return;
+  }
+  
+  const leave = (AppState.leaves || []).find(l => l.id === leaveId);
+  if (!leave) return;
+  
+  leave.status = 'Approved';
+  leave.reviewedAt = Date.now();
+  leave.reviewedBy = 'Admin';
+  
+  saveState();
+  playChime(true);
+  renderApp();
+  showToast(`✅ Leave approved for ${leave.date} (${leave.shift})`);
+}
+
+function rejectLeaveRequest(leaveId) {
+  if (AppState.role !== 'admin') {
+    openAdminPinModal();
+    return;
+  }
+  
+  const leave = (AppState.leaves || []).find(l => l.id === leaveId);
+  if (!leave) return;
+  
+  const reason = prompt('Enter reason for rejecting leave (optional):', 'Please attend work if possible');
+  if (reason === null) return;
+  
+  leave.status = 'Rejected';
+  leave.reviewedAt = Date.now();
+  leave.reviewedBy = 'Admin';
+  leave.reviewNote = reason.trim();
+  
+  saveState();
+  renderApp();
+  showToast(`❌ Leave request rejected`);
+}
+
+function deleteLeaveRecord(leaveId) {
+  if (AppState.role !== 'admin') {
+    openAdminPinModal();
+    return;
+  }
+  
+  AppState.leaves = (AppState.leaves || []).filter(l => l.id !== leaveId);
+  delete AppState.workLogs['act_leave_' + leaveId];
+  saveState();
+  renderApp();
+  showToast('Leave record removed');
+}
+
+function renderCookLeaveBanner(dateStr, shift, isHi) {
+  const leavesForDate = (AppState.leaves || []).filter(l => l.date === dateStr);
+  if (leavesForDate.length === 0) return '';
+  
+  const activeLeave = leavesForDate.find(l => l.shift === 'Full Day' || l.shift === shift) || leavesForDate[0];
+  if (!activeLeave) return '';
+  
+  if (activeLeave.status === 'Approved') {
+    return `
+    <div style="background:linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border:2px solid #43a047; border-radius:var(--radius-lg); padding:16px; margin-bottom:16px; box-shadow:var(--shadow-sm); display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div style="font-size:36px; background:#fff; width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(0,0,0,0.1);">🏖️</div>
+        <div>
+          <div style="font-size:16px; font-weight:800; color:#1b5e20;">
+            ${isHi ? 'आज की छुट्टी स्वीकृत है (Leave Approved)' : 'Leave Approved for this Day/Shift'}
+          </div>
+          <div style="font-size:13px; color:#2e7d32; margin-top:2px;">
+            <b>${activeLeave.shift === 'Full Day' ? (isHi ? 'पूरा दिन' : 'Full Day') : activeLeave.shift}</b> · ${esc(activeLeave.reason)}
+          </div>
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span class="task-tag" style="background:#2e7d32; color:#fff; font-weight:700; padding:6px 12px; font-size:12px;">
+          ✓ Approved
+        </span>
+        ${AppState.role === 'admin' ? `
+          <button class="btn-icon" style="width:30px; height:30px; font-size:12px; color:#c62828;" onclick="deleteLeaveRecord('${activeLeave.id}')" title="Revoke/Delete">✕</button>
+        ` : ''}
+      </div>
+    </div>
+    `;
+  }
+  
+  if (activeLeave.status === 'Pending') {
+    return `
+    <div style="background:linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); border:2px solid #fb8c00; border-radius:var(--radius-lg); padding:16px; margin-bottom:16px; box-shadow:var(--shadow-sm); display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div style="font-size:36px; background:#fff; width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(0,0,0,0.1);">⏳</div>
+        <div>
+          <div style="font-size:16px; font-weight:800; color:#e65100;">
+            ${isHi ? 'छुट्टी का आवेदन समीक्षा हेतु लंबित है' : 'Leave Request Awaiting Admin Approval'}
+          </div>
+          <div style="font-size:13px; color:#ef6c00; margin-top:2px;">
+            <b>${activeLeave.shift === 'Full Day' ? (isHi ? 'पूरा दिन' : 'Full Day') : activeLeave.shift}</b> · ${esc(activeLeave.reason)}
+          </div>
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        ${AppState.role === 'admin' ? `
+          <button class="btn-secondary" style="background:#2e7d32; color:#fff; border:none; padding:6px 12px; font-size:12px; font-weight:700;" onclick="approveLeaveRequest('${activeLeave.id}')">
+            ✓ Approve
+          </button>
+          <button class="btn-secondary" style="background:#d32f2f; color:#fff; border:none; padding:6px 12px; font-size:12px; font-weight:700;" onclick="rejectLeaveRequest('${activeLeave.id}')">
+            ✕ Reject
+          </button>
+        ` : `
+          <button class="btn-secondary" style="background:#fff; border-color:#ffa726; color:#e65100; font-size:12px; font-weight:700;" onclick="cancelLeaveRequest('${activeLeave.id}')">
+            ✕ ${isHi ? 'आवेदन रद्द करें' : 'Cancel Request'}
+          </button>
+        `}
+      </div>
+    </div>
+    `;
+  }
+  
+  if (activeLeave.status === 'Rejected') {
+    return `
+    <div style="background:#ffebee; border:1.5px solid #ef5350; border-radius:var(--radius-lg); padding:12px 16px; margin-bottom:16px; display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span style="font-size:22px;">❌</span>
+        <div>
+          <div style="font-size:14px; font-weight:800; color:#c62828;">
+            ${isHi ? 'छुट्टी का आवेदन अस्वीकृत (Rejected)' : 'Leave Request Rejected'}
+          </div>
+          <div style="font-size:12px; color:#d32f2f;">
+            ${activeLeave.reviewNote ? esc(activeLeave.reviewNote) : (isHi ? 'कृपया समय पर उपस्थित हों।' : 'Please report for duty.')}
+          </div>
+        </div>
+      </div>
+      ${AppState.role === 'admin' ? `
+        <button class="btn-icon" style="width:26px; height:26px; font-size:11px;" onclick="deleteLeaveRecord('${activeLeave.id}')">✕</button>
+      ` : ''}
+    </div>
+    `;
+  }
+  
+  return '';
+}
+
+function renderCookLeaveCard(isHi) {
+  const leaves = AppState.leaves || [];
+  const recentLeaves = leaves.slice(0, 3);
+  
+  let html = `
+  <div class="req-section" style="border-left: 4px solid #f57c00; margin-bottom: 24px;">
+    <div class="req-header" style="flex-wrap: wrap; gap: 8px;">
+      <div>
+        <h3 style="font-size:16px; font-weight:800; display:flex; align-items:center; gap:6px; color:var(--ink);">
+          <span>🏖️</span> <span>${isHi ? 'छुट्टी आवेदन व स्थिति' : 'Leave Application & Status'}</span>
+          <span class="task-tag" style="background:#fff3e0; color:#e65100; font-weight:700;">${leaves.length}</span>
+        </h3>
+        <p style="font-size:12px; color:var(--ink-sec); margin-top:2px;">
+          ${isHi ? 'किसी भी दिन की छुट्टी के लिए यहाँ से आवेदन करें' : 'Apply for leave whenever you need time off'}
+        </p>
+      </div>
+      <button class="btn-secondary" style="border-color:#ffb74d; color:#e65100; font-weight:700; font-size:12px; padding:6px 14px;" onclick="openLeaveApplyModal()">
+        ➕ ${isHi ? 'छुट्टी मांगें (Apply Leave)' : 'Apply for Leave'}
+      </button>
+    </div>
+  `;
+  
+  if (recentLeaves.length === 0) {
+    html += `
+      <div style="text-align:center; padding:14px; background:var(--surface-alt); border-radius:var(--radius-md); font-size:13px; color:var(--ink-mute);">
+        🏖️ ${isHi ? 'कोई छुट्टी आवेदन दर्ज नहीं है। छुट्टी की आवश्यकता होने पर बटन दबाएं।' : 'No leave requests applied yet.'}
+      </div>
+    `;
+  } else {
+    html += `<div class="req-list">`;
+    recentLeaves.forEach(l => {
+      let statusColor = '#e65100';
+      let statusBg = '#fff3e0';
+      let statusText = isHi ? '⏳ लंबित' : 'Pending';
+      if (l.status === 'Approved') {
+        statusColor = 'var(--ok)';
+        statusBg = 'var(--ok-light)';
+        statusText = isHi ? '✓ स्वीकृत' : 'Approved';
+      } else if (l.status === 'Rejected') {
+        statusColor = '#c62828';
+        statusBg = '#ffebee';
+        statusText = isHi ? '✕ अस्वीकृत' : 'Rejected';
+      }
+      
+      html += `
+        <div class="req-item" style="border-left: 3px solid ${statusColor};">
+          <div class="req-left">
+            <div style="width:38px; height:38px; border-radius:50%; background:${statusBg}; display:flex; align-items:center; justify-content:center; font-size:18px;">
+              🏖️
+            </div>
+            <div class="req-names">
+              ${l.date} (${l.shift === 'Full Day' ? (isHi ? 'पूरा दिन' : 'Full Day') : l.shift})
+              <span>${esc(l.reason)}</span>
+              ${l.reviewNote ? `<span style="color:#d32f2f; font-weight:600;">नोट: ${esc(l.reviewNote)}</span>` : ''}
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span class="req-status-tag" style="background:${statusBg}; color:${statusColor}; font-weight:700;">
+              ${statusText}
+            </span>
+            ${l.status === 'Pending' ? `
+              <button class="btn-icon" style="width:26px; height:26px; font-size:11px;" onclick="cancelLeaveRequest('${l.id}')" title="${isHi ? 'रद्द करें' : 'Cancel'}">✕</button>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    });
+    html += `</div>`;
+  }
+  
+  html += `</div>`;
+  return html;
+}
+
+function renderAdminLeaveReviewSection(isHi) {
+  const leaves = AppState.leaves || [];
+  const pendingLeaves = leaves.filter(l => l.status === 'Pending');
+  const pastLeaves = leaves.filter(l => l.status !== 'Pending');
+  
+  let html = `
+  <div class="day-plan-card" style="border-left: 4px solid #f57c00; margin-bottom: 20px;">
+    <div class="day-plan-hdr">
+      <div>
+        <b style="font-size:16px; color:#e65100; display:flex; align-items:center; gap:6px;">
+          <span>🏖️</span> <span>${isHi ? 'कुक छुट्टी आवेदन समीक्षा व प्रबंधन' : 'Cook Leave Requests & Approvals'}</span>
+        </b>
+        <div style="font-size:12px; color:var(--ink-sec); margin-top:2px;">
+          <span style="color:#e65100; font-weight:700;">${pendingLeaves.length} ${isHi ? 'आवेदन समीक्षा हेतु लंबित' : 'pending approval'}</span> • ${pastLeaves.length} ${isHi ? 'इतिहास रिकॉर्ड' : 'past records'}
+        </div>
+      </div>
+      <button class="btn-secondary" style="border-color:#ffb74d; color:#e65100; font-weight:700; font-size:12px;" onclick="openLeaveApplyModal()">
+        ➕ ${isHi ? 'छुट्टी जोड़ें' : 'Log Leave'}
+      </button>
+    </div>
+  `;
+  
+  if (pendingLeaves.length > 0) {
+    html += `
+      <div style="background:#fff3e0; border-radius:var(--radius-md); padding:12px; margin-bottom:14px; border:1px solid #ffe0b2;">
+        <div style="font-size:13px; font-weight:800; color:#e65100; margin-bottom:8px;">
+          ⚠️ ${isHi ? 'स्वीकृति हेतु लंबित आवेदन (Action Required):' : 'Pending Approvals (Action Required):'}
+        </div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+    `;
+    
+    pendingLeaves.forEach(l => {
+      html += `
+        <div style="background:#fff; border-radius:var(--radius-sm); padding:12px; border:1px solid #ffd54f; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+          <div>
+            <div style="font-size:15px; font-weight:800; color:var(--ink);">
+              📅 ${l.date} <span class="task-tag" style="background:#ffecb3; color:#e65100; font-weight:700;">${l.shift}</span>
+            </div>
+            <div style="font-size:13px; color:var(--ink-sec); margin-top:3px;">
+              <b>कारण (Reason):</b> ${esc(l.reason)}
+            </div>
+            <div style="font-size:11px; color:var(--ink-mute); margin-top:2px;">
+              आवेदक: <b>${l.appliedBy || 'Sobendra (Cook)'}</b> · समय: ${formatTime(l.appliedAt)}
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <button class="btn-secondary" style="background:#2e7d32; color:#fff; border:none; padding:8px 16px; font-weight:700; font-size:13px;" onclick="approveLeaveRequest('${l.id}')">
+              ✓ Approve (स्वीकृत)
+            </button>
+            <button class="btn-secondary" style="background:#d32f2f; color:#fff; border:none; padding:8px 14px; font-weight:700; font-size:13px;" onclick="rejectLeaveRequest('${l.id}')">
+              ✕ Reject (अस्वीकृत)
+            </button>
+          </div>
+        </div>
+      `;
+    });
+    
+    html += `
+        </div>
+      </div>
+    `;
+  } else {
+    html += `
+      <div style="text-align:center; padding:14px; background:var(--surface-alt); border-radius:var(--radius-md); font-size:13px; color:var(--ink-sec); margin-bottom:12px;">
+        ✅ ${isHi ? 'कोई नई छुट्टी समीक्षा हेतु लंबित नहीं है।' : 'No pending leave requests.'}
+      </div>
+    `;
+  }
+  
+  if (pastLeaves.length > 0) {
+    html += `
+      <details style="margin-top:10px;">
+        <summary style="font-size:13px; font-weight:700; color:var(--ink-sec); cursor:pointer; padding:6px 0;">
+          📜 ${isHi ? 'पिछली छुट्टियों का इतिहास देखें' : 'View Past Leave History'} (${pastLeaves.length})
+        </summary>
+        <div class="table-wrap" style="margin-top:8px;">
+          <table class="sched-table">
+            <thead>
+              <tr>
+                <th>${isHi ? 'तारीख व समय' : 'Date & Shift'}</th>
+                <th>${isHi ? 'कारण' : 'Reason'}</th>
+                <th>${isHi ? 'स्थिति' : 'Status'}</th>
+                <th>${isHi ? 'कार्य' : 'Action'}</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${pastLeaves.map(l => `
+                <tr>
+                  <td><b>${l.date}</b><br><span style="font-size:11px; color:var(--ink-mute);">${l.shift}</span></td>
+                  <td>${esc(l.reason)}${l.reviewNote ? `<br><small style="color:#d32f2f">Note: ${esc(l.reviewNote)}</small>` : ''}</td>
+                  <td>
+                    <span class="task-tag" style="background:${l.status === 'Approved' ? 'var(--ok-light)' : '#ffebee'}; color:${l.status === 'Approved' ? 'var(--ok)' : '#c62828'}; font-weight:700;">
+                      ${l.status}
+                    </span>
+                  </td>
+                  <td>
+                    <button class="btn-icon" style="width:26px; height:26px; font-size:11px; color:#d32f2f;" onclick="deleteLeaveRecord('${l.id}')" title="Delete">✕</button>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </details>
+    `;
+  }
+  
+  html += `</div>`;
+  return html;
+}
+
+/* ==========================================================================
    RENDER VIEWS: TODAY, GROCERY, MENU, ADMIN
    ========================================================================== */
 
@@ -3958,6 +4540,9 @@ function renderTodayView() {
     return html;
   }
   
+  // LEAVE STATUS BANNER (IF APPROVED, PENDING OR REJECTED FOR TODAY/SHIFT)
+  html += renderCookLeaveBanner(dateStr, shift, isHi);
+
   // ATTENDANCE CHECK-IN CARD
   const attKey = `${dateStr}__${shift}`;
   const attRecord = AppState.attendance[attKey];
@@ -3978,7 +4563,7 @@ function renderTodayView() {
       </div>
     </div>
     
-    <div>
+    <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
       ${attRecord ? `
         <button class="btn-secondary" onclick="handleDeparture()">
           🏁 ${attRecord.departedAt ? `${isHi ? 'प्रस्थान:' : 'Left at'} ${formatTime(attRecord.departedAt)}` : (isHi ? 'प्रस्थान दर्ज करें' : 'Mark Departed')}
@@ -3986,6 +4571,9 @@ function renderTodayView() {
       ` : `
         <button class="btn-arrive" onclick="handleArrival()">
           ${t('arriveBtn')}
+        </button>
+        <button class="btn-secondary" style="border-radius:var(--radius-full); font-weight:700; color:#e65100; border-color:#ffccbc;" onclick="openLeaveApplyModal('${dateStr}')">
+          🏖️ ${isHi ? 'छुट्टी चाहिए?' : 'Apply Leave'}
         </button>
       `}
     </div>
@@ -4190,6 +4778,9 @@ function renderTodayView() {
   
   // Cook Taken Groceries Log Section (सामान घर ले जाना)
   html += renderTakenGroceriesSection(dateStr, isHi);
+  
+  // Cook Leave Application & Status Card (छुट्टी आवेदन व स्थिति)
+  html += renderCookLeaveCard(isHi);
   
   return html;
 }
@@ -4525,6 +5116,7 @@ function renderAdminHubView() {
   const mornAtt = AppState.attendance[`${todayStr}__Morning`];
   const eveAtt = AppState.attendance[`${todayStr}__Evening`];
   const pendingGroc = AppState.groceryRequests.filter(r => r.status === 'Requested').length;
+  const pendingLeaves = (AppState.leaves || []).filter(l => l.status === 'Pending').length;
   const completedTasksToday = Object.values(AppState.workLogs).filter(w => w.date === todayStr).length;
   
   let html = `
@@ -4546,6 +5138,10 @@ function renderAdminHubView() {
         ${eveAtt ? '✓ ' + formatTime(eveAtt.at) : '—'}
       </div>
       <div class="stat-label">🌆 ${isHi ? 'शाम का आगमन' : 'Evening Shift'}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" style="color:${pendingLeaves > 0 ? '#e65100' : 'var(--ok)'}">${pendingLeaves}</div>
+      <div class="stat-label">🏖️ ${isHi ? 'छुट्टी आवेदन' : 'Pending Leaves'}</div>
     </div>
     <div class="stat-card">
       <div class="stat-val">${completedTasksToday}</div>
@@ -4674,6 +5270,9 @@ function renderAdminHubView() {
     </div>
   </div>
   
+  <!-- Cook Leave Requests Review Section (छुट्टी आवेदन समीक्षा) -->
+  ${renderAdminLeaveReviewSection(isHi)}
+
   <!-- Groceries Taken Home by Cook (Admin Audit Log) -->
   <div class="day-plan-card" style="border-left: 4px solid #8e24aa;">
     <div class="day-plan-hdr">
@@ -4778,6 +5377,16 @@ function renderActivityLogs() {
       title: `📦 Took Home: ${tg.qty} of ${isHi ? tg.itemHi : tg.itemEn} (${tg.shift})`,
       time: timeMs,
       date: tg.date
+    });
+  });
+  
+  // Leaves
+  (AppState.leaves || []).forEach(l => {
+    items.push({
+      type: 'leave',
+      title: `🏖️ Leave (${l.status}): ${l.date} (${l.shift}) - ${l.reason}`,
+      time: l.appliedAt || Date.now(),
+      date: l.date
     });
   });
   
