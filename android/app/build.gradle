@@ -28,19 +28,6 @@ android {
     }
 }
 
-task copyWebAssets(type: Copy) {
-    from('../../') {
-        include 'index.html'
-        include 'cook-manager.html'
-        include 'manifest.json'
-        include 'sw.js'
-        include 'assets/**'
-    }
-    into 'src/main/assets'
-}
-
-preBuild.dependsOn(copyWebAssets)
-
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.11.0'
