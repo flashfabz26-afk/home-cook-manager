@@ -17,6 +17,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<!-- Firebase Realtime Database SDK (Compat) for multi-phone live sync -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 
 <style>
 :root {
@@ -188,6 +191,56 @@ input, select, textarea, button {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* Cloud Sync Indicator Pill */
+.cloud-sync-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  background: rgba(46, 125, 50, 0.12);
+  color: #2e7d32;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  border: 1px solid rgba(46, 125, 50, 0.28);
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.25s ease;
+  vertical-align: middle;
+}
+.cloud-sync-badge.syncing {
+  background: rgba(2, 136, 209, 0.12);
+  color: #0288d1;
+  border-color: rgba(2, 136, 209, 0.28);
+}
+.cloud-sync-badge.offline {
+  background: rgba(237, 108, 2, 0.12);
+  color: #ed6c02;
+  border-color: rgba(237, 108, 2, 0.28);
+}
+.cloud-sync-badge .sync-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #2e7d32;
+  box-shadow: 0 0 6px rgba(46, 125, 50, 0.7);
+  animation: pulse-sync 2s infinite ease-in-out;
+}
+.cloud-sync-badge.syncing .sync-dot {
+  background: #0288d1;
+  box-shadow: 0 0 6px rgba(2, 136, 209, 0.7);
+}
+.cloud-sync-badge.offline .sync-dot {
+  background: #ed6c02;
+  box-shadow: none;
+  animation: none;
+}
+@keyframes pulse-sync {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
 }
 
 .header-actions {
@@ -1982,7 +2035,13 @@ input, select, textarea, button {
     <div class="brand" onclick="setTab('today')">
       <div class="brand-icon">🍳</div>
       <div class="brand-text">
-        <h1 id="brandTitle">रसोई मित्र</h1>
+        <div style="display:flex;align-items:center;gap:6px">
+          <h1 id="brandTitle">रसोई मित्र</h1>
+          <div id="cloudSyncIndicator" class="cloud-sync-badge" onclick="event.stopPropagation(); triggerManualSync();" title="Firebase Live Cloud Sync">
+            <span class="sync-dot"></span>
+            <span id="cloudSyncText">Live</span>
+          </div>
+        </div>
         <p id="brandSubtitle">Home Cook Manager</p>
       </div>
     </div>
@@ -2514,10 +2573,30 @@ const USERS = [
 ];
 
 /* ==========================================================================
-   APP STATE MANAGEMENT (LocalStorage + BroadcastChannel sync)
+   APP STATE MANAGEMENT & FIREBASE REALTIME MULTI-PHONE SYNC
    ========================================================================== */
 
 const syncChannel = ('BroadcastChannel' in window) ? new BroadcastChannel('cook_tracker_sync') : null;
+
+// Firebase Realtime Database Configuration
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyATxJgmbZw6-nU05zm3APPb_FjM2-T5lqk",
+  authDomain: "rasoi-mitra-8d76a.firebaseapp.com",
+  databaseURL: "https://rasoi-mitra-8d76a-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "rasoi-mitra-8d76a",
+  storageBucket: "rasoi-mitra-8d76a.firebasestorage.app",
+  messagingSenderId: "953686934100",
+  appId: "1:953686934100:web:ebba9595578f3f0e35a3c1",
+  measurementId: "G-D467QZNTDC"
+};
+
+let fbApp = null;
+let fbDb = null;
+let fbDbRef = null;
+let isReceivingRemoteUpdate = false;
+let isCloudConnected = false;
+let lastRemoteSyncTimestamp = 0;
+let fbSyncDebounce = null;
 
 // Auto-migrate schema if updated
 const TASK_SCHEMA_VERSION = 'v4_clean_floors_vessels_daily';
@@ -2565,9 +2644,7 @@ if (Array.isArray(AppState.groceryRequests)) {
   });
 }
 
-function saveState(broadcast = true) {
-  localStorage.setItem('rc_role', AppState.role);
-  localStorage.setItem('rc_lang', AppState.lang);
+function persistLocalCache() {
   localStorage.setItem('rc_tasks', JSON.stringify(AppState.tasks));
   localStorage.setItem('rc_schedule', JSON.stringify(AppState.schedule));
   localStorage.setItem('rc_menu', JSON.stringify(AppState.menu));
@@ -2586,9 +2663,149 @@ function saveState(broadcast = true) {
       localStorage.setItem('rc_work_proofs', JSON.stringify(AppState.workProofs));
     }
   }
+}
+
+function pushToFirebase() {
+  if (!fbDbRef) return;
+  clearTimeout(fbSyncDebounce);
+  fbSyncDebounce = setTimeout(() => {
+    const payload = {
+      tasks: AppState.tasks || DEFAULT_TASKS,
+      schedule: AppState.schedule || DEFAULT_SCHEDULE,
+      menu: AppState.menu || DEFAULT_MENU,
+      attendance: AppState.attendance || {},
+      workLogs: AppState.workLogs || {},
+      groceryRequests: AppState.groceryRequests || [],
+      cookedStatus: AppState.cookedStatus || {},
+      takenGroceries: AppState.takenGroceries || [],
+      leaves: AppState.leaves || [],
+      workProofs: (AppState.workProofs || []).slice(0, 20),
+      lastUpdated: Date.now(),
+      updatedBy: AppState.role === 'cook' ? 'Cook' : 'Admin'
+    };
+    fbDbRef.set(payload).catch(err => {
+      console.warn('Firebase real-time sync write error:', err);
+    });
+  }, 120);
+}
+
+function saveState(broadcast = true) {
+  localStorage.setItem('rc_role', AppState.role);
+  localStorage.setItem('rc_lang', AppState.lang);
+  persistLocalCache();
   
   if (broadcast && syncChannel) {
     syncChannel.postMessage({ type: 'STATE_UPDATED' });
+  }
+
+  // Push instantly to Firebase for live sync across different phones
+  if (!isReceivingRemoteUpdate && fbDbRef) {
+    pushToFirebase();
+  }
+}
+
+function updateCloudSyncUI() {
+  const badge = document.getElementById('cloudSyncIndicator');
+  const text = document.getElementById('cloudSyncText');
+  if (!badge || !text) return;
+
+  const isHi = AppState.lang === 'hi';
+  if (isCloudConnected) {
+    badge.className = 'cloud-sync-badge';
+    badge.title = isHi ? 'क्लाउड लाइव कनेक्टेड (रीयल-टाइम सिंक सक्रिय)' : 'Cloud Live Connected (Real-Time Sync Active)';
+    text.textContent = isHi ? 'लाइव' : 'Live';
+  } else {
+    badge.className = 'cloud-sync-badge offline';
+    badge.title = isHi ? 'ऑफ़लाइन मोड (इंटरनेट आने पर ऑटो-सिंक होगा)' : 'Offline Mode (Will auto-sync when connected)';
+    text.textContent = isHi ? 'ऑफ़लाइन' : 'Offline';
+  }
+}
+
+function triggerManualSync() {
+  if (!fbDbRef) {
+    initFirebaseSync();
+  }
+  const isHi = AppState.lang === 'hi';
+  showToast(isHi ? '🔄 क्लाउड से सिंक किया जा रहा है...' : '🔄 Syncing with cloud...', '☁️');
+  if (fbDb) {
+    try { fbDb.goOnline(); } catch (e) {}
+  }
+  pushToFirebase();
+}
+
+function initFirebaseSync() {
+  if (typeof firebase === 'undefined') {
+    console.warn('Firebase library not available. Running in local-only mode.');
+    updateCloudSyncUI();
+    return;
+  }
+
+  try {
+    if (!firebase.apps || !firebase.apps.length) {
+      fbApp = firebase.initializeApp(FIREBASE_CONFIG);
+    } else {
+      fbApp = firebase.app();
+    }
+    fbDb = firebase.database();
+    fbDbRef = fbDb.ref('rasoi_mitra_shared');
+
+    // Monitor online/offline connection state
+    fbDb.ref('.info/connected').on('value', snap => {
+      isCloudConnected = snap.val() === true;
+      updateCloudSyncUI();
+    });
+
+    // Realtime multi-phone sync listener
+    fbDbRef.on('value', snapshot => {
+      const cloudData = snapshot.val();
+      if (!cloudData) {
+        // First run on new database: seed Firebase with current local data
+        pushToFirebase();
+        return;
+      }
+
+      // Avoid echo processing of updates this device just sent
+      if (cloudData.lastUpdated && cloudData.lastUpdated === lastRemoteSyncTimestamp) {
+        return;
+      }
+      lastRemoteSyncTimestamp = cloudData.lastUpdated || Date.now();
+
+      isReceivingRemoteUpdate = true;
+      try {
+        let changed = false;
+        if (cloudData.attendance) { AppState.attendance = cloudData.attendance; changed = true; }
+        if (cloudData.workLogs) { AppState.workLogs = cloudData.workLogs; changed = true; }
+        if (cloudData.groceryRequests) { AppState.groceryRequests = cloudData.groceryRequests; changed = true; }
+        if (cloudData.cookedStatus) { AppState.cookedStatus = cloudData.cookedStatus; changed = true; }
+        if (cloudData.takenGroceries) { AppState.takenGroceries = cloudData.takenGroceries; changed = true; }
+        if (cloudData.leaves) { AppState.leaves = cloudData.leaves; changed = true; }
+        if (cloudData.workProofs) { AppState.workProofs = cloudData.workProofs; changed = true; }
+        if (cloudData.menu) { AppState.menu = cloudData.menu; changed = true; }
+        if (cloudData.tasks) { AppState.tasks = cloudData.tasks; changed = true; }
+        if (cloudData.schedule) { AppState.schedule = cloudData.schedule; changed = true; }
+
+        if (changed) {
+          persistLocalCache();
+          renderApp();
+
+          // Notify user if updated by the other device
+          const isFromOther = (AppState.role === 'cook' && cloudData.updatedBy === 'Admin') ||
+                              (AppState.role !== 'cook' && cloudData.updatedBy === 'Cook');
+          if (isFromOther) {
+            const isHi = AppState.lang === 'hi';
+            const who = cloudData.updatedBy === 'Cook' ? (isHi ? 'रसोइया' : 'Cook') : (isHi ? 'एडमिन' : 'Admin');
+            showToast(isHi ? `⚡ ${who} से नया लाइव अपडेट मिला!` : `⚡ Live update received from ${who}!`, '☁️');
+            if (typeof playChime === 'function') playChime(true);
+          }
+        }
+      } catch (err) {
+        console.error('Error applying cloud sync:', err);
+      } finally {
+        setTimeout(() => { isReceivingRemoteUpdate = false; }, 400);
+      }
+    });
+  } catch (err) {
+    console.error('Firebase initialization error:', err);
   }
 }
 
@@ -2994,6 +3211,7 @@ function updateHeaderControls() {
   const brandSub = document.getElementById('brandSubtitle');
   if (brandTitle) brandTitle.textContent = t('brand');
   if (brandSub) brandSub.textContent = t('brandSub');
+  updateCloudSyncUI();
 }
 
 function updateNavState() {
@@ -5640,6 +5858,8 @@ document.addEventListener('DOMContentLoaded', () => {
   updateHeaderControls();
   updateNavState();
   updateSoundButton();
+  updateCloudSyncUI();
+  initFirebaseSync();
   renderApp();
 
   // Register PWA Service Worker for mobile install and offline use
@@ -5649,6 +5869,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .catch(err => console.log('SW registration error:', err));
   }
 });
+initFirebaseSync();
 renderApp();
 
 </script>

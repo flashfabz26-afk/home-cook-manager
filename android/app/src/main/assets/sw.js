@@ -31,12 +31,18 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
+  const url = event.request.url;
+  // Always let Firebase, Google APIs, and real-time streams go directly to network
+  if (url.includes('firebasedatabase.app') || url.includes('firebaseio.com') || url.includes('googleapis.com')) {
+    return;
+  }
+
   // Network first, falling back to cache
   event.respondWith(
     fetch(event.request)
       .then(response => {
-        // Cache successful GET responses
-        if (event.request.method === 'GET' && response.status === 200) {
+        // Only cache local same-origin assets
+        if (event.request.method === 'GET' && response.status === 200 && url.startsWith(self.location.origin)) {
           const respClone = response.clone();
           caches.open(CACHE_NAME).then(cache => {
             cache.put(event.request, respClone).catch(() => {});
