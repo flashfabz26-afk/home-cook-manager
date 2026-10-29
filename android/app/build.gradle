@@ -1,0 +1,49 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.rasoimitra.app'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.rasoimitra.app"
+        minSdk 21
+        targetSdk 34
+        versionCode 1
+        versionName "1.0.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+task copyWebAssets(type: Copy) {
+    from('../../') {
+        include 'index.html'
+        include 'cook-manager.html'
+        include 'manifest.json'
+        include 'sw.js'
+        include 'assets/**'
+    }
+    into 'src/main/assets'
+}
+
+preBuild.dependsOn(copyWebAssets)
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'androidx.webkit:webkit:1.10.0'
+    implementation 'androidx.core:core:1.12.0'
+}

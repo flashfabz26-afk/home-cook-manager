@@ -1,0 +1,73 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build Rasoi Mitra APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.4'
+
+      - name: Build Debug APK
+        run: |
+          cd android
+          gradle assembleDebug --no-daemon --stacktrace
+
+      - name: Prepare APK File
+        run: |
+          cp android/app/build/outputs/apk/debug/app-debug.apk RasoiMitra.apk
+          ls -la RasoiMitra.apk
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: RasoiMitra-APK
+          path: RasoiMitra.apk
+          retention-days: 60
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: github.ref == 'refs/heads/master'
+        with:
+          tag_name: v1.0.0-apk
+          name: "Rasoi Mitra Android APK v1.0.0"
+          body: |
+            ### 📱 Rasoi Mitra Android APK
+
+            Download and install the latest APK file directly on your Android phone:
+            
+            - **File:** `RasoiMitra.apk`
+            - **App:** Rasoi Mitra - Home Cook & Kitchen Manager
+            - **Package:** `com.rasoimitra.app`
+            
+            #### 📥 How to Install on Android Phone:
+            1. Tap on **`RasoiMitra.apk`** below to download.
+            2. Open the downloaded file from your notifications or browser downloads.
+            3. If prompted with *"For your security, your phone is not allowed to install unknown apps"*, tap **Settings** and enable **Allow from this source**.
+            4. Tap **Install** and open **Rasoi Mitra**!
+          files: RasoiMitra.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

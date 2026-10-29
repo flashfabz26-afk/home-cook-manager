@@ -1,0 +1,30 @@
+{
+  "name": "Rasoi Mitra - Home Cook & Kitchen Manager",
+  "short_name": "Rasoi Mitra",
+  "description": "Smart daily tracking for home cooks, meals, groceries and kitchen management",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fcf9f5",
+  "theme_color": "#d35400",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

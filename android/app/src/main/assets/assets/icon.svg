@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e65100"/>
+      <stop offset="100%" stop-color="#ff7043"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+  <!-- Background Icon Tile -->
+  <rect width="512" height="512" rx="128" fill="url(#grad)"/>
+  
+  <!-- Subtle Inner Ring -->
+  <circle cx="256" cy="256" r="210" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="6"/>
+  
+  <!-- Main Cooking Icon (Pan & Chef Hat) -->
+  <g filter="url(#shadow)" transform="translate(40, 30)">
+    <!-- Chef Hat -->
+    <path d="M 216 110 C 200 70 140 70 125 110 C 90 95 60 140 85 175 C 65 210 110 240 140 230 L 290 230 C 320 240 365 210 345 175 C 370 140 340 95 305 110 C 290 70 230 70 216 110 Z" fill="#ffffff"/>
+    <path d="M 120 230 L 310 230 L 300 270 L 130 270 Z" fill="#fff3e0"/>
+    <rect x="140" y="240" width="150" height="8" rx="4" fill="#e65100" opacity="0.6"/>
+    
+    <!-- Frying Pan with Sauté Spark -->
+    <ellipse cx="215" cy="340" rx="120" ry="40" fill="#2c2520"/>
+    <ellipse cx="215" cy="336" rx="108" ry="32" fill="#423832"/>
+    <path d="M 330 340 L 410 365 C 418 368 422 376 418 384 C 415 390 408 393 400 390 L 325 355 Z" fill="#2c2520"/>
+    <!-- Yellow Sauté glow -->
+    <ellipse cx="215" cy="336" rx="70" ry="18" fill="#ffb300" opacity="0.85"/>
+  </g>
+</svg>

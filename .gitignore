@@ -13,3 +13,11 @@ Thumbs.db
 Home Cook Manager.xlsx
 *.backup.html
 excel_dump.json
+
+# Android build outputs
+.gradle/
+build/
+android/app/build/
+android/.gradle/
+*.apk
+*.aab
