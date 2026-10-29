@@ -28,6 +28,10 @@ jobs:
         with:
           gradle-version: '8.4'
 
+      - name: Accept Android SDK Licenses
+        run: |
+          yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
+
       - name: Sync Web Assets to Android App
         run: |
           mkdir -p android/app/src/main/assets
@@ -38,6 +42,8 @@ jobs:
         run: |
           cd android
           gradle assembleDebug --no-daemon --stacktrace
+        env:
+          ANDROID_HOME: /usr/local/lib/android/sdk
 
       - name: Prepare APK File
         run: |
@@ -59,7 +65,6 @@ jobs:
           name: "Rasoi Mitra Android APK v1.0.0"
           draft: false
           prerelease: false
-          generate_release_notes: false
           body: |
             ### 📱 Rasoi Mitra Android App (APK)
 
@@ -71,7 +76,7 @@ jobs:
             
             #### 📥 How to Install:
             1. Download **`RasoiMitra.apk`** below.
-            2. Send it to your phone via WhatsApp (as a Document) or download directly.
+            2. Send it to your phone via WhatsApp (as a Document) or download directly on your phone.
             3. Tap on the file on your phone and click **Install**.
           files: RasoiMitra.apk
         env:
