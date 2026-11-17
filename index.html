@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Rasoi Mitra - Home Cook & Kitchen Manager</title>
-<meta name="theme-color" content="#d35400">
+<meta name="theme-color" content="#FF653B">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -14,7 +14,7 @@
 <link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <!-- Firebase Realtime Database SDK (Compat) for multi-phone live sync -->
@@ -23,62 +23,101 @@
 
 <style>
 :root {
-  --font-main: 'Outfit', 'Noto Sans Devanagari', -apple-system, sans-serif;
-  --font-hi: 'Noto Sans Devanagari', 'Outfit', sans-serif;
-  
-  /* Color Palette */
-  --pri: #d35400;
-  --pri-light: #fff3eb;
-  --pri-dark: #a04000;
-  --pri-grad: linear-gradient(135deg, #e65100 0%, #ff7043 100%);
-  
-  --ok: #2e7d32;
-  --ok-light: #e8f5e9;
-  --ok-grad: linear-gradient(135deg, #2e7d32 0%, #4caf50 100%);
-  
-  --warn: #ed6c02;
-  --warn-light: #fff4e5;
-  --info: #0288d1;
-  --info-light: #e1f5fe;
-  
-  --bg: #fcf9f5;
+  /* Typography: Inter + Noto Sans Devanagari */
+  --font-main: 'Inter', 'Plus Jakarta Sans', 'Noto Sans Devanagari', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-hi: 'Noto Sans Devanagari', 'Inter', sans-serif;
+
+  /* Primary Accent: Modern Vibrant Orange (#FF653B) */
+  --pri: #ff653b;
+  --pri-hover: #f0552b;
+  --pri-light: #fff2ed;
+  --pri-dark: #d44219;
+  --pri-grad: linear-gradient(135deg, #ff653b 0%, #ff855f 100%);
+  --pri-glow: 0 4px 16px rgba(255, 101, 59, 0.28);
+
+  /* Secondary: Dark Navy (#111827) */
+  --sec: #111827;
+  --sec-hover: #1f2937;
+  --sec-light: #f3f4f6;
+
+  /* Success: Modern Green */
+  --ok: #10b981;
+  --ok-hover: #059669;
+  --ok-light: #ecfdf5;
+  --ok-dark: #047857;
+  --ok-grad: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  --ok-glow: 0 4px 16px rgba(16, 185, 129, 0.28);
+
+  /* Warning: Soft Amber */
+  --warn: #f59e0b;
+  --warn-light: #fffbeb;
+  --warn-dark: #b45309;
+
+  /* Danger / Rejected */
+  --danger: #ef4444;
+  --danger-light: #fef2f2;
+  --danger-dark: #b91c1c;
+
+  /* Info */
+  --info: #0ea5e9;
+  --info-light: #f0f9ff;
+
+  /* Canvas / Backgrounds: Soft Off-White (#F7F8FC) */
+  --bg: #f7f8fc;
   --surface: #ffffff;
-  --surface-alt: #f5efe6;
+  --surface-alt: #f1f3f9;
   --card: #ffffff;
-  --ink: #1f1b16;
-  --ink-sec: #5c5247;
-  --ink-mute: #8c8072;
-  --border: #e8ded1;
-  --border-focus: #d35400;
-  --shadow-sm: 0 2px 6px rgba(40, 25, 10, 0.05);
-  --shadow: 0 6px 18px rgba(40, 25, 10, 0.08);
-  --shadow-lg: 0 12px 32px rgba(40, 25, 10, 0.12);
-  
-  --radius-sm: 8px;
+  --card-glass: rgba(255, 255, 255, 0.92);
+
+  /* Typography / Inks: Dark Navy & Grays */
+  --ink: #111827;
+  --ink-sec: #4b5563;
+  --ink-mute: #9ca3af;
+
+  /* Subtle Borders */
+  --border: #e5e7eb;
+  --border-subtle: #f3f4f6;
+  --border-focus: #ff653b;
+
+  /* Subtle Shadows (Linear & Stripe Inspired) */
+  --shadow-xs: 0 1px 2px 0 rgba(17, 24, 39, 0.04);
+  --shadow-sm: 0 1px 3px 0 rgba(17, 24, 39, 0.06), 0 1px 2px -1px rgba(17, 24, 39, 0.04);
+  --shadow: 0 4px 14px -2px rgba(17, 24, 39, 0.06), 0 2px 6px -1px rgba(17, 24, 39, 0.03);
+  --shadow-lg: 0 12px 28px -4px rgba(17, 24, 39, 0.09), 0 4px 10px -2px rgba(17, 24, 39, 0.03);
+
+  /* Border Radii (12px–20px) */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
   --radius-md: 14px;
-  --radius-lg: 20px;
+  --radius-lg: 18px;
+  --radius-xl: 20px;
   --radius-full: 9999px;
-  
-  --header-h: 68px;
-  --bottom-nav-h: 70px;
+
+  --header-h: 66px;
+  --bottom-nav-h: 68px;
 }
 
 [data-theme="dark"] {
-  --bg: #141210;
-  --surface: #1e1b17;
-  --surface-alt: #29241f;
-  --card: #1e1b17;
-  --ink: #f7f2eb;
-  --ink-sec: #c4b8a9;
-  --ink-mute: #8e8376;
-  --border: #383129;
-  --pri-light: #3a2214;
-  --ok-light: #15331d;
-  --warn-light: #3a2b16;
-  --info-light: #122838;
-  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.4);
-  --shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.6);
+  --bg: #0b0f17;
+  --surface: #111827;
+  --surface-alt: #1a2233;
+  --card: #111827;
+  --card-glass: rgba(17, 24, 39, 0.92);
+  --ink: #f9fafb;
+  --ink-sec: #9ca3af;
+  --ink-mute: #6b7280;
+  --border: #1f2937;
+  --border-subtle: #16202e;
+  --border-focus: #ff855f;
+  --pri-light: rgba(255, 101, 59, 0.16);
+  --ok-light: rgba(16, 185, 129, 0.16);
+  --warn-light: rgba(245, 158, 11, 0.16);
+  --danger-light: rgba(239, 68, 68, 0.16);
+  --info-light: rgba(14, 165, 233, 0.16);
+  --sec-light: #1f2937;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.65);
 }
 
 *, *::before, *::after {
@@ -94,6 +133,8 @@ html {
   overflow-x: hidden !important;
   overscroll-behavior-x: none;
   touch-action: pan-y pinch-zoom;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
@@ -107,8 +148,24 @@ body {
   color: var(--ink);
   line-height: 1.5;
   min-height: 100vh;
-  padding-bottom: calc(var(--bottom-nav-h) + env(safe-area-inset-bottom, 20px) + 20px);
+  padding-bottom: calc(var(--bottom-nav-h) + env(safe-area-inset-bottom, 16px) + 20px);
   -webkit-overflow-scrolling: touch;
+}
+
+/* Custom Sleek Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.35);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.6);
 }
 
 img, svg, video, canvas, audio, iframe, embed, object {
@@ -118,40 +175,47 @@ img, svg, video, canvas, audio, iframe, embed, object {
 
 input, select, textarea, button {
   max-width: 100%;
+  font-family: inherit;
 }
 
-/* App Header */
+/* ==========================================================================
+   3. NAVIGATION REDESIGN (COMPACT, MODERN, PROFESSIONAL SAAS TOP BAR)
+   ========================================================================== */
 .app-header {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: var(--surface);
+  background: var(--card-glass);
   border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  padding: 10px 16px;
-  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 10px 20px;
+  box-shadow: var(--shadow-xs);
   width: 100%;
   max-width: 100%;
+  transition: all 0.2s ease;
 }
 
 .header-inner {
-  max-width: 1000px;
+  max-width: 1080px;
   width: 100%;
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: 16px;
 }
 
+/* Brand */
 .brand {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   cursor: pointer;
   min-width: 0;
-  flex-shrink: 1;
+  flex-shrink: 0;
+  text-decoration: none;
+  user-select: none;
 }
 
 .brand-icon {
@@ -163,10 +227,15 @@ input, select, textarea, button {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
-  box-shadow: 0 4px 12px rgba(211, 84, 0, 0.3);
+  font-size: 20px;
+  box-shadow: var(--pri-glow);
   color: white;
   flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.brand:hover .brand-icon {
+  transform: scale(1.06);
 }
 
 .brand-text {
@@ -175,1048 +244,233 @@ input, select, textarea, button {
 }
 
 .brand-text h1 {
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 800;
-  line-height: 1.1;
+  letter-spacing: -0.3px;
+  line-height: 1.15;
   color: var(--ink);
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .brand-text p {
   font-size: 11px;
   color: var(--ink-mute);
-  font-weight: 500;
+  font-weight: 600;
+  letter-spacing: 0.3px;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
-/* Cloud Sync Indicator Pill */
+/* Cloud Sync Indicator Badge */
 .cloud-sync-badge {
   display: inline-flex;
   align-items: center;
   gap: 5px;
   padding: 2px 8px;
-  background: rgba(46, 125, 50, 0.12);
-  color: #2e7d32;
-  border-radius: 12px;
-  font-size: 11px;
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--ok-dark);
+  border-radius: var(--radius-full);
+  font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.3px;
-  border: 1px solid rgba(46, 125, 50, 0.28);
+  border: 1px solid rgba(16, 185, 129, 0.25);
   cursor: pointer;
   user-select: none;
-  transition: all 0.25s ease;
+  transition: all 0.2s ease;
   vertical-align: middle;
 }
+.cloud-sync-badge:hover {
+  background: rgba(16, 185, 129, 0.18);
+}
 .cloud-sync-badge.syncing {
-  background: rgba(2, 136, 209, 0.12);
-  color: #0288d1;
-  border-color: rgba(2, 136, 209, 0.28);
+  background: rgba(14, 165, 233, 0.1);
+  color: #0284c7;
+  border-color: rgba(14, 165, 233, 0.25);
 }
 .cloud-sync-badge.offline {
-  background: rgba(237, 108, 2, 0.12);
-  color: #ed6c02;
-  border-color: rgba(237, 108, 2, 0.28);
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--warn-dark);
+  border-color: rgba(245, 158, 11, 0.25);
 }
 .cloud-sync-badge .sync-dot {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background: #2e7d32;
-  box-shadow: 0 0 6px rgba(46, 125, 50, 0.7);
+  background: var(--ok);
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.8);
   animation: pulse-sync 2s infinite ease-in-out;
 }
 .cloud-sync-badge.syncing .sync-dot {
-  background: #0288d1;
-  box-shadow: 0 0 6px rgba(2, 136, 209, 0.7);
+  background: var(--info);
+  box-shadow: 0 0 6px rgba(14, 165, 233, 0.8);
 }
 .cloud-sync-badge.offline .sync-dot {
-  background: #ed6c02;
+  background: var(--warn);
   box-shadow: none;
   animation: none;
 }
 @keyframes pulse-sync {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(0.85); }
+  50% { opacity: 0.35; transform: scale(0.8); }
 }
 
+/* Desktop SaaS Tab Navigation Bar */
+.desktop-nav {
+  display: none;
+  align-items: center;
+  gap: 4px;
+  background: var(--surface-alt);
+  padding: 3px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+}
+
+.subtab-btn {
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--ink-sec);
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+}
+.subtab-btn:hover {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.6);
+}
+.subtab-btn.active {
+  background: var(--surface);
+  color: var(--pri);
+  font-weight: 700;
+  box-shadow: var(--shadow-xs);
+  border: 1px solid rgba(229, 231, 235, 0.8);
+}
+
+.nav-badge {
+  background: var(--pri);
+  color: white;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  line-height: 1.2;
+}
+
+/* Header Action Controls */
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   flex-shrink: 0;
 }
 
-/* Role Selector & Controls */
+/* Role Selector Capsule */
 .role-badge {
   display: flex;
   align-items: center;
   background: var(--surface-alt);
   border: 1px solid var(--border);
   border-radius: var(--radius-full);
-  padding: 3px 4px;
+  padding: 3px;
+  gap: 2px;
 }
 
 .role-btn {
   border: none;
   background: transparent;
-  padding: 6px 12px;
-  font-size: 13px;
+  padding: 5px 12px;
+  font-size: 12px;
   font-weight: 600;
   border-radius: var(--radius-full);
   cursor: pointer;
   color: var(--ink-sec);
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 5px;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.role-btn:hover {
+  color: var(--ink);
 }
 
 .role-btn.active {
-  background: var(--pri);
+  background: var(--surface);
+  color: var(--pri);
+  font-weight: 700;
+  box-shadow: var(--shadow-xs);
+}
+
+.role-btn.active.admin-active {
+  background: var(--sec);
   color: #fff;
-  box-shadow: 0 2px 8px rgba(211, 84, 0, 0.35);
 }
 
 .exit-admin-btn {
-  background: #fbe9e7 !important;
-  color: #d84315 !important;
-  border: 1px solid #ffccbc !important;
+  background: var(--warn-light) !important;
+  color: var(--warn-dark) !important;
+  border: 1px solid rgba(245, 158, 11, 0.25) !important;
   font-weight: 700 !important;
-}
-.exit-admin-btn:hover {
-  background: #ffccbc !important;
 }
 
 .admin-lock-btn {
   color: var(--ink-sec);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
 }
 .admin-lock-btn:hover {
   color: var(--pri);
 }
 
-/* PIN Modal Styling */
-.pin-modal-card {
-  max-width: 380px !important;
-  margin: auto;
-  border-radius: var(--radius-lg);
-  padding: 24px 20px !important;
-}
-.pin-input-wrap {
-  margin: 18px 0 10px;
-  display: flex;
-  justify-content: center;
-}
-.pin-input-wrap input {
-  font-size: 28px;
-  font-weight: 800;
-  letter-spacing: 10px;
-  text-align: center;
-  width: 190px;
-  padding: 10px 14px;
-  border-radius: var(--radius-md);
-  border: 2px solid var(--border);
-  background: var(--surface-alt);
-  color: var(--ink);
-  outline: none;
-  font-family: inherit;
-  transition: all 0.2s ease;
-}
-.pin-input-wrap input:focus {
-  border-color: var(--pri);
-  background: var(--surface);
-  box-shadow: 0 0 0 3px rgba(211, 84, 0, 0.18);
-}
-.pin-error-msg {
-  color: #d32f2f;
-  background: #ffebee;
-  padding: 8px 12px;
-  border-radius: var(--radius-sm);
-  font-size: 13px;
-  font-weight: 700;
-  margin-top: 8px;
-  animation: shake 0.35s;
-}
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-6px); }
-  75% { transform: translateX(6px); }
-}
-
+/* Quick Action Circle Icon Buttons */
 .btn-icon {
   background: var(--surface-alt);
   border: 1px solid var(--border);
   border-radius: var(--radius-full);
   width: 36px;
   height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: var(--ink);
-  font-size: 15px;
-  font-weight: 600;
-  transition: background 0.2s;
-}
-.btn-icon:hover { background: var(--border); }
-
-/* Main Container */
-.container {
-  max-width: 960px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 16px;
-  overflow-x: hidden;
-  box-sizing: border-box;
-}
-
-/* Quick Shift Bar */
-.shift-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 8px 12px;
-  margin-bottom: 16px;
-  box-shadow: var(--shadow-sm);
-  gap: 10px;
-  flex-wrap: wrap;
-  max-width: 100%;
-}
-
-.shift-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.date-pill {
-  font-size: 14px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--ink);
-}
-
-.shift-toggle {
-  display: flex;
-  background: var(--surface-alt);
-  border-radius: var(--radius-full);
-  padding: 4px;
-  gap: 4px;
-}
-
-.shift-btn {
-  border: none;
-  background: transparent;
-  padding: 6px 14px;
-  border-radius: var(--radius-full);
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  color: var(--ink-sec);
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  transition: all 0.2s ease;
-}
-
-.shift-btn.active {
-  background: var(--pri);
-  color: white;
-  box-shadow: 0 2px 6px rgba(211, 84, 0, 0.3);
-}
-
-.shift-btn.active.evening {
-  background: #3949ab;
-  box-shadow: 0 2px 6px rgba(57, 73, 171, 0.3);
-}
-
-/* Sunday Banner */
-.sunday-hero {
-  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-  color: white;
-  border-radius: var(--radius-lg);
-  padding: 24px 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 8px 24px rgba(37, 117, 252, 0.25);
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.sunday-hero h2 {
-  font-size: 24px;
-  font-weight: 800;
-  margin-bottom: 6px;
-}
-
-.sunday-hero p {
-  font-size: 14px;
-  opacity: 0.95;
-  max-width: 500px;
-  margin: 0 auto;
-}
-
-/* Attendance Card */
-.att-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 16px;
-  margin-bottom: 16px;
-  box-shadow: var(--shadow-sm);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.att-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.att-avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: var(--pri-light);
-  border: 2px solid var(--pri);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  flex-shrink: 0;
-}
-
-.att-title {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--ink);
-}
-
-.att-sub {
-  font-size: 13px;
-  color: var(--ink-sec);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 2px;
-}
-
-.btn-arrive {
-  background: var(--pri-grad);
-  border: none;
-  color: white;
-  padding: 10px 20px;
-  font-size: 15px;
-  font-weight: 700;
-  border-radius: var(--radius-full);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  box-shadow: 0 4px 14px rgba(211, 84, 0, 0.35);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-.btn-arrive:active { transform: scale(0.96); }
-
-.badge-arrived {
-  background: var(--ok-light);
-  color: var(--ok);
-  border: 1px solid rgba(46, 125, 50, 0.2);
-  padding: 6px 14px;
-  border-radius: var(--radius-full);
-  font-weight: 700;
-  font-size: 13px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-/* Sections */
-.section-title {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 22px 0 12px;
-}
-
-.section-title h2 {
-  font-size: 18px;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--ink);
-}
-
-.section-title span.tag {
-  font-size: 12px;
-  font-weight: 600;
-  background: var(--pri-light);
-  color: var(--pri);
-  padding: 2px 8px;
-  border-radius: var(--radius-full);
-}
-
-/* Meal Hero Card with Image */
-.meal-hero {
-  position: relative;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow);
-  margin-bottom: 20px;
-}
-
-.meal-img-box {
-  position: relative;
-  width: 100%;
-  height: 220px;
-  background: var(--surface-alt);
-  overflow: hidden;
-}
-
-.meal-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.meal-hero:hover .meal-img {
-  transform: scale(1.03);
-}
-
-.meal-shift-pill {
-  position: absolute;
-  top: 14px;
-  left: 14px;
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
-  backdrop-filter: blur(6px);
-  padding: 4px 12px;
-  border-radius: var(--radius-full);
-  font-size: 12px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.meal-status-pill {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  background: rgba(255, 255, 255, 0.95);
-  color: var(--ok);
-  padding: 4px 12px;
-  border-radius: var(--radius-full);
-  font-size: 12px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  box-shadow: var(--shadow-sm);
-}
-
-.meal-body {
-  padding: 18px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.meal-info {
-  flex: 1;
-  min-width: 220px;
-}
-
-.meal-title-hi {
-  font-size: 22px;
-  font-weight: 800;
-  color: var(--ink);
-  line-height: 1.2;
-}
-
-.meal-title-en {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--ink-sec);
-  margin-top: 4px;
-}
-
-.meal-note {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  background: var(--warn-light);
-  color: var(--warn);
-  border: 1px dashed rgba(237, 108, 2, 0.3);
-  padding: 4px 10px;
-  border-radius: var(--radius-sm);
-  font-size: 12px;
-  font-weight: 600;
-  margin-top: 8px;
-}
-
-.meal-cook-btn {
-  background: var(--surface-alt);
-  border: 2px solid var(--border);
-  color: var(--ink);
-  padding: 12px 22px;
-  border-radius: var(--radius-full);
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.meal-cook-btn.done {
-  background: var(--ok-grad);
-  border-color: var(--ok);
-  color: white;
-  box-shadow: 0 4px 14px rgba(46, 125, 50, 0.35);
-}
-
-.meal-cook-btn:active { transform: scale(0.96); }
-
-/* Progress Card */
-.progress-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 12px 16px;
-  margin-bottom: 14px;
-  box-shadow: var(--shadow-sm);
-}
-
-.progress-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 13px;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-
-.progress-track {
-  height: 10px;
-  background: var(--surface-alt);
-  border-radius: var(--radius-full);
-  overflow: hidden;
-}
-
-.progress-fill {
-  height: 100%;
-  background: var(--ok-grad);
-  border-radius: var(--radius-full);
-  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Tasks Checklist */
-.task-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 24px;
-}
-
-.task-item {
-  background: var(--surface);
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 14px 16px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  box-shadow: var(--shadow-sm);
-  transition: all 0.2s ease;
-  cursor: pointer;
-  user-select: none;
-}
-
-.task-item:hover {
-  border-color: var(--pri);
-  box-shadow: var(--shadow);
-}
-
-.task-item.completed {
-  background: var(--ok-light);
-  border-color: rgba(46, 125, 50, 0.3);
-}
-
-.task-chk {
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-md);
-  border: 2px solid var(--border);
-  background: var(--surface);
-  display: flex;
-  align-items: center;
   justify-content: center;
-  font-size: 22px;
-  flex-shrink: 0;
-  color: transparent;
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.task-item.completed .task-chk {
-  background: var(--ok);
-  border-color: var(--ok);
-  color: white;
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
-}
-
-.task-details {
-  flex: 1;
-}
-
-.task-name-hi {
-  font-size: 17px;
-  font-weight: 700;
+  cursor: pointer;
   color: var(--ink);
-  line-height: 1.3;
-}
-
-.task-name-en {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--ink-sec);
-}
-
-.task-item.completed .task-name-hi,
-.task-item.completed .task-name-en {
-  text-decoration: line-through;
-  opacity: 0.7;
-}
-
-.task-meta {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 4px;
-  font-size: 11px;
-}
-
-.task-tag {
-  background: var(--surface-alt);
-  color: var(--ink-mute);
-  padding: 2px 6px;
-  border-radius: var(--radius-sm);
-  font-weight: 600;
-}
-
-.task-tag.weekly {
-  background: var(--info-light);
-  color: var(--info);
-}
-
-.task-time {
-  color: var(--ok);
-  font-weight: 600;
-}
-
-/* Visual Grocery Catalog */
-.groc-categories {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  padding-bottom: 6px;
-  margin-bottom: 14px;
-  scrollbar-width: none;
-  overscroll-behavior-x: contain;
-  -webkit-overflow-scrolling: touch;
-  max-width: 100%;
-}
-.groc-categories::-webkit-scrollbar { display: none; }
-
-.cat-btn {
-  border: 1px solid var(--border);
-  background: var(--surface);
-  border-radius: var(--radius-full);
-  padding: 7px 14px;
   font-size: 13px;
   font-weight: 600;
-  color: var(--ink-sec);
-  white-space: nowrap;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
-
-.cat-btn.active {
-  background: var(--pri);
-  color: white;
-  border-color: var(--pri);
-  box-shadow: 0 2px 8px rgba(211, 84, 0, 0.3);
-}
-
-.grocery-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
-  gap: 12px;
-  margin-bottom: 24px;
-}
-
-.groc-card {
+.btn-icon:hover {
   background: var(--surface);
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  transition: all 0.2s ease;
-  cursor: pointer;
-  position: relative;
-  box-shadow: var(--shadow-sm);
-}
-
-.groc-card:hover {
-  transform: translateY(-3px);
-  border-color: var(--pri);
-  box-shadow: var(--shadow);
-}
-
-.groc-card:active {
-  transform: scale(0.97);
-}
-
-.groc-img-wrap {
-  width: 100%;
-  height: 105px;
-  background: var(--surface-alt);
-  position: relative;
-  overflow: hidden;
-}
-
-.groc-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.2s ease;
-}
-
-.groc-card:hover .groc-img {
-  transform: scale(1.06);
-}
-
-.groc-req-badge {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  background: var(--pri);
-  color: white;
-  font-size: 10px;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: var(--radius-full);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-}
-
-.groc-info {
-  padding: 8px 10px;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-.groc-name-hi {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--ink);
-  line-height: 1.2;
-}
-
-.groc-name-en {
-  font-size: 11px;
-  color: var(--ink-mute);
-  font-weight: 500;
-  margin-top: 2px;
-}
-
-.groc-quick-btn {
-  margin-top: 6px;
-  background: var(--pri-light);
+  border-color: var(--border-focus);
   color: var(--pri);
-  border: 1px solid rgba(211, 84, 0, 0.2);
-  border-radius: var(--radius-sm);
-  padding: 5px 8px;
-  font-size: 11px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-xs);
+}
+.btn-icon:active {
+  transform: scale(0.94);
 }
 
-/* Active Requests Drawer / Section */
-.req-section {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 16px;
-  margin-bottom: 24px;
-  box-shadow: var(--shadow-sm);
-}
-
-.req-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-}
-
-.req-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.req-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--surface-alt);
-  border-radius: var(--radius-md);
-  padding: 8px 12px;
-  gap: 10px;
-}
-
-.req-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.req-thumb {
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-sm);
-  object-fit: cover;
-  background: var(--surface);
-}
-
-.req-names {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--ink);
-}
-
-.req-names span {
-  font-size: 11px;
-  color: var(--ink-sec);
-  font-weight: normal;
-  display: block;
-}
-
-.req-qty {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  padding: 3px 8px;
-  border-radius: var(--radius-full);
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--pri);
-}
-
-.req-status-tag {
-  font-size: 11px;
-  font-weight: 700;
-  padding: 4px 8px;
-  border-radius: var(--radius-full);
-}
-.req-status-tag.requested { background: var(--warn-light); color: var(--warn); }
-.req-status-tag.bought { background: var(--ok-light); color: var(--ok); }
-
-/* Quantity Selection Modal / Bottom Sheet */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
-  z-index: 100;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s ease;
-}
-
-.modal-overlay.open {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.modal-card {
-  width: 100%;
-  max-width: 480px;
-  background: var(--surface);
-  border-radius: 24px 24px 0 0;
-  padding: 20px;
-  transform: translateY(100%);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.25);
-  max-height: 90vh;
-  overflow-y: auto;
-}
-
-.modal-overlay.open .modal-card {
-  transform: translateY(0);
-}
-
-.modal-drag-bar {
-  width: 40px;
-  height: 4px;
-  background: var(--border);
-  border-radius: 2px;
-  margin: 0 auto 16px;
-}
-
-.modal-item-info {
-  display: flex;
-  gap: 14px;
-  align-items: center;
-  margin-bottom: 18px;
-}
-
-.modal-item-img {
-  width: 72px;
-  height: 72px;
-  border-radius: var(--radius-md);
-  object-fit: cover;
-  background: var(--surface-alt);
-}
-
-.modal-title-hi {
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--ink);
-}
-
-.modal-title-en {
-  font-size: 14px;
-  color: var(--ink-sec);
-  font-weight: 500;
-}
-
-.qty-stepper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  margin: 16px 0;
-}
-
-.step-btn {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  border: 1px solid var(--border);
-  background: var(--surface-alt);
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--ink);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.15s ease;
-}
-.step-btn:hover { background: var(--border); }
-.step-btn:active { transform: scale(0.92); }
-
-.qty-display {
-  font-size: 28px;
-  font-weight: 800;
-  min-width: 120px;
-  text-align: center;
-  color: var(--pri);
-}
-
-.qty-presets {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-.qty-chip {
-  background: var(--surface-alt);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-full);
-  padding: 8px 16px;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  color: var(--ink-sec);
-  transition: all 0.15s;
-}
-
-.qty-chip.selected {
-  background: var(--pri);
-  color: white;
-  border-color: var(--pri);
-}
-
-.modal-btn-confirm {
-  width: 100%;
-  background: var(--pri-grad);
-  color: white;
-  border: none;
-  border-radius: var(--radius-full);
-  padding: 14px;
-  font-size: 16px;
-  font-weight: 800;
-  cursor: pointer;
-  box-shadow: 0 4px 16px rgba(211, 84, 0, 0.35);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: transform 0.15s;
-}
-.modal-btn-confirm:active { transform: scale(0.97); }
-
-/* Bottom Mobile Navigation */
+/* Mobile Bottom Navigation Bar (Floating Dock) */
 .bottom-nav {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   height: var(--bottom-nav-h);
-  background: var(--surface);
+  background: var(--card-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-top: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: space-around;
   padding-bottom: env(safe-area-inset-bottom, 0px);
   z-index: 45;
-  box-shadow: 0 -4px 16px rgba(0,0,0,0.06);
+  box-shadow: 0 -4px 20px rgba(17, 24, 39, 0.05);
 }
 
 .nav-item {
@@ -1235,41 +489,1245 @@ input, select, textarea, button {
   cursor: pointer;
   padding: 6px 0;
   position: relative;
-  transition: color 0.2s;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .nav-icon {
-  font-size: 22px;
-  height: 26px;
+  font-size: 20px;
+  height: 24px;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .nav-item.active {
   color: var(--pri);
+  font-weight: 700;
+}
+.nav-item.active .nav-icon {
+  transform: scale(1.15) translateY(-1px);
 }
 
-.nav-badge {
+.nav-item .nav-badge {
   position: absolute;
   top: 4px;
   right: 28%;
+}
+
+@media (min-width: 768px) {
+  body {
+    padding-bottom: 36px;
+  }
+  .bottom-nav {
+    display: none;
+  }
+  .desktop-nav {
+    display: inline-flex;
+  }
+}
+
+/* ==========================================================================
+   MAIN DASHBOARD CONTAINER
+   ========================================================================== */
+.container {
+  max-width: 1040px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px 20px 40px;
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   4. TODAY'S DASHBOARD REDESIGN
+   ========================================================================== */
+
+/* Date & Shift Selector Bar */
+.shift-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 8px 14px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-sm);
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.shift-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.date-navigator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.date-nav-btn {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  cursor: pointer;
+  color: var(--ink-sec);
+  transition: all 0.15s ease;
+}
+.date-nav-btn:hover {
+  background: var(--pri);
+  color: #fff;
+  border-color: var(--pri);
+  transform: scale(1.05);
+}
+
+.date-pill {
+  font-size: 14px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: background 0.15s;
+}
+.date-pill:hover {
+  background: var(--surface-alt);
+}
+
+.badge-today {
+  background: var(--ok-light);
+  color: var(--ok-dark);
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  margin-left: 4px;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.badge-subtle {
+  background: var(--surface-alt);
+  color: var(--ink-sec);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  margin-left: 4px;
+  border: 1px solid var(--border);
+}
+
+.shift-toggle {
+  display: inline-flex;
+  background: var(--surface-alt);
+  border-radius: var(--radius-full);
+  padding: 3px;
+  gap: 3px;
+  border: 1px solid var(--border);
+}
+
+.shift-btn {
+  border: none;
+  background: transparent;
+  padding: 7px 16px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--ink-sec);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.shift-btn.active {
+  background: var(--pri-grad);
+  color: white;
+  box-shadow: var(--pri-glow);
+}
+
+.shift-btn.active.evening {
+  background: var(--sec);
+  color: white;
+  box-shadow: 0 4px 12px rgba(17, 24, 39, 0.25);
+}
+
+/* Cook Attendance Card */
+.att-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  transition: all 0.2s ease;
+}
+.att-card:hover {
+  box-shadow: var(--shadow);
+}
+
+.att-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.att-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: var(--pri-light);
+  border: 1.5px solid rgba(255, 101, 59, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.att-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -0.2px;
+}
+
+.att-sub {
+  font-size: 13px;
+  color: var(--ink-sec);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.btn-arrive {
+  background: var(--pri-grad);
+  border: none;
+  color: white;
+  padding: 10px 22px;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: var(--pri-glow);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-arrive:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(255, 101, 59, 0.38);
+}
+.btn-arrive:active {
+  transform: scale(0.97);
+}
+
+.badge-arrived {
+  background: var(--ok-light);
+  color: var(--ok-dark);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Section Headings */
+.section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 26px 0 14px;
+}
+
+.section-title h2 {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink);
+}
+
+.section-title span.tag {
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--pri-light);
+  color: var(--pri);
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(255, 101, 59, 0.18);
+}
+
+/* Today's Meal Card (Special Showcase) */
+.meal-hero {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  margin-bottom: 24px;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+.meal-hero:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.meal-img-box {
+  position: relative;
+  width: 100%;
+  height: 240px;
+  background: var(--surface-alt);
+  overflow: hidden;
+}
+
+.meal-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.meal-hero:hover .meal-img {
+  transform: scale(1.03);
+}
+
+.meal-shift-pill {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: rgba(17, 24, 39, 0.82);
+  color: white;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 5px 14px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.meal-status-pill {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(255, 255, 255, 0.96);
+  color: var(--ok-dark);
+  backdrop-filter: blur(8px);
+  padding: 5px 14px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(16, 185, 129, 0.28);
+}
+
+.meal-body {
+  padding: 20px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.meal-info {
+  flex: 1;
+  min-width: 220px;
+}
+
+.meal-title-hi {
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: var(--ink);
+  line-height: 1.25;
+}
+
+.meal-title-en {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-sec);
+  margin-top: 3px;
+}
+
+.meal-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--warn-light);
+  color: var(--warn-dark);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.meal-cook-btn {
+  background: var(--surface-alt);
+  border: 1.5px solid var(--border);
+  color: var(--ink);
+  padding: 11px 22px;
+  border-radius: var(--radius-full);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+.meal-cook-btn:hover {
+  background: var(--surface);
+  border-color: var(--pri);
+  transform: translateY(-1px);
+}
+
+.meal-cook-btn.done {
+  background: var(--ok-grad);
+  border-color: transparent;
+  color: white;
+  box-shadow: var(--ok-glow);
+}
+.meal-cook-btn.done:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+.meal-cook-btn:active {
+  transform: scale(0.97);
+}
+
+/* Progress Card */
+.progress-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-xs);
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.progress-track {
+  height: 8px;
+  background: var(--surface-alt);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--ok-grad);
+  border-radius: var(--radius-full);
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Kitchen & Cleaning Tasks Checklist */
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.task-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  box-shadow: var(--shadow-xs);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+.task-item:hover {
+  border-color: rgba(255, 101, 59, 0.35);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+
+.task-item.completed {
+  background: rgba(16, 185, 129, 0.03);
+  border-color: rgba(16, 185, 129, 0.28);
+}
+
+.task-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.task-chk {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: 2px solid #cbd5e1;
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 800;
+  flex-shrink: 0;
+  color: transparent;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.task-item.completed .task-chk {
+  background: var(--ok);
+  border-color: var(--ok);
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.task-details {
+  flex: 1 1 auto;
+  min-width: 0;
+  word-break: break-word;
+}
+
+.task-name-hi {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.3;
+}
+
+.task-name-en {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-sec);
+  margin-top: 1px;
+}
+
+.task-item.completed .task-name-hi,
+.task-item.completed .task-name-en {
+  text-decoration: line-through;
+  opacity: 0.65;
+}
+
+.task-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  font-size: 11px;
+  flex-wrap: wrap;
+}
+
+.task-tag {
+  background: var(--surface-alt);
+  color: var(--ink-mute);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  border: 1px solid var(--border);
+}
+
+.task-tag.weekly {
+  background: var(--info-light);
+  color: var(--info);
+  border-color: rgba(14, 165, 233, 0.25);
+}
+
+.task-time {
+  color: var(--ok-dark);
+  font-weight: 700;
+}
+
+.task-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.task-thumb-wrap {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 2px solid var(--ok);
+  flex-shrink: 0;
+  cursor: pointer;
+  box-shadow: var(--shadow-xs);
+  transition: transform 0.2s;
+}
+.task-thumb-wrap:hover {
+  transform: scale(1.08);
+}
+.task-thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.btn-task-camera {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  color: var(--ink);
+  padding: 6px 13px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.btn-task-camera:hover {
+  background: var(--pri-light);
+  border-color: var(--pri);
+  color: var(--pri);
+}
+.btn-task-camera.has-photo {
+  background: var(--ok-light);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: var(--ok-dark);
+}
+
+/* Send Work Report & Photos to Admin (WhatsApp Section) */
+.shift-send-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 20px 22px;
+  margin-top: 18px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  box-shadow: var(--shadow-sm);
+  background: linear-gradient(135deg, var(--surface) 0%, rgba(16, 185, 129, 0.04) 100%);
+}
+
+.shift-send-info h3 {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.shift-send-info p {
+  font-size: 13px;
+  color: var(--ink-sec);
+  margin-top: 4px;
+  max-width: 480px;
+}
+
+.btn-send-admin {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: var(--radius-full);
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-send-admin:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.45);
+}
+.btn-send-admin:active {
+  transform: scale(0.97);
+}
+
+/* ==========================================================================
+   5. MODERN UI COMPONENTS & CATALOGS
+   ========================================================================== */
+
+/* Grocery Categories & Grid */
+.groc-categories {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
+.groc-categories::-webkit-scrollbar { display: none; }
+
+.cat-btn {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: var(--radius-full);
+  padding: 7px 15px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-sec);
+  white-space: nowrap;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: var(--shadow-xs);
+}
+.cat-btn:hover {
+  border-color: var(--pri);
+  color: var(--pri);
+  transform: translateY(-1px);
+}
+.cat-btn.active {
+  background: var(--pri-grad);
+  color: white;
+  border-color: transparent;
+  box-shadow: var(--pri-glow);
+}
+
+.grocery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.groc-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  position: relative;
+  box-shadow: var(--shadow-xs);
+}
+.groc-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 101, 59, 0.4);
+  box-shadow: var(--shadow);
+}
+.groc-card:active {
+  transform: scale(0.97);
+}
+
+.groc-img-wrap {
+  width: 100%;
+  height: 110px;
+  background: var(--surface-alt);
+  position: relative;
+  overflow: hidden;
+}
+
+.groc-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.groc-card:hover .groc-img {
+  transform: scale(1.05);
+}
+
+.groc-req-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
   background: var(--pri);
   color: white;
   font-size: 10px;
-  font-weight: 700;
-  padding: 1px 5px;
+  font-weight: 800;
+  padding: 2px 7px;
   border-radius: var(--radius-full);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
 }
 
-/* ADMIN VIEW SPECIFIC STYLES */
+.groc-info {
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.groc-name-hi {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1.25;
+}
+
+.groc-name-en {
+  font-size: 11px;
+  color: var(--ink-mute);
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.groc-quick-btn {
+  margin-top: 8px;
+  background: var(--pri-light);
+  color: var(--pri);
+  border: 1px solid rgba(255, 101, 59, 0.2);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+}
+.groc-card:hover .groc-quick-btn {
+  background: var(--pri);
+  color: white;
+  border-color: var(--pri);
+}
+
+/* Request Section */
+.req-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 18px 20px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.req-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.req-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.req-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--surface-alt);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  gap: 12px;
+  border: 1px solid var(--border);
+}
+
+.req-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.req-thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.req-names {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--ink);
+}
+.req-names span {
+  font-size: 11px;
+  color: var(--ink-sec);
+  font-weight: normal;
+  display: block;
+}
+
+.req-qty {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--pri);
+}
+
+.req-status-tag {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+}
+.req-status-tag.requested {
+  background: var(--warn-light);
+  color: var(--warn-dark);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+.req-status-tag.bought {
+  background: var(--ok-light);
+  color: var(--ok-dark);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+/* Modals & Bottom Sheets */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 100;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-card {
+  width: 100%;
+  max-width: 500px;
+  background: var(--surface);
+  border-radius: 24px 24px 0 0;
+  padding: 24px;
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.25);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-overlay.open .modal-card {
+  transform: translateY(0);
+}
+
+.modal-drag-bar {
+  width: 40px;
+  height: 4px;
+  background: #cbd5e1;
+  border-radius: var(--radius-full);
+  margin: 0 auto 16px;
+}
+
+.modal-item-info {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.modal-item-img {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+}
+
+.modal-title-hi {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: var(--ink);
+}
+
+.modal-title-en {
+  font-size: 14px;
+  color: var(--ink-sec);
+  font-weight: 500;
+}
+
+.qty-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin: 18px 0;
+}
+
+.step-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface-alt);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  box-shadow: var(--shadow-xs);
+}
+.step-btn:hover {
+  background: var(--border);
+  transform: scale(1.05);
+}
+.step-btn:active {
+  transform: scale(0.92);
+}
+
+.qty-display {
+  font-size: 30px;
+  font-weight: 800;
+  min-width: 120px;
+  text-align: center;
+  color: var(--pri);
+}
+
+.qty-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.qty-chip {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 7px 15px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--ink-sec);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.qty-chip:hover {
+  border-color: var(--pri);
+  color: var(--pri);
+}
+.qty-chip.selected {
+  background: var(--pri-grad);
+  color: white;
+  border-color: transparent;
+  box-shadow: var(--pri-glow);
+}
+
+.modal-btn-confirm {
+  width: 100%;
+  background: var(--pri-grad);
+  color: white;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: var(--pri-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.modal-btn-confirm:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(255, 101, 59, 0.38);
+}
+.modal-btn-confirm:active {
+  transform: scale(0.97);
+}
+
+/* PIN Modal */
+.pin-modal-card {
+  max-width: 380px !important;
+  margin: auto;
+  border-radius: var(--radius-xl);
+  padding: 26px 22px !important;
+}
+.pin-input-wrap {
+  margin: 18px 0 10px;
+  display: flex;
+  justify-content: center;
+}
+.pin-input-wrap input {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 12px;
+  text-align: center;
+  width: 190px;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--border);
+  background: var(--surface-alt);
+  color: var(--ink);
+  outline: none;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+.pin-input-wrap input:focus {
+  border-color: var(--pri);
+  background: var(--surface);
+  box-shadow: 0 0 0 3px rgba(255, 101, 59, 0.16);
+}
+.pin-error-msg {
+  color: var(--danger);
+  background: var(--danger-light);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 700;
+  margin-top: 8px;
+  animation: shake 0.35s;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+/* Secondary Button */
+.btn-secondary {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  color: var(--ink);
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-secondary:hover {
+  background: var(--surface);
+  border-color: var(--pri);
+  color: var(--pri);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-xs);
+}
+
+.btn-voice-speak {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  color: var(--ink);
+  padding: 8px 15px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+.btn-voice-speak:hover {
+  background: var(--pri-light);
+  color: var(--pri);
+  border-color: var(--pri);
+  transform: translateY(-1px);
+}
+
+/* Sunday Holiday Screen */
+.sunday-hero {
+  background: linear-gradient(135deg, #111827 0%, #1f2937 50%, #374151 100%);
+  color: white;
+  border-radius: var(--radius-xl);
+  padding: 34px 22px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.sunday-hero h2 {
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 6px;
+  letter-spacing: -0.3px;
+}
+.sunday-hero p {
+  font-size: 14px;
+  opacity: 0.9;
+  max-width: 500px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Admin Dashboard Elements */
 .admin-badge-hdr {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: #3949ab;
-  color: white;
-  padding: 2px 10px;
+  background: var(--sec-light);
+  color: var(--ink);
+  padding: 4px 12px;
   border-radius: var(--radius-full);
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 800;
+  border: 1px solid var(--border);
 }
 
 .stats-grid {
@@ -1284,9 +1742,14 @@ input, select, textarea, button {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 14px;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-xs);
   display: flex;
   flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
 }
 
 .stat-val {
@@ -1294,58 +1757,23 @@ input, select, textarea, button {
   font-weight: 800;
   color: var(--pri);
   line-height: 1.1;
+  letter-spacing: -0.4px;
 }
 
 .stat-label {
   font-size: 12px;
   color: var(--ink-sec);
   font-weight: 600;
-  margin-top: 4px;
+  margin-top: 5px;
 }
 
-/* Admin Tabs */
-.admin-subtabs {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  margin-bottom: 16px;
-  scrollbar-width: none;
-  overscroll-behavior-x: contain;
-  -webkit-overflow-scrolling: touch;
-  max-width: 100%;
-}
-.admin-subtabs::-webkit-scrollbar { display: none; }
-
-.subtab-btn {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-full);
-  padding: 8px 16px;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  color: var(--ink-sec);
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.2s;
-}
-
-.subtab-btn.active {
-  background: var(--ink);
-  color: var(--surface);
-  border-color: var(--ink);
-}
-
-/* Admin Menu Editor Table/Cards */
 .day-plan-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 16px;
+  padding: 16px 18px;
   margin-bottom: 14px;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-xs);
 }
 
 .day-plan-hdr {
@@ -1360,8 +1788,9 @@ input, select, textarea, button {
 .meal-slot-edit {
   background: var(--surface-alt);
   border-radius: var(--radius-md);
-  padding: 12px;
+  padding: 12px 14px;
   margin-bottom: 10px;
+  border: 1px solid var(--border);
 }
 
 .input-row {
@@ -1378,17 +1807,21 @@ input, select, textarea, button {
   background: var(--surface);
   color: var(--ink);
   border-radius: var(--radius-sm);
-  padding: 8px 12px;
-  font-size: 14px;
+  padding: 9px 12px;
+  font-size: 13px;
   font-family: inherit;
   outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
-.app-input:focus { border-color: var(--border-focus); }
+.app-input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(255, 101, 59, 0.15);
+}
 
-/* Toast Notifications */
+/* Toast */
 .toast-wrap {
   position: fixed;
-  bottom: calc(var(--bottom-nav-h) + 20px);
+  bottom: calc(var(--bottom-nav-h) + 16px);
   left: 50%;
   transform: translateX(-50%);
   z-index: 200;
@@ -1397,31 +1830,31 @@ input, select, textarea, button {
   gap: 8px;
   pointer-events: none;
   width: 90%;
-  max-width: 420px;
+  max-width: 400px;
 }
 
 .toast {
-  background: #1f1b16;
+  background: var(--sec);
   color: white;
-  padding: 12px 18px;
+  padding: 11px 18px;
   border-radius: var(--radius-full);
-  font-size: 14px;
-  font-weight: 600;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: var(--shadow-lg);
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
-
 @keyframes toastIn {
-  from { opacity: 0; transform: translateY(20px); }
+  from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 /* WhatsApp Share Button */
 .btn-whatsapp {
-  background: #25d366;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: white;
   border: none;
   border-radius: var(--radius-full);
@@ -1432,24 +1865,15 @@ input, select, textarea, button {
   align-items: center;
   gap: 6px;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(37, 211, 102, 0.3);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+  transition: all 0.2s ease;
+}
+.btn-whatsapp:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
 }
 
-.btn-secondary {
-  background: var(--surface-alt);
-  border: 1px solid var(--border);
-  color: var(--ink);
-  padding: 8px 14px;
-  border-radius: var(--radius-full);
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-/* Weekly Schedule Matrix & Table Wrappers */
+/* Schedule Table */
 .table-wrap {
   width: 100%;
   max-width: 100%;
@@ -1457,174 +1881,34 @@ input, select, textarea, button {
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-x: contain;
   margin-top: 10px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
 }
+
 .sched-table {
   width: 100%;
   min-width: 500px;
   border-collapse: collapse;
   font-size: 13px;
+  background: var(--surface);
 }
+
 .sched-table th, .sched-table td {
-  padding: 10px;
+  padding: 10px 12px;
   text-align: left;
   border-bottom: 1px solid var(--border);
 }
-.sched-table th { background: var(--surface-alt); color: var(--ink-sec); font-weight: 700; }
-
-@media (min-width: 768px) {
-  body {
-    padding-bottom: 40px;
-  }
-  .bottom-nav {
-    display: none;
-  }
-  .desktop-nav {
-    display: flex !important;
-    gap: 8px;
-  }
-}
-.desktop-nav {
-  display: none;
-}
-
-/* Mobile Layout Fixes to Prevent Horizontal Scroll/Wobble */
-@media (max-width: 600px) {
-  .app-header {
-    padding: 8px 12px;
-  }
-  .header-inner {
-    gap: 6px;
-  }
-  .brand-icon {
-    width: 34px;
-    height: 34px;
-    min-width: 34px;
-    font-size: 19px;
-  }
-  .brand-text h1 {
-    font-size: 15px;
-  }
-  .brand-text p {
-    display: none;
-  }
-  .role-btn {
-    padding: 5px 9px;
-    font-size: 12px;
-    gap: 3px;
-  }
-  .btn-icon {
-    width: 32px;
-    height: 32px;
-    font-size: 13px;
-  }
-  .container {
-    padding: 12px;
-  }
-  .shift-bar {
-    padding: 8px 10px;
-    gap: 8px;
-  }
-  .date-pill {
-    font-size: 13px;
-  }
-  .shift-btn {
-    padding: 5px 10px;
-    font-size: 12px;
-  }
-}
-
-@media (max-width: 380px) {
-  .app-header {
-    padding: 6px 8px;
-  }
-  .header-inner {
-    gap: 4px;
-  }
-  .brand-text h1 {
-    font-size: 14px;
-  }
-  .role-btn span {
-    font-size: 11px;
-  }
-  .role-btn {
-    padding: 4px 6px;
-  }
-  .btn-icon {
-    width: 28px;
-    height: 28px;
-    font-size: 12px;
-  }
-  .container {
-    padding: 8px;
-  }
-}
-
-/* Date Navigator */
-.date-navigator {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-.date-nav-btn {
+.sched-table th {
   background: var(--surface-alt);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-full);
-  width: 28px;
-  height: 28px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  cursor: pointer;
   color: var(--ink-sec);
-  transition: all 0.2s ease;
-}
-.date-nav-btn:hover {
-  background: var(--pri);
-  color: #fff;
-  border-color: var(--pri);
-}
-.badge-today {
-  background: var(--ok-light);
-  color: var(--ok);
-  font-size: 10px;
   font-weight: 700;
-  padding: 2px 6px;
-  border-radius: var(--radius-full);
-  margin-left: 4px;
+  font-size: 12px;
 }
-.badge-subtle {
-  background: var(--surface-alt);
-  color: var(--ink-sec);
-  font-size: 10px;
-  font-weight: 600;
-  padding: 2px 6px;
-  border-radius: var(--radius-full);
-  margin-left: 4px;
+.sched-table tr:last-child td {
+  border-bottom: none;
 }
 
-/* Voice Speak Button */
-.btn-voice-speak {
-  background: var(--surface-alt);
-  border: 1px solid var(--border);
-  color: var(--ink);
-  padding: 8px 14px;
-  border-radius: var(--radius-full);
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  transition: all 0.2s ease;
-}
-.btn-voice-speak:hover {
-  background: var(--pri-light);
-  color: var(--pri);
-  border-color: var(--pri);
-}
-
-/* Grocery Search Bar */
+/* Search Bar */
 .groc-search-bar {
   display: flex;
   align-items: center;
@@ -1642,11 +1926,13 @@ input, select, textarea, button {
   color: var(--ink);
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: var(--shadow-xs);
 }
 .groc-search-input:focus {
   border-color: var(--pri);
-  box-shadow: 0 0 0 3px rgba(211, 84, 0, 0.15);
+  box-shadow: 0 0 0 3px rgba(255, 101, 59, 0.15);
 }
+
 .groc-mic-btn {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -1659,14 +1945,16 @@ input, select, textarea, button {
   font-size: 18px;
   cursor: pointer;
   transition: all 0.2s ease;
+  box-shadow: var(--shadow-xs);
 }
 .groc-mic-btn:hover {
   background: var(--pri-light);
   border-color: var(--pri);
 }
 .groc-mic-btn.listening {
-  background: #ff5252;
+  background: #ef4444;
   color: white;
+  border-color: #ef4444;
   animation: pulseMic 1.2s infinite;
 }
 @keyframes pulseMic {
@@ -1675,14 +1963,14 @@ input, select, textarea, button {
   100% { transform: scale(1); }
 }
 
-/* Proof of Work Photos & Camera Styles */
+/* Photo Proof Grid */
 .proof-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 18px 20px;
   margin-bottom: 24px;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-xs);
 }
 
 .proof-header {
@@ -1695,7 +1983,7 @@ input, select, textarea, button {
 }
 
 .proof-header h3 {
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 800;
   color: var(--ink);
   display: flex;
@@ -1731,16 +2019,19 @@ input, select, textarea, button {
   background: var(--pri-grad);
   border: none;
   color: white;
-  padding: 10px 18px;
-  font-size: 14px;
+  padding: 9px 18px;
+  font-size: 13px;
   font-weight: 700;
   border-radius: var(--radius-full);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  box-shadow: 0 4px 14px rgba(211, 84, 0, 0.35);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: var(--pri-glow);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-camera:hover {
+  transform: translateY(-1px);
 }
 .btn-camera:active { transform: scale(0.97); }
 
@@ -1753,17 +2044,17 @@ input, select, textarea, button {
 .proof-item {
   position: relative;
   background: var(--surface-alt);
-  border: 1.5px solid var(--border);
+  border: 1px solid var(--border);
   border-radius: var(--radius-md);
   overflow: hidden;
   aspect-ratio: 1;
   cursor: pointer;
-  box-shadow: var(--shadow-sm);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: var(--shadow-xs);
+  transition: all 0.2s ease;
 }
 .proof-item:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-sm);
   border-color: var(--pri);
 }
 
@@ -1778,7 +2069,7 @@ input, select, textarea, button {
   position: absolute;
   bottom: 6px;
   left: 6px;
-  background: rgba(0, 0, 0, 0.78);
+  background: rgba(17, 24, 39, 0.85);
   color: #fff;
   font-size: 10px;
   font-weight: 700;
@@ -1798,7 +2089,7 @@ input, select, textarea, button {
   width: 26px;
   height: 26px;
   border-radius: 50%;
-  background: rgba(220, 38, 38, 0.88);
+  background: rgba(239, 68, 68, 0.9);
   color: #fff;
   border: none;
   cursor: pointer;
@@ -1811,15 +2102,15 @@ input, select, textarea, button {
   transition: background 0.2s, transform 0.1s;
 }
 .proof-del-btn:hover {
-  background: #b91c1c;
+  background: #dc2626;
   transform: scale(1.1);
 }
 
 .proof-empty {
   text-align: center;
-  padding: 24px 16px;
+  padding: 22px 16px;
   background: var(--surface-alt);
-  border: 2px dashed var(--border);
+  border: 1.5px dashed var(--border);
   border-radius: var(--radius-md);
   color: var(--ink-sec);
   font-size: 13px;
@@ -1830,9 +2121,9 @@ input, select, textarea, button {
 .lightbox-modal {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.88);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(17, 24, 39, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   display: none;
   align-items: center;
   justify-content: center;
@@ -1853,18 +2144,19 @@ input, select, textarea, button {
 .lightbox-img {
   max-width: 100%;
   max-height: 75vh;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   object-fit: contain;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7);
 }
 .lightbox-caption {
-  margin-top: 12px;
+  margin-top: 14px;
   color: #fff;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   text-align: center;
   background: rgba(255, 255, 255, 0.15);
-  padding: 6px 16px;
+  backdrop-filter: blur(6px);
+  padding: 6px 18px;
   border-radius: var(--radius-full);
 }
 .lightbox-close {
@@ -1882,137 +2174,17 @@ input, select, textarea, button {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s;
+  transition: all 0.2s;
 }
-/* Per-Task Photo & Admin Report Styles */
-.task-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-  padding: 12px 16px;
-  max-width: 100%;
-}
-.task-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex: 1 1 auto;
-  min-width: 0;
-}
-.task-details {
-  flex: 1 1 auto;
-  min-width: 0;
-  word-break: break-word;
-  overflow-wrap: break-word;
-}
-.task-right {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.task-thumb-wrap {
-  position: relative;
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radius-sm);
-  overflow: hidden;
-  border: 2px solid var(--ok);
-  flex-shrink: 0;
-  cursor: pointer;
-  box-shadow: var(--shadow-sm);
-  transition: transform 0.2s;
-}
-.task-thumb-wrap:hover {
+.lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.4);
   transform: scale(1.08);
 }
-.task-thumb-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.btn-task-camera {
-  background: var(--surface-alt);
-  border: 1.5px solid var(--border);
-  color: var(--ink);
-  padding: 6px 12px;
-  border-radius: var(--radius-full);
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-.btn-task-camera:hover {
-  background: var(--pri-light);
-  border-color: var(--pri);
-  color: var(--pri);
-}
-.btn-task-camera.has-photo {
-  background: var(--ok-light);
-  border-color: var(--ok);
-  color: var(--ok);
-}
-.btn-send-admin {
-  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
-  color: white;
-  border: none;
-  padding: 12px 22px;
-  border-radius: var(--radius-full);
-  font-size: 14px;
-  font-weight: 800;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-.btn-send-admin:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(37, 211, 102, 0.45);
-}
-.btn-send-admin:active {
-  transform: scale(0.97);
-}
-.shift-send-card {
-  background: var(--surface);
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 18px 20px;
-  margin-top: 18px;
-  margin-bottom: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-  box-shadow: var(--shadow-sm);
-  background: linear-gradient(135deg, var(--surface) 0%, var(--surface-alt) 100%);
-}
-.shift-send-info h3 {
-  font-size: 16px;
-  font-weight: 800;
-  color: var(--ink);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.shift-send-info p {
-  font-size: 12px;
-  color: var(--ink-sec);
-  margin-top: 4px;
-}
+
 .btn-approve-task {
   background: var(--ok-light);
-  border: 1px solid var(--ok);
-  color: var(--ok);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: var(--ok-dark);
   padding: 4px 10px;
   border-radius: var(--radius-full);
   font-size: 11px;
@@ -2020,9 +2192,1004 @@ input, select, textarea, button {
   cursor: pointer;
   transition: all 0.2s;
 }
+.btn-approve-task:hover {
+  background: var(--ok);
+  color: #fff;
+}
 .btn-approve-task.approved {
   background: var(--ok);
   color: #fff;
+  border-color: var(--ok);
+}
+
+/* Responsive Tweaks */
+@media (max-width: 600px) {
+  .app-header {
+    padding: 8px 12px;
+  }
+  .header-inner {
+    gap: 8px;
+  }
+  .brand-icon {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    font-size: 18px;
+  }
+  .brand-text h1 {
+    font-size: 15px;
+  }
+  .brand-text p {
+    display: none;
+  }
+  .role-btn {
+    padding: 4px 9px;
+    font-size: 11px;
+    gap: 3px;
+  }
+  .btn-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+  .container {
+    padding: 12px 14px;
+  }
+  .shift-bar {
+    padding: 8px 10px;
+    gap: 8px;
+  }
+  .date-pill {
+    font-size: 13px;
+  }
+  .shift-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  .meal-body {
+    padding: 14px 16px;
+  }
+  .meal-title-hi {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 380px) {
+  .app-header {
+    padding: 6px 10px;
+  }
+  .brand-text h1 {
+    font-size: 13px;
+  }
+  .role-btn span {
+    font-size: 10px;
+  }
+  .role-btn {
+    padding: 3px 6px;
+  }
+  .btn-icon {
+    width: 28px;
+    height: 28px;
+    font-size: 11px;
+  }
+  .container {
+    padding: 10px 12px;
+  }
+}
+
+/* Enhanced SaaS Meal Card & Hero Image Proportions */
+.meal-hero {
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.meal-hero:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.meal-img-box {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  background: var(--surface-alt);
+  overflow: hidden;
+}
+.meal-img-box::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(17, 24, 39, 0.12) 0%, transparent 40%, rgba(17, 24, 39, 0.4) 100%);
+  pointer-events: none;
+}
+
+.meal-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.meal-hero:hover .meal-img {
+  transform: scale(1.035);
+}
+
+.meal-shift-pill {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 2;
+  background: rgba(17, 24, 39, 0.85);
+  color: white;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.meal-status-pill {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.96);
+  color: var(--ok-dark);
+  backdrop-filter: blur(8px);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+.meal-status-pill .status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ok);
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.8);
+}
+
+.meal-body {
+  padding: 22px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.meal-title-hi {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: var(--ink);
+  line-height: 1.25;
+}
+
+.meal-title-en {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink-sec);
+  margin-top: 3px;
+}
+
+.meal-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--warn-light);
+  color: var(--warn-dark);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.meal-cook-btn {
+  background: var(--surface-alt);
+  border: 1.5px solid var(--border);
+  color: var(--ink);
+  padding: 12px 24px;
+  border-radius: var(--radius-full);
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+.meal-cook-btn:hover {
+  background: var(--surface);
+  border-color: var(--pri);
+  color: var(--pri);
+  transform: translateY(-1px);
+}
+.meal-cook-btn.done {
+  background: var(--ok-grad);
+  border-color: transparent;
+  color: white;
+  box-shadow: var(--ok-glow);
+}
+.meal-cook-btn.done:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+.meal-cook-btn:active {
+  transform: scale(0.97);
+}
+
+/* Enhanced Attendance Card */
+.att-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 18px 22px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  transition: all 0.2s ease;
+}
+.att-card:hover {
+  box-shadow: var(--shadow);
+}
+.att-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: var(--radius-md);
+  background: var(--pri-light);
+  border: 1.5px solid rgba(255, 101, 59, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-xs);
+}
+
+/* Enhanced Task Card */
+.task-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  box-shadow: var(--shadow-xs);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+.task-item:hover {
+  border-color: rgba(255, 101, 59, 0.35);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+.task-item.completed {
+  background: rgba(16, 185, 129, 0.035);
+  border-color: rgba(16, 185, 129, 0.28);
+}
+.task-item.completed .task-chk {
+  background: var(--ok);
+  border-color: var(--ok);
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* WhatsApp Card */
+.shift-send-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 20px 24px;
+  margin-top: 20px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+  box-shadow: var(--shadow-sm);
+  background: linear-gradient(135deg, var(--surface) 0%, rgba(16, 185, 129, 0.04) 100%);
+  border-left: 4px solid var(--ok);
+}
+
+
+/* ==========================================================================
+   ZEPTO-INSPIRED QUICK COMMERCE DESIGN SYSTEM ENHANCEMENTS
+   ========================================================================== */
+
+/* Zepto Desktop Header Search Bar */
+.header-search-bar {
+  display: none;
+  align-items: center;
+  position: relative;
+  flex: 1;
+  max-width: 380px;
+  background: var(--surface-alt);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 0 12px;
+  height: 42px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: inset 0 1px 2px rgba(17, 24, 39, 0.03);
+}
+.header-search-bar:focus-within {
+  background: var(--surface);
+  border-color: var(--pri);
+  box-shadow: 0 0 0 3px rgba(255, 101, 59, 0.16);
+}
+.header-search-icon {
+  font-size: 15px;
+  color: var(--ink-mute);
+  margin-right: 8px;
+  pointer-events: none;
+}
+.header-search-input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ink);
+  width: 100%;
+}
+.header-search-input::placeholder {
+  color: var(--ink-mute);
+  font-size: 12.5px;
+}
+.header-search-clear {
+  border: none;
+  background: transparent;
+  color: var(--ink-mute);
+  cursor: pointer;
+  font-size: 13px;
+  padding: 4px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+.header-search-clear:hover {
+  color: var(--ink);
+  background: rgba(0, 0, 0, 0.07);
+}
+.header-search-mic {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 15px;
+  padding: 4px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease;
+}
+.header-search-mic:hover {
+  transform: scale(1.15);
+}
+
+@media (min-width: 900px) {
+  .header-search-bar {
+    display: flex;
+  }
+}
+
+/* Zepto Mobile Quick Search Bar (Displayed on Dashboard) */
+.mobile-search-bar {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 0 14px;
+  height: 44px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-xs);
+  transition: all 0.2s ease;
+}
+.mobile-search-bar:focus-within {
+  border-color: var(--pri);
+  box-shadow: 0 0 0 3px rgba(255, 101, 59, 0.14);
+}
+@media (min-width: 900px) {
+  .mobile-search-bar {
+    display: none;
+  }
+}
+
+/* Zepto "Shop by Category" Inspired Kitchen Hub */
+.zepto-cat-section {
+  margin: 18px 0 22px;
+}
+.zepto-cat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding: 0 2px;
+}
+.zepto-cat-chip {
+  background: rgba(255, 101, 59, 0.1);
+  color: var(--pri);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  letter-spacing: 0.3px;
+}
+.zepto-cat-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--ink);
+  margin: 0;
+  letter-spacing: -0.2px;
+}
+.zepto-cat-sub {
+  font-size: 11.5px;
+  color: var(--ink-mute);
+  font-weight: 600;
+}
+.zepto-cat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+@media (max-width: 860px) {
+  .zepto-cat-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+}
+.zepto-cat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  box-shadow: var(--shadow-xs);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+}
+.zepto-cat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+  border-color: rgba(255, 101, 59, 0.4);
+}
+.zepto-cat-card:active {
+  transform: scale(0.97);
+}
+.zepto-cat-icon-wrap {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  font-size: 22px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+.zepto-cat-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: var(--pri);
+  color: white;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 1px 5px;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--surface);
+}
+.zepto-cat-meta {
+  min-width: 0;
+  flex: 1;
+}
+.zepto-cat-name {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.zepto-cat-desc {
+  font-size: 11px;
+  color: var(--ink-mute);
+  font-weight: 500;
+  line-height: 1.25;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Subtle pulse highlight on category jump */
+@keyframes sectionPulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 101, 59, 0.6); }
+  50% { box-shadow: 0 0 0 10px rgba(255, 101, 59, 0.15); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 101, 59, 0); }
+}
+.pulse-highlight {
+  animation: sectionPulse 1.4s ease-out;
+  border-color: var(--pri) !important;
+}
+
+/* Responsive bottom nav 5-item layout */
+.bottom-nav .nav-item {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 2px;
+}
+.bottom-nav .nav-item span {
+  font-size: 10px;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.bottom-nav .nav-icon {
+  font-size: 20px;
+  height: 22px;
+}
+
+/* Meal Hero Proportion Cap (Prevents pushing tasks below fold) */
+.meal-img-box {
+  position: relative;
+  width: 100%;
+  height: 210px !important;
+  background: var(--surface-alt);
+  overflow: hidden;
+}
+@media (max-width: 600px) {
+  .meal-img-box {
+    height: 165px !important;
+  }
+}
+
+
+/* ==========================================================================
+   ATTENDANCE CALENDAR SHEET (MUSTER ROLL & MONTHLY ATTENDANCE GRID)
+   ========================================================================== */
+
+.cal-sheet-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 16px 18px;
+  margin: 18px 0;
+  box-shadow: var(--shadow-xs);
+  transition: all 0.25s ease;
+}
+
+.cal-sheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.cal-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cal-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--ink);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cal-nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.cal-month-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 3px 6px;
+}
+
+.cal-month-title {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--ink);
+  min-width: 140px;
+  text-align: center;
+  user-select: none;
+}
+
+.cal-nav-btn {
+  background: transparent;
+  border: none;
+  font-size: 13px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--ink-sec);
+  transition: all 0.15s ease;
+}
+.cal-nav-btn:hover {
+  background: var(--surface);
+  color: var(--pri);
+}
+.cal-nav-btn:active {
+  transform: scale(0.92);
+}
+
+.cal-view-toggle {
+  display: flex;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 3px;
+  gap: 2px;
+}
+
+.cal-toggle-btn {
+  border: none;
+  background: transparent;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-mute);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.cal-toggle-btn.active {
+  background: var(--surface);
+  color: var(--pri);
+  box-shadow: var(--shadow-xs);
+}
+
+/* Quick Summary Statistics Bar */
+.cal-stats-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.cal-stat-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid transparent;
+}
+.cal-stat-pill.present {
+  background: #ecfdf5;
+  color: #059669;
+  border-color: rgba(5, 150, 105, 0.25);
+}
+.cal-stat-pill.absent {
+  background: #fef2f2;
+  color: #dc2626;
+  border-color: rgba(220, 38, 38, 0.25);
+}
+.cal-stat-pill.leave {
+  background: #f5f3ff;
+  color: #7c3aed;
+  border-color: rgba(124, 58, 237, 0.25);
+}
+.cal-stat-pill.holiday {
+  background: #fffbeb;
+  color: #d97706;
+  border-color: rgba(217, 119, 6, 0.25);
+}
+.cal-stat-pill.rate {
+  background: rgba(255, 101, 59, 0.1);
+  color: var(--pri);
+  border-color: rgba(255, 101, 59, 0.25);
+  margin-left: auto;
+}
+
+/* 7-Column Calendar Grid */
+.cal-grid-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  min-width: 310px;
+}
+
+.cal-col-header {
+  text-align: center;
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--ink-mute);
+  padding: 6px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.cal-col-header.sunday {
+  color: #d97706;
+}
+
+.cal-cell {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  min-height: 54px;
+  padding: 5px 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  user-select: none;
+}
+.cal-cell:hover:not(.empty) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+  z-index: 2;
+}
+.cal-cell:active:not(.empty) {
+  transform: scale(0.96);
+}
+
+.cal-cell.empty {
+  border-color: transparent;
+  background: transparent;
+  cursor: default;
+}
+
+.cal-cell.today {
+  border: 2px solid var(--pri) !important;
+  box-shadow: 0 0 0 2px rgba(255, 101, 59, 0.2);
+}
+
+/* Cell Status Backgrounds */
+.cal-cell.present {
+  background: #f0fdf4;
+  border-color: rgba(34, 197, 94, 0.35);
+}
+.cal-cell.absent {
+  background: #fef2f2;
+  border-color: rgba(239, 68, 68, 0.35);
+}
+.cal-cell.holiday {
+  background: #fffbeb;
+  border-color: rgba(245, 158, 11, 0.3);
+}
+.cal-cell.leave {
+  background: #faf5ff;
+  border-color: rgba(168, 85, 247, 0.3);
+}
+.cal-cell.future {
+  opacity: 0.55;
+  background: var(--surface-alt);
+}
+
+.cal-date-num {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-sec);
+  align-self: flex-start;
+  line-height: 1;
+}
+.cal-cell.today .cal-date-num {
+  color: var(--pri);
+  font-weight: 800;
+}
+
+/* Center Check / Cross Marks */
+.cal-mark {
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1;
+  margin: 2px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cal-mark.present {
+  color: #059669;
+}
+.cal-mark.absent {
+  color: #dc2626;
+}
+.cal-mark.holiday {
+  font-size: 14px;
+}
+.cal-mark.leave {
+  font-size: 14px;
+}
+.cal-mark.future {
+  color: var(--ink-mute);
+  font-size: 14px;
+}
+
+.cal-cell-label {
+  font-size: 9px;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.cal-cell-label.present { color: #059669; }
+.cal-cell-label.absent { color: #dc2626; }
+.cal-cell-label.holiday { color: #d97706; }
+.cal-cell-label.leave { color: #7c3aed; }
+.cal-cell-label.future { color: var(--ink-mute); }
+
+/* Tabular Muster Roll Sheet View */
+.cal-sheet-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+}
+
+.cal-sheet-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  text-align: left;
+}
+.cal-sheet-table th {
+  background: var(--surface-alt);
+  color: var(--ink-sec);
+  font-weight: 800;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.cal-sheet-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--ink);
+  vertical-align: middle;
+}
+.cal-sheet-table tr:hover {
+  background: rgba(255, 101, 59, 0.03);
+}
+
+/* Legend */
+.cal-legend {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+  font-size: 11.5px;
+  color: var(--ink-sec);
+  font-weight: 600;
+}
+.cal-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Dark mode overrides for calendar */
+[data-theme="dark"] .cal-stat-pill.present {
+  background: rgba(5, 150, 105, 0.2);
+  color: #34d399;
+}
+[data-theme="dark"] .cal-stat-pill.absent {
+  background: rgba(220, 38, 38, 0.2);
+  color: #f87171;
+}
+[data-theme="dark"] .cal-stat-pill.leave {
+  background: rgba(124, 58, 237, 0.2);
+  color: #c084fc;
+}
+[data-theme="dark"] .cal-stat-pill.holiday {
+  background: rgba(217, 119, 6, 0.2);
+  color: #fbbf24;
+}
+[data-theme="dark"] .cal-cell.present {
+  background: rgba(5, 150, 105, 0.12);
+  border-color: rgba(5, 150, 105, 0.35);
+}
+[data-theme="dark"] .cal-cell.absent {
+  background: rgba(220, 38, 38, 0.12);
+  border-color: rgba(220, 38, 38, 0.35);
+}
+[data-theme="dark"] .cal-cell.holiday {
+  background: rgba(217, 119, 6, 0.12);
+  border-color: rgba(217, 119, 6, 0.3);
+}
+[data-theme="dark"] .cal-cell.leave {
+  background: rgba(124, 58, 237, 0.12);
+  border-color: rgba(124, 58, 237, 0.3);
+}
+
+@media (max-width: 600px) {
+  .cal-sheet-card {
+    padding: 12px 10px;
+  }
+  .cal-cell {
+    min-height: 48px;
+    padding: 3px 2px;
+  }
+  .cal-mark {
+    font-size: 15px;
+  }
+  .cal-cell-label {
+    font-size: 8px;
+  }
+  .cal-month-title {
+    font-size: 12.5px;
+    min-width: 110px;
+  }
+  .cal-stat-pill {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
 }
 
 </style>
@@ -2032,7 +3199,7 @@ input, select, textarea, button {
 <!-- App Header -->
 <header class="app-header">
   <div class="header-inner">
-    <div class="brand" onclick="setTab('today')">
+    <div class="brand" onclick="setTab('today')" title="Home Cook Manager">
       <div class="brand-icon">🍳</div>
       <div class="brand-text">
         <div style="display:flex;align-items:center;gap:6px">
@@ -2046,16 +3213,29 @@ input, select, textarea, button {
       </div>
     </div>
 
-    <!-- Desktop Navigation Tabs -->
+    <!-- Zepto-Style Header Search Bar (Desktop) -->
+    <div class="header-search-bar" id="headerSearchBar">
+      <span class="header-search-icon">🔍</span>
+      <input type="text" id="headerSearchInput" class="header-search-input" 
+             placeholder="Search groceries (e.g. Potato, Milk, Rice...)" 
+             value="" 
+             oninput="handleHeaderSearch(this.value)"
+             onkeydown="if(event.key==='Enter') handleHeaderSearch(this.value)">
+      <button type="button" class="header-search-clear" id="headerSearchClear" style="display:none;" onclick="handleHeaderSearchClear()" title="Clear">✕</button>
+      <button type="button" class="header-search-mic" id="headerSearchMic" onclick="toggleGroceryVoiceSearch()" title="Voice Search">🎤</button>
+    </div>
+
+    <!-- Desktop Navigation Tabs (5 Core Destinations) -->
     <div class="desktop-nav">
       <button class="subtab-btn" id="dtab-today" onclick="setTab('today')">📅 <span data-t="today">Today</span></button>
       <button class="subtab-btn" id="dtab-grocery" onclick="setTab('grocery')">🛒 <span data-t="grocery">Grocery</span> <span id="deskGrocBadge" class="nav-badge" style="position:static;display:none">0</span></button>
       <button class="subtab-btn" id="dtab-menu" onclick="setTab('menu')">📋 <span data-t="menu">Menu</span></button>
-      <button class="subtab-btn" id="dtab-admin" onclick="setTab('admin')" style="display:none">👑 <span data-t="admin">Admin</span></button>
+      <button class="subtab-btn" id="dtab-cook" onclick="switchToCookView()">🧑‍🍳 <span data-t="cookRole">Cook</span></button>
+      <button class="subtab-btn" id="dtab-admin" onclick="promptAdminLogin()"><span id="dtabAdminIcon">👑</span> <span data-t="adminRole">Admin</span></button>
     </div>
 
     <div class="header-actions">
-      <!-- Role Switcher -->
+      <!-- Role Switcher Pill -->
       <div class="role-badge" id="headerRoleControls" title="Switch User View">
         <button class="role-btn active" id="roleBtnCook" onclick="setRole('cook')">🧑‍🍳 <span data-t="cookRole">Cook</span></button>
         <button class="role-btn admin-lock-btn" id="roleBtnAdmin" onclick="promptAdminLogin()">🔒 <span data-t="adminRole">Admin</span></button>
@@ -2066,11 +3246,11 @@ input, select, textarea, button {
         अ/A
       </button>
 
-      
       <!-- Sound Toggle -->
       <button class="btn-icon" id="soundBtn" onclick="toggleSound()" title="Toggle Sound (चालू / बंद)">
         🔊
       </button>
+
       <!-- Theme Toggle -->
       <button class="btn-icon" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
         🌓
@@ -2097,11 +3277,15 @@ input, select, textarea, button {
   </button>
   <button class="nav-item" id="bnav-menu" onclick="setTab('menu')">
     <div class="nav-icon">📋</div>
-    <span data-t="menu">Weekly Menu</span>
+    <span data-t="menu">Menu</span>
   </button>
-  <button class="nav-item" id="bnav-admin" onclick="setTab('admin')" style="display:none">
-    <div class="nav-icon">👑</div>
-    <span data-t="admin">Admin</span>
+  <button class="nav-item" id="bnav-cook" onclick="switchToCookView()">
+    <div class="nav-icon">🧑‍🍳</div>
+    <span data-t="cookRole">Cook</span>
+  </button>
+  <button class="nav-item" id="bnav-admin" onclick="promptAdminLogin()">
+    <div class="nav-icon" id="bnavAdminIcon">👑</div>
+    <span data-t="adminRole">Admin</span>
   </button>
 </nav>
 
@@ -2216,7 +3400,7 @@ input, select, textarea, button {
         <div id="takenItemNameHi" style="font-weight:800; font-size:15px; color:var(--ink);">आलू</div>
         <div id="takenItemNameEn" style="font-size:12px; color:var(--ink-sec);">Potato</div>
       </div>
-      <span class="task-tag" style="background:#f3e5f5; color:#7b1fa2; font-weight:700;">चयनित (Selected)</span>
+      <span class="task-tag" style="background:var(--purple-light); color:var(--purple); font-weight:700; border-color:rgba(139, 92, 246, 0.25);">चयनित (Selected)</span>
     </div>
 
     <!-- Quantity Stepper -->
@@ -2225,7 +3409,7 @@ input, select, textarea, button {
     </div>
     <div class="qty-stepper">
       <button class="step-btn" onclick="adjustTakenQty(-1)">-</button>
-      <div class="qty-display" id="takenQtyVal" style="color:#7b1fa2;">1 kg</div>
+      <div class="qty-display" id="takenQtyVal" style="color:var(--purple);">1 kg</div>
       <button class="step-btn" onclick="adjustTakenQty(1)">+</button>
     </div>
 
@@ -2254,7 +3438,7 @@ input, select, textarea, button {
     </div>
 
     <!-- Submit Button -->
-    <button class="modal-btn-confirm" style="background:linear-gradient(135deg, #7b1fa2 0%, #ab47bc 100%); box-shadow:0 4px 14px rgba(123, 31, 162, 0.35);" onclick="submitTakenGrocery()">
+    <button class="modal-btn-confirm" style="background:var(--purple-grad); box-shadow:var(--purple-glow);" onclick="submitTakenGrocery()">
       <span>✅</span>
       <span>सामान दर्ज करें (Confirm & Save Entry)</span>
     </button>
@@ -2324,7 +3508,7 @@ input, select, textarea, button {
     </div>
 
     <!-- Submit Button -->
-    <button class="modal-btn-confirm" style="background:linear-gradient(135deg, #e65100 0%, #f57c00 100%); box-shadow:0 4px 14px rgba(230, 81, 0, 0.35);" onclick="submitLeaveRequest()">
+    <button class="modal-btn-confirm" style="background:var(--pri-grad); box-shadow:var(--pri-glow);" onclick="submitLeaveRequest()">
       <span>📩</span>
       <span>आवेदन भेजें (Submit Leave Request)</span>
     </button>
@@ -2611,6 +3795,10 @@ const AppState = {
   lang: localStorage.getItem('rc_lang') || 'hi', // Hindi default for cook friendliness
   soundEnabled: localStorage.getItem('rc_sound') !== '0', // Default sound on
   currentTab: 'today',
+  calendarYear: new Date().getFullYear(),
+  calendarMonth: new Date().getMonth(),
+  calendarSheetMode: 'grid',
+  calendarSelectedDate: null,
   viewDateOffset: 0,
   grocerySearch: '',
   selectedShift: new Date().getHours() < 15 ? 'Morning' : 'Evening', // 3 PM cutoff
@@ -3216,19 +4404,38 @@ function updateHeaderControls() {
 
 function updateNavState() {
   const isAdmin = AppState.role === 'admin';
-  const botAdmin = document.getElementById('bnav-admin');
-  const deskAdmin = document.getElementById('dtab-admin');
-  if (botAdmin) botAdmin.style.display = isAdmin ? 'flex' : 'none';
-  if (deskAdmin) deskAdmin.style.display = isAdmin ? 'inline-flex' : 'none';
+  const curTab = AppState.currentTab;
 
-  const tabs = ['today', 'grocery', 'menu', 'admin'];
-  tabs.forEach(tName => {
-    const b = document.getElementById(`bnav-${tName}`);
-    if (b) b.classList.toggle('active', AppState.currentTab === tName);
-    const d = document.getElementById(`dtab-${tName}`);
-    if (d) d.classList.toggle('active', AppState.currentTab === tName);
-  });
-  
+  // Bottom navigation items
+  const bToday = document.getElementById('bnav-today');
+  const bGroc = document.getElementById('bnav-grocery');
+  const bMenu = document.getElementById('bnav-menu');
+  const bCook = document.getElementById('bnav-cook');
+  const bAdmin = document.getElementById('bnav-admin');
+  const bAdminIcon = document.getElementById('bnavAdminIcon');
+
+  if (bToday) bToday.classList.toggle('active', curTab === 'today');
+  if (bGroc) bGroc.classList.toggle('active', curTab === 'grocery');
+  if (bMenu) bMenu.classList.toggle('active', curTab === 'menu');
+  if (bCook) bCook.classList.toggle('active', AppState.role === 'cook' && curTab === 'today');
+  if (bAdmin) bAdmin.classList.toggle('active', curTab === 'admin');
+  if (bAdminIcon) bAdminIcon.textContent = isAdmin ? '👑' : '🔒';
+
+  // Desktop navigation items
+  const dToday = document.getElementById('dtab-today');
+  const dGroc = document.getElementById('dtab-grocery');
+  const dMenu = document.getElementById('dtab-menu');
+  const dCook = document.getElementById('dtab-cook');
+  const dAdmin = document.getElementById('dtab-admin');
+  const dAdminIcon = document.getElementById('dtabAdminIcon');
+
+  if (dToday) dToday.classList.toggle('active', curTab === 'today');
+  if (dGroc) dGroc.classList.toggle('active', curTab === 'grocery');
+  if (dMenu) dMenu.classList.toggle('active', curTab === 'menu');
+  if (dCook) dCook.classList.toggle('active', AppState.role === 'cook' && curTab === 'today');
+  if (dAdmin) dAdmin.classList.toggle('active', curTab === 'admin');
+  if (dAdminIcon) dAdminIcon.textContent = isAdmin ? '👑' : '🔒';
+
   // Pending grocery requests badge
   const pendingCount = AppState.groceryRequests.filter(r => r.status === 'Requested').length;
   const botB = document.getElementById('botGrocBadge');
@@ -3238,9 +4445,678 @@ function updateNavState() {
     botB.textContent = pendingCount;
   }
   if (deskB) {
-    deskB.style.display = pendingCount > 0 ? 'inline-block' : 'none';
+    deskB.style.display = pendingCount > 0 ? 'inline-flex' : 'none';
     deskB.textContent = pendingCount;
   }
+  
+  // Sync header search bar value and clear button
+  const hInp = document.getElementById('headerSearchInput');
+  const hClear = document.getElementById('headerSearchClear');
+  if (hInp && hInp.value !== (AppState.grocerySearch || '')) {
+    hInp.value = AppState.grocerySearch || '';
+  }
+  if (hClear) {
+    hClear.style.display = (AppState.grocerySearch && AppState.grocerySearch.length > 0) ? 'inline-flex' : 'none';
+  }
+}
+
+function switchToCookView() {
+  if (AppState.role === 'admin') {
+    lockToCookMode();
+  } else {
+    setTab('today');
+  }
+}
+
+function handleHeaderSearch(val) {
+  AppState.grocerySearch = val;
+  const clearBtn = document.getElementById('headerSearchClear');
+  if (clearBtn) clearBtn.style.display = val ? 'inline-flex' : 'none';
+  
+  if (AppState.currentTab !== 'grocery') {
+    AppState.currentTab = 'grocery';
+    updateNavState();
+    renderApp();
+  } else {
+    renderApp();
+  }
+  
+  const hInp = document.getElementById('headerSearchInput');
+  const gInp = document.getElementById('grocSearchInput');
+  if (hInp && hInp.value !== val) hInp.value = val;
+  if (gInp && gInp.value !== val) gInp.value = val;
+}
+
+function handleHeaderSearchClear() {
+  handleHeaderSearch('');
+  const hInp = document.getElementById('headerSearchInput');
+  if (hInp) {
+    hInp.value = '';
+    hInp.focus();
+  }
+}
+
+function toggleGroceryVoiceSearch() {
+  startGroceryVoiceSearch();
+}
+
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    el.classList.add('pulse-highlight');
+    setTimeout(() => {
+      el.classList.remove('pulse-highlight');
+    }, 1500);
+  }
+}
+
+function renderCategorySection(isHi) {
+  const pendingRequests = AppState.groceryRequests.filter(r => r.status === 'Requested');
+  
+  const categories = [
+    {
+      id: 'tasks',
+      icon: '📋',
+      title: isHi ? 'आज के काम' : "Today's Work",
+      sub: isHi ? 'दैनिक व साप्ताहिक कार्य' : 'Daily & weekly tasks',
+      bg: '#FFF4EE',
+      color: '#FF653B',
+      action: "scrollToSection('tasksSection')"
+    },
+    {
+      id: 'meal',
+      icon: '🍽️',
+      title: isHi ? 'आज का मेन्यू' : "Today's Meal",
+      sub: isHi ? 'नाश्ता, खाना व फ़ोटो' : 'Menu, photo & audio',
+      bg: '#FEF3C7',
+      color: '#D97706',
+      action: "scrollToSection('mealSection')"
+    },
+    {
+      id: 'att',
+      icon: '🧑‍🍳',
+      title: isHi ? 'कुक हाज़िरी' : 'Cook Attendance',
+      sub: isHi ? 'आगमन, प्रस्थान व छुट्टी' : 'Check-in & leave status',
+      bg: '#ECFDF5',
+      color: '#059669',
+      action: "scrollToSection('attSection')"
+    },
+    {
+      id: 'cleaning',
+      icon: '🧹',
+      title: isHi ? 'रसोई सफ़ाई' : 'Kitchen Cleaning',
+      sub: isHi ? 'डीप क्लीन व स्वच्छता' : 'Sanitization & checks',
+      bg: '#F0F9FF',
+      color: '#0284C7',
+      action: "scrollToSection('tasksSection')"
+    },
+    {
+      id: 'grocery',
+      icon: '🛒',
+      title: isHi ? 'राशन मंगाएं' : 'Grocery Tracker',
+      sub: isHi ? '1-टैप सब्ज़ी/राशन' : 'One-tap visual order',
+      bg: '#FAF5FF',
+      color: '#9333EA',
+      badge: pendingRequests.length > 0 ? `${pendingRequests.length}` : null,
+      action: "setTab('grocery')"
+    },
+    {
+      id: 'report',
+      icon: '📲',
+      title: isHi ? 'कार्य रिपोर्ट' : 'Work Reports',
+      sub: isHi ? 'व्हाट्सएप पर फोटो भेजें' : 'Send proofs to admin',
+      bg: '#F0FDF4',
+      color: '#16A34A',
+      action: "scrollToSection('reportSection')"
+    },
+    {
+      id: 'menu',
+      icon: '📅',
+      title: isHi ? 'साप्ताहिक मेन्यू' : 'Weekly Menu',
+      sub: isHi ? 'पूरे हफ़्ते का खाना' : 'Full 7-day meal plan',
+      bg: '#EEF2FF',
+      color: '#4F46E5',
+      action: "setTab('menu')"
+    },
+    {
+      id: 'admin',
+      icon: '👑',
+      title: isHi ? 'व्यवस्थापक केंद्र' : 'Admin Hub',
+      sub: isHi ? 'वेतन, मेन्यू व नियंत्रण' : 'PIN access & settings',
+      bg: '#FFF1F2',
+      color: '#E11D48',
+      action: "promptAdminLogin()"
+    }
+  ];
+
+  return `
+  <div class="zepto-cat-section">
+    <div class="zepto-cat-header">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span class="zepto-cat-chip">⚡ ${isHi ? 'त्वरित श्रेणियाँ' : 'Categories'}</span>
+        <h3 class="zepto-cat-title">${isHi ? 'रसोई श्रेणियाँ (Kitchen Hub)' : 'Quick Categories'}</h3>
+      </div>
+      <span class="zepto-cat-sub">${isHi ? 'टैप करके सीधा पहुँचें' : 'Tap to jump'}</span>
+    </div>
+    
+    <div class="zepto-cat-grid">
+      ${categories.map(c => `
+        <div class="zepto-cat-card" onclick="${c.action}" role="button" tabindex="0">
+          <div class="zepto-cat-icon-wrap" style="background:${c.bg}; color:${c.color};">
+            <span class="zepto-cat-emoji">${c.icon}</span>
+            ${c.badge ? `<span class="zepto-cat-badge">${c.badge}</span>` : ''}
+          </div>
+          <div class="zepto-cat-meta">
+            <div class="zepto-cat-name">${c.title}</div>
+            <div class="zepto-cat-desc">${c.sub}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  </div>
+  `;
+  
+
+}
+
+/* ==========================================================================
+   ATTENDANCE CALENDAR SHEET LOGIC (BOTH COOK & ADMIN VIEWS)
+   ========================================================================== */
+
+const MONTH_NAMES_EN = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const MONTH_NAMES_HI = ['जनवरी', 'फ़रवरी', 'मार्च', 'अप्रैल', 'मई', 'जून', 'जुलाई', 'अगस्त', 'सितम्बर', 'अक्टूबर', 'नवम्बर', 'दिसम्बर'];
+
+function changeCalendarMonth(delta) {
+  let m = AppState.calendarMonth + delta;
+  let y = AppState.calendarYear;
+  if (m < 0) {
+    m = 11;
+    y--;
+  } else if (m > 11) {
+    m = 0;
+    y++;
+  }
+  AppState.calendarMonth = m;
+  AppState.calendarYear = y;
+  renderApp();
+}
+
+function resetCalendarToCurrentMonth() {
+  const d = new Date();
+  AppState.calendarMonth = d.getMonth();
+  AppState.calendarYear = d.getFullYear();
+  renderApp();
+}
+
+function setCalendarSheetMode(mode) {
+  AppState.calendarSheetMode = mode;
+  renderApp();
+}
+
+// Comprehensive day status evaluation
+function getAttendanceStatusForDate(dateStr) {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  const dateObj = new Date(y, m - 1, d);
+  const dayOfWeek = dateObj.getDay();
+  const isSunday = (dayOfWeek === 0);
+  const todayStr = getTodayDateStr();
+  const isFuture = (dateStr > todayStr);
+  const isToday = (dateStr === todayStr);
+
+  // Check approved leave
+  const leave = (AppState.leaves || []).find(l => l.date === dateStr && l.status === 'Approved');
+
+  // Check attendance records & work logs
+  const mornAtt = AppState.attendance[`${dateStr}__Morning`];
+  const eveAtt = AppState.attendance[`${dateStr}__Evening`];
+  const mornCooked = AppState.cookedStatus[`${dateStr}__Morning`];
+  const eveCooked = AppState.cookedStatus[`${dateStr}__Evening`];
+  const mornTasks = Object.values(AppState.workLogs).filter(w => w.date === dateStr && w.visit === 'Morning').length;
+  const eveTasks = Object.values(AppState.workLogs).filter(w => w.date === dateStr && w.visit === 'Evening').length;
+  const photos = (AppState.workProofs || []).filter(p => p.date === dateStr).length;
+
+  const workedMorning = !!(mornAtt || mornCooked || mornTasks > 0);
+  const workedEvening = !!(eveAtt || eveCooked || eveTasks > 0);
+
+  if (isSunday) {
+    if (workedMorning || workedEvening) {
+      return { status: 'present', labelEn: 'Sun Worked ✓', labelHi: 'रविवार कार्य ✓', shifts: (workedMorning && workedEvening) ? 2 : 1, mark: '✓', mornAtt, eveAtt, mornCooked, eveCooked, mornTasks, eveTasks, photos, leave };
+    }
+    return { status: 'holiday', labelEn: 'Sunday Off', labelHi: 'रविवार अवकाश', shifts: 0, mark: '🎉', mornAtt, eveAtt, mornCooked, eveCooked, mornTasks, eveTasks, photos, leave };
+  }
+
+  if (leave) {
+    return { status: 'leave', labelEn: 'Leave', labelHi: 'स्वीकृत छुट्टी', shifts: 0, mark: '🏖️', mornAtt, eveAtt, mornCooked, eveCooked, mornTasks, eveTasks, photos, leave };
+  }
+
+  if (isFuture) {
+    return { status: 'future', labelEn: 'Upcoming', labelHi: 'आगामी', shifts: 0, mark: '·', mornAtt, eveAtt, mornCooked, eveCooked, mornTasks, eveTasks, photos, leave };
+  }
+
+  // If worked both or either
+  if (workedMorning && workedEvening) {
+    return { status: 'present', labelEn: 'Full Day ✓', labelHi: 'पूरा दिन ✓', shifts: 2, mark: '✓', mornAtt, eveAtt, mornCooked, eveCooked, mornTasks, eveTasks, photos, leave };
+  }
+  if (workedMorning || workedEvening) {
+    return { status: 'present', labelEn: workedMorning ? 'Morning ✓' : 'Evening ✓', labelHi: workedMorning ? 'सुबह ✓' : 'शाम ✓', shifts: 1, mark: '✓', mornAtt, eveAtt, mornCooked, eveCooked, mornTasks, eveTasks, photos, leave };
+  }
+
+  // Today in progress without attendance yet
+  if (isToday) {
+    const curHour = new Date().getHours();
+    if (curHour < 15 && !workedMorning) {
+      return { status: 'today_pending', labelEn: 'Pending ⏳', labelHi: 'प्रतीक्षित ⏳', shifts: 0, mark: '⏳', mornAtt, eveAtt, mornCooked, eveCooked, mornTasks, eveTasks, photos, leave };
+    }
+    if (curHour >= 15 && curHour < 21 && !workedEvening) {
+      return { status: 'today_pending', labelEn: 'Evening ⏳', labelHi: 'शाम प्रतीक्षित ⏳', shifts: 0, mark: '⏳', mornAtt, eveAtt, mornCooked, eveCooked, mornTasks, eveTasks, photos, leave };
+    }
+  }
+
+  // Past day on a working day with no attendance
+  return { status: 'absent', labelEn: 'Absent ✕', labelHi: 'अनुपस्थित ✕', shifts: 0, mark: '✕', mornAtt, eveAtt, mornCooked, eveCooked, mornTasks, eveTasks, photos, leave };
+}
+
+function renderAttendanceCalendarSheet(options = {}) {
+  const isHi = AppState.lang === 'hi';
+  const isAdmin = !!options.isAdmin;
+  const year = AppState.calendarYear || new Date().getFullYear();
+  const month = (AppState.calendarMonth !== undefined) ? AppState.calendarMonth : new Date().getMonth();
+  const mode = AppState.calendarSheetMode || 'grid';
+  const todayStr = getTodayDateStr();
+
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const firstDayIndex = new Date(year, month, 1).getDay(); // Sun=0, Mon=1...
+  const startOffset = (firstDayIndex + 6) % 7; // Mon=0, Sun=6
+
+  // Calculate Month Stats
+  let presentCount = 0;
+  let absentCount = 0;
+  let leaveCount = 0;
+  let holidayCount = 0;
+  const daysList = [];
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = `${year}-${pad(month + 1)}-${pad(d)}`;
+    const info = getAttendanceStatusForDate(dateStr);
+    daysList.push({ day: d, dateStr, ...info });
+
+    if (info.status === 'present') {
+      presentCount += (info.shifts === 2 ? 1 : 0.5);
+    } else if (info.status === 'absent') {
+      absentCount++;
+    } else if (info.status === 'leave') {
+      leaveCount++;
+    } else if (info.status === 'holiday') {
+      holidayCount++;
+    }
+  }
+
+  const workingDaysElapsed = presentCount + absentCount;
+  const attendanceRate = workingDaysElapsed > 0 ? Math.round((presentCount / workingDaysElapsed) * 100) : 100;
+  const monthTitle = isHi ? `${MONTH_NAMES_HI[month]} ${year}` : `${MONTH_NAMES_EN[month]} ${year}`;
+
+  let html = `
+  <div class="cal-sheet-card" id="${isAdmin ? 'adminAttendanceCalendar' : 'cookAttendanceCalendar'}">
+    <!-- Header -->
+    <div class="cal-sheet-header">
+      <div class="cal-title-wrap">
+        <span style="font-size:22px;">📅</span>
+        <div>
+          <h3 class="cal-title">
+            ${isHi ? 'उपस्थिति कैलेंडर पत्रक (Muster Roll)' : 'Attendance Calendar Sheet'}
+          </h3>
+          <div style="font-size:11.5px; color:var(--ink-mute); font-weight:600;">
+            ${isHi ? 'सोबेंद्र (कुक) · कार्य दिवस उपस्थिति ट्रैकर' : 'Sobendra (Cook) · Monthly Work Tracker'}
+          </div>
+        </div>
+      </div>
+
+      <div class="cal-nav-controls">
+        <div class="cal-month-nav">
+          <button type="button" class="cal-nav-btn" onclick="changeCalendarMonth(-1)" title="Previous Month">◀</button>
+          <span class="cal-month-title">${monthTitle}</span>
+          <button type="button" class="cal-nav-btn" onclick="changeCalendarMonth(1)" title="Next Month">▶</button>
+        </div>
+
+        <button type="button" class="btn-secondary" style="padding:4px 9px; font-size:11.5px; border-radius:var(--radius-full);" onclick="resetCalendarToCurrentMonth()" title="Jump to Current Month">
+          ${isHi ? 'आज का महीना' : 'Current'}
+        </button>
+
+        <div class="cal-view-toggle">
+          <button type="button" class="cal-toggle-btn ${mode === 'grid' ? 'active' : ''}" onclick="setCalendarSheetMode('grid')">
+            📅 ${isHi ? 'कैलेंडर' : 'Grid'}
+          </button>
+          <button type="button" class="cal-toggle-btn ${mode === 'sheet' ? 'active' : ''}" onclick="setCalendarSheetMode('sheet')">
+            📑 ${isHi ? 'पत्रक' : 'Sheet'}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary Metrics Bar -->
+    <div class="cal-stats-bar">
+      <div class="cal-stat-pill present" title="Days work was completed">
+        <span>✓</span>
+        <span>${isHi ? 'काम किया:' : 'Present:'} <b>${presentCount} ${isHi ? 'दिन' : 'days'}</b></span>
+      </div>
+      <div class="cal-stat-pill absent" title="Days missed / absent">
+        <span>✕</span>
+        <span>${isHi ? 'काम नहीं किया:' : 'Absent:'} <b>${absentCount} ${isHi ? 'दिन' : 'days'}</b></span>
+      </div>
+      <div class="cal-stat-pill leave" title="Approved leaves">
+        <span>🏖️</span>
+        <span>${isHi ? 'स्वीकृत छुट्टी:' : 'Leave:'} <b>${leaveCount}</b></span>
+      </div>
+      <div class="cal-stat-pill holiday" title="Sundays off">
+        <span>🎉</span>
+        <span>${isHi ? 'रविवार अवकाश:' : 'Sundays:'} <b>${holidayCount}</b></span>
+      </div>
+      <div class="cal-stat-pill rate">
+        <span>📊</span>
+        <span>${isHi ? 'उपस्थिति दर:' : 'Attendance:'} <b>${attendanceRate}%</b></span>
+      </div>
+    </div>
+  `;
+
+  // Render Mode 1: 7-Column Visual Calendar Grid
+  if (mode === 'grid') {
+    const colHeadersEn = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const colHeadersHi = ['सोम', 'मंगल', 'बुध', 'गुरु', 'शुक्र', 'शनि', 'रवि'];
+
+    html += `
+    <div class="cal-grid-wrapper">
+      <div class="cal-grid">
+        ${colHeadersEn.map((ch, idx) => `
+          <div class="cal-col-header ${idx === 6 ? 'sunday' : ''}">
+            ${isHi ? colHeadersHi[idx] : ch}
+          </div>
+        `).join('')}
+
+        <!-- Empty Leading Cells -->
+        ${Array.from({ length: startOffset }).map(() => '<div class="cal-cell empty"></div>').join('')}
+
+        <!-- Day Cells with ✓, ✕, 🎉, 🏖️ Marks -->
+        ${daysList.map(item => {
+          const isToday = (item.dateStr === todayStr);
+          const label = isHi ? item.labelHi : item.labelEn;
+          return `
+            <div class="cal-cell ${item.status} ${isToday ? 'today' : ''}" 
+                 onclick="openCalendarDateDetails('${item.dateStr}', ${isAdmin})" 
+                 title="${item.dateStr}: ${label} - ${isHi ? 'विवरण देखने के लिए क्लिक करें' : 'Click for details'}">
+              <span class="cal-date-num">${item.day}</span>
+              <div class="cal-mark ${item.status}">${item.mark}</div>
+              <span class="cal-cell-label ${item.status}">${label}</span>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </div>
+    `;
+  } else {
+    // Render Mode 2: Tabular Muster Roll Sheet View
+    html += `
+    <div class="cal-sheet-table-wrap">
+      <table class="cal-sheet-table">
+        <thead>
+          <tr>
+            <th>${isHi ? 'दिनांक' : 'Date'}</th>
+            <th>${isHi ? 'दिन' : 'Day'}</th>
+            <th>${isHi ? 'सुबह की विज़िट' : 'Morning Shift'}</th>
+            <th>${isHi ? 'शाम की विज़िट' : 'Evening Shift'}</th>
+            <th>${isHi ? 'सफ़ाई कार्य' : 'Tasks'}</th>
+            <th>${isHi ? 'स्थिति' : 'Status'}</th>
+            ${isAdmin ? `<th>${isHi ? 'त्वरित कार्रवाई' : 'Admin Action'}</th>` : ''}
+          </tr>
+        </thead>
+        <tbody>
+          ${daysList.map(item => {
+            const [y, m, d] = item.dateStr.split('-').map(Number);
+            const dateObj = new Date(y, m - 1, d);
+            const dayName = DAYS[dateObj.getDay()];
+            const isToday = (item.dateStr === todayStr);
+            const statusLabel = isHi ? item.labelHi : item.labelEn;
+            const totalTasks = (item.mornTasks || 0) + (item.eveTasks || 0);
+
+            return `
+              <tr style="${isToday ? 'background:rgba(255,101,59,0.06); font-weight:700;' : ''}">
+                <td>
+                  <b>${item.day} ${isHi ? MONTH_NAMES_HI[m - 1] : MONTH_NAMES_EN[m - 1].slice(0, 3)}</b>
+                  ${isToday ? `<span class="badge-today" style="margin-left:4px;">${isHi ? 'आज' : 'Today'}</span>` : ''}
+                </td>
+                <td>${isHi ? getDayHi(dayName) : dayName}</td>
+                <td>
+                  ${item.mornAtt ? `<span style="color:#059669;">✓ ${formatTime(item.mornAtt.at)}</span>` : '<span style="color:var(--ink-mute);">—</span>'}
+                </td>
+                <td>
+                  ${item.eveAtt ? `<span style="color:#059669;">✓ ${formatTime(item.eveAtt.at)}</span>` : '<span style="color:var(--ink-mute);">—</span>'}
+                </td>
+                <td>
+                  ${totalTasks > 0 ? `<span style="color:#059669;">${totalTasks} ${isHi ? 'कार्य' : 'done'}</span>` : '<span style="color:var(--ink-mute);">0</span>'}
+                </td>
+                <td>
+                  <span class="cal-stat-pill ${item.status}" style="padding:2px 8px; font-size:11px;">
+                    ${item.mark} ${statusLabel}
+                  </span>
+                </td>
+                ${isAdmin ? `
+                  <td>
+                    <button class="btn-secondary" style="padding:2px 8px; font-size:11px;" onclick="openCalendarDateDetails('${item.dateStr}', true)">
+                      ✏️ ${isHi ? 'बदलें' : 'Edit'}
+                    </button>
+                  </td>
+                ` : ''}
+              </tr>
+            `;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+    `;
+  }
+
+  // Legend
+  html += `
+    <div class="cal-legend">
+      <div class="cal-legend-item">
+        <span style="color:#059669; font-weight:900; font-size:14px;">✓</span>
+        <span>${isHi ? 'काम पूरा (Present)' : 'Work Finished (✓)'}</span>
+      </div>
+      <div class="cal-legend-item">
+        <span style="color:#dc2626; font-weight:900; font-size:14px;">✕</span>
+        <span>${isHi ? 'काम नहीं किया (Absent)' : 'Did Not Come (✕)'}</span>
+      </div>
+      <div class="cal-legend-item">
+        <span>🏖️</span>
+        <span>${isHi ? 'स्वीकृत छुट्टी (Leave)' : 'Approved Leave'}</span>
+      </div>
+      <div class="cal-legend-item">
+        <span>🎉</span>
+        <span>${isHi ? 'रविवार अवकाश (Sunday)' : 'Sunday Holiday'}</span>
+      </div>
+      ${isAdmin ? `
+        <div style="margin-left:auto; font-size:11px; color:var(--pri); font-weight:700;">
+          💡 ${isHi ? 'किसी भी तारीख पर टैप करके उपस्थिति अपडेट करें' : 'Tap any date to adjust attendance'}
+        </div>
+      ` : ''}
+    </div>
+  </div>
+  `;
+
+  return html;
+}
+
+// Interactive Date Details Modal (Inspection & Admin Manual Edit)
+function openCalendarDateDetails(dateStr, isAdmin = false) {
+  const isHi = AppState.lang === 'hi';
+  const info = getAttendanceStatusForDate(dateStr);
+  const [y, m, d] = dateStr.split('-').map(Number);
+  const dateObj = new Date(y, m - 1, d);
+  const dayName = DAYS[dateObj.getDay()];
+
+  let modal = document.getElementById('calDateDetailsModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'calDateDetailsModal';
+    modal.className = 'modal-overlay';
+    modal.onclick = (e) => {
+      if (e.target === modal) modal.classList.remove('open');
+    };
+    document.body.appendChild(modal);
+  }
+
+  const mornMeal = AppState.menu.find(x => x.day === dayName && x.visit === 'Morning');
+  const eveMeal = AppState.menu.find(x => x.day === dayName && x.visit === 'Evening');
+  const mornCooked = AppState.cookedStatus[`${dateStr}__Morning`];
+  const eveCooked = AppState.cookedStatus[`${dateStr}__Evening`];
+  const dayProofs = (AppState.workProofs || []).filter(p => p.date === dateStr);
+
+  modal.innerHTML = `
+    <div class="modal-card" onclick="event.stopPropagation()" style="max-width:480px;">
+      <div class="modal-drag-bar"></div>
+      
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <div>
+          <div style="font-size:17px; font-weight:800; color:var(--ink);">
+            📅 ${d} ${isHi ? MONTH_NAMES_HI[m - 1] : MONTH_NAMES_EN[m - 1]} ${y}
+          </div>
+          <div style="font-size:12px; color:var(--ink-sec); font-weight:700;">
+            ${isHi ? getDayHi(dayName) : dayName}
+          </div>
+        </div>
+        <span class="cal-stat-pill ${info.status}" style="font-size:12px; padding:4px 10px;">
+          ${info.mark} ${isHi ? info.labelHi : info.labelEn}
+        </span>
+      </div>
+
+      <!-- Shifts Detailed Breakdown -->
+      <div style="background:var(--surface-alt); border-radius:var(--radius-lg); padding:12px; margin-bottom:14px; border:1px solid var(--border);">
+        <div style="margin-bottom:10px; padding-bottom:8px; border-bottom:1px solid var(--border);">
+          <div style="font-size:13px; font-weight:800; color:var(--ink); margin-bottom:4px; display:flex; align-items:center; justify-content:space-between;">
+            <span>🌅 ${isHi ? 'सुबह की विज़िट' : 'Morning Shift'}</span>
+            ${info.mornAtt ? `<span style="color:#059669; font-size:11.5px; font-weight:800;">✓ पहुंचे: ${formatTime(info.mornAtt.at)}</span>` : '<span style="color:var(--warn); font-size:11.5px;">⏳ नहीं पहुंचे</span>'}
+          </div>
+          <div style="font-size:12px; color:var(--ink-sec);">
+            🍳 ${isHi ? 'मेन्यू:' : 'Meal:'} <b>${mornMeal ? (isHi ? mornMeal.hi : mornMeal.en) : '—'}</b>
+            ${mornCooked ? `<span style="color:#059669; margin-left:6px;">✓ तैयार (${formatTime(mornCooked.at)})</span>` : ''}
+          </div>
+          ${info.mornAtt && info.mornAtt.departedAt ? `<div style="font-size:11.5px; color:var(--ink-mute); margin-top:2px;">🏁 ${isHi ? 'प्रस्थान:' : 'Departed at'} ${formatTime(info.mornAtt.departedAt)}</div>` : ''}
+        </div>
+
+        <div>
+          <div style="font-size:13px; font-weight:800; color:var(--ink); margin-bottom:4px; display:flex; align-items:center; justify-content:space-between;">
+            <span>🌆 ${isHi ? 'शाम की विज़िट' : 'Evening Shift'}</span>
+            ${info.eveAtt ? `<span style="color:#059669; font-size:11.5px; font-weight:800;">✓ पहुंचे: ${formatTime(info.eveAtt.at)}</span>` : '<span style="color:var(--warn); font-size:11.5px;">⏳ नहीं पहुंचे</span>'}
+          </div>
+          <div style="font-size:12px; color:var(--ink-sec);">
+            🍳 ${isHi ? 'मेन्यू:' : 'Meal:'} <b>${eveMeal ? (isHi ? eveMeal.hi : eveMeal.en) : '—'}</b>
+            ${eveCooked ? `<span style="color:#059669; margin-left:6px;">✓ तैयार (${formatTime(eveCooked.at)})</span>` : ''}
+          </div>
+          ${info.eveAtt && info.eveAtt.departedAt ? `<div style="font-size:11.5px; color:var(--ink-mute); margin-top:2px;">🏁 ${isHi ? 'प्रस्थान:' : 'Departed at'} ${formatTime(info.eveAtt.departedAt)}</div>` : ''}
+        </div>
+      </div>
+
+      <!-- Work Proof Photos for the day -->
+      ${dayProofs.length > 0 ? `
+        <div style="margin-bottom:14px;">
+          <div style="font-size:12px; font-weight:700; color:var(--ink-sec); margin-bottom:6px;">
+            📸 ${isHi ? 'इस दिन की कार्य फोटो:' : 'Uploaded Work Photos:'}
+          </div>
+          <div style="display:flex; gap:8px; overflow-x:auto; padding-bottom:4px;">
+            ${dayProofs.map(p => `
+              <img src="${p.imgData}" style="width:64px; height:64px; border-radius:8px; object-fit:cover; border:1px solid var(--border); cursor:pointer;" onclick="openLightbox('${p.id}')">
+            `).join('')}
+          </div>
+        </div>
+      ` : ''}
+
+      <!-- Admin Adjustment Actions -->
+      ${isAdmin ? `
+        <div style="background:rgba(255,101,59,0.06); border:1px dashed var(--pri); border-radius:var(--radius-lg); padding:10px 12px; margin-bottom:14px;">
+          <div style="font-size:12px; font-weight:800; color:var(--pri); margin-bottom:8px;">
+            👑 ${isHi ? 'एडमिन उपस्थिति समायोजन (Override Attendance)' : 'Admin Manual Attendance Override'}
+          </div>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <button class="btn-secondary" style="font-size:11.5px; padding:4px 10px; background:#ecfdf5; color:#059669; border-color:#059669;" onclick="adminSetDateAttendance('${dateStr}', 'present')">
+              ✓ ${isHi ? 'उपस्थित मार्क करें' : 'Mark Full Day ✓'}
+            </button>
+            <button class="btn-secondary" style="font-size:11.5px; padding:4px 10px; background:#fef2f2; color:#dc2626; border-color:#dc2626;" onclick="adminSetDateAttendance('${dateStr}', 'absent')">
+              ✕ ${isHi ? 'अनुपस्थित मार्क करें' : 'Mark Absent ✕'}
+            </button>
+            <button class="btn-secondary" style="font-size:11.5px; padding:4px 10px; background:#f5f3ff; color:#7c3aed; border-color:#7c3aed;" onclick="adminSetDateAttendance('${dateStr}', 'leave')">
+              🏖️ ${isHi ? 'स्वीकृत छुट्टी' : 'Grant Leave 🏖️'}
+            </button>
+          </div>
+        </div>
+      ` : ''}
+
+      <div style="display:flex; justify-content:flex-end;">
+        <button class="btn-secondary" onclick="document.getElementById('calDateDetailsModal').classList.remove('open')">
+          ${isHi ? 'बंद करें' : 'Close'}
+        </button>
+      </div>
+    </div>
+  `;
+
+  modal.classList.add('open');
+}
+
+// Admin manual override logic
+function adminSetDateAttendance(dateStr, targetStatus) {
+  const isHi = AppState.lang === 'hi';
+
+  if (targetStatus === 'present') {
+    // Set morning and evening arrival
+    AppState.attendance[`${dateStr}__Morning`] = {
+      date: dateStr,
+      visit: 'Morning',
+      at: Date.now(),
+      departedAt: Date.now() + 2 * 3600000,
+      by: 'Sobendra (Cook)',
+      status: 'Arrived (Admin Verified)'
+    };
+    AppState.attendance[`${dateStr}__Evening`] = {
+      date: dateStr,
+      visit: 'Evening',
+      at: Date.now() + 9 * 3600000,
+      departedAt: Date.now() + 11 * 3600000,
+      by: 'Sobendra (Cook)',
+      status: 'Arrived (Admin Verified)'
+    };
+    // Remove conflicting leaves
+    AppState.leaves = (AppState.leaves || []).filter(l => l.date !== dateStr);
+    showToast(isHi ? `✅ ${dateStr} उपस्थिति दर्ज हुई (Marked Present ✓)` : `✅ ${dateStr} marked Present ✓`);
+  } else if (targetStatus === 'absent') {
+    // Remove attendance records
+    delete AppState.attendance[`${dateStr}__Morning`];
+    delete AppState.attendance[`${dateStr}__Evening`];
+    AppState.leaves = (AppState.leaves || []).filter(l => l.date !== dateStr);
+    showToast(isHi ? `❌ ${dateStr} अनुपस्थित दर्ज किया गया (Marked Absent ✕)` : `❌ ${dateStr} marked Absent ✕`);
+  } else if (targetStatus === 'leave') {
+    // Grant approved leave
+    delete AppState.attendance[`${dateStr}__Morning`];
+    delete AppState.attendance[`${dateStr}__Evening`];
+    AppState.leaves = AppState.leaves || [];
+    const existing = AppState.leaves.find(l => l.date === dateStr);
+    if (existing) {
+      existing.status = 'Approved';
+    } else {
+      AppState.leaves.push({
+        id: 'leave_' + Date.now(),
+        date: dateStr,
+        shift: 'Full Day',
+        reason: 'Approved by Admin (Kishan & Joju)',
+        status: 'Approved',
+        appliedAt: Date.now()
+      });
+    }
+    showToast(isHi ? `🏖️ ${dateStr} छुट्टी स्वीकृत की गई (Leave Approved)` : `🏖️ ${dateStr} Leave Approved`);
+  }
+
+  saveState();
+  renderApp();
+  const modal = document.getElementById('calDateDetailsModal');
+  if (modal) modal.classList.remove('open');
 }
 
 /* ==========================================================================
@@ -4032,7 +5908,7 @@ function renderTakenGroceriesSection(dateStr, isHi) {
   const isAdmin = AppState.role === 'admin';
   
   let html = `
-  <div class="req-section" style="border-left: 4px solid #8e24aa; margin-bottom: 24px;">
+  <div class="req-section" style="border-top: 3px solid #8b5cf6; margin-bottom: 24px;">
     <div class="req-header" style="flex-wrap: wrap; gap: 8px;">
       <div>
         <h3 style="font-size:16px; font-weight:800; display:flex; align-items:center; gap:6px; color:var(--ink);">
@@ -4401,7 +6277,7 @@ function renderCookLeaveBanner(dateStr, shift, isHi) {
   
   if (activeLeave.status === 'Approved') {
     return `
-    <div style="background:linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border:2px solid #43a047; border-radius:var(--radius-lg); padding:16px; margin-bottom:16px; box-shadow:var(--shadow-sm); display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+    <div style="background:var(--surface); border:1.5px solid rgba(16, 185, 129, 0.35); border-radius:var(--radius-xl); padding:16px 20px; margin-bottom:18px; box-shadow:var(--shadow-sm); display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;">
       <div style="display:flex; align-items:center; gap:12px;">
         <div style="font-size:36px; background:#fff; width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(0,0,0,0.1);">🏖️</div>
         <div>
@@ -4427,7 +6303,7 @@ function renderCookLeaveBanner(dateStr, shift, isHi) {
   
   if (activeLeave.status === 'Pending') {
     return `
-    <div style="background:linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); border:2px solid #fb8c00; border-radius:var(--radius-lg); padding:16px; margin-bottom:16px; box-shadow:var(--shadow-sm); display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+    <div style="background:var(--surface); border:1.5px solid rgba(245, 158, 11, 0.35); border-radius:var(--radius-xl); padding:16px 20px; margin-bottom:18px; box-shadow:var(--shadow-sm); display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;">
       <div style="display:flex; align-items:center; gap:12px;">
         <div style="font-size:36px; background:#fff; width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(0,0,0,0.1);">⏳</div>
         <div>
@@ -4459,7 +6335,7 @@ function renderCookLeaveBanner(dateStr, shift, isHi) {
   
   if (activeLeave.status === 'Rejected') {
     return `
-    <div style="background:#ffebee; border:1.5px solid #ef5350; border-radius:var(--radius-lg); padding:12px 16px; margin-bottom:16px; display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
+    <div style="background:var(--surface); border:1.5px solid rgba(239, 68, 68, 0.35); border-radius:var(--radius-xl); padding:14px 18px; margin-bottom:18px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
       <div style="display:flex; align-items:center; gap:10px;">
         <span style="font-size:22px;">❌</span>
         <div>
@@ -4486,7 +6362,7 @@ function renderCookLeaveCard(isHi) {
   const recentLeaves = leaves.slice(0, 3);
   
   let html = `
-  <div class="req-section" style="border-left: 4px solid #f57c00; margin-bottom: 24px;">
+  <div class="req-section" style="border-top: 3px solid #ff5722; margin-bottom: 24px;">
     <div class="req-header" style="flex-wrap: wrap; gap: 8px;">
       <div>
         <h3 style="font-size:16px; font-weight:800; display:flex; align-items:center; gap:6px; color:var(--ink);">
@@ -4561,7 +6437,7 @@ function renderAdminLeaveReviewSection(isHi) {
   const pastLeaves = leaves.filter(l => l.status !== 'Pending');
   
   let html = `
-  <div class="day-plan-card" style="border-left: 4px solid #f57c00; margin-bottom: 20px;">
+  <div class="day-plan-card" style="border-top: 3px solid #ff5722; margin-bottom: 20px;">
     <div class="day-plan-hdr">
       <div>
         <b style="font-size:16px; color:#e65100; display:flex; align-items:center; gap:6px;">
@@ -4579,7 +6455,7 @@ function renderAdminLeaveReviewSection(isHi) {
   
   if (pendingLeaves.length > 0) {
     html += `
-      <div style="background:#fff3e0; border-radius:var(--radius-md); padding:12px; margin-bottom:14px; border:1px solid #ffe0b2;">
+      <div style="background:var(--warn-light); border-radius:var(--radius-lg); padding:14px 16px; margin-bottom:16px; border:1px solid rgba(245, 158, 11, 0.25);">
         <div style="font-size:13px; font-weight:800; color:#e65100; margin-bottom:8px;">
           ⚠️ ${isHi ? 'स्वीकृति हेतु लंबित आवेदन (Action Required):' : 'Pending Approvals (Action Required):'}
         </div>
@@ -4588,10 +6464,10 @@ function renderAdminLeaveReviewSection(isHi) {
     
     pendingLeaves.forEach(l => {
       html += `
-        <div style="background:#fff; border-radius:var(--radius-sm); padding:12px; border:1px solid #ffd54f; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+        <div style="background:var(--surface); border-radius:var(--radius-md); padding:14px; border:1px solid var(--border); box-shadow:var(--shadow-xs); display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
           <div>
             <div style="font-size:15px; font-weight:800; color:var(--ink);">
-              📅 ${l.date} <span class="task-tag" style="background:#ffecb3; color:#e65100; font-weight:700;">${l.shift}</span>
+              📅 ${l.date} <span class="task-tag" style="background:var(--warn-light); color:#b45309; font-weight:700; border-color:rgba(245, 158, 11, 0.3);">${l.shift}</span>
             </div>
             <div style="font-size:13px; color:var(--ink-sec); margin-top:3px;">
               <b>कारण (Reason):</b> ${esc(l.reason)}
@@ -4601,10 +6477,10 @@ function renderAdminLeaveReviewSection(isHi) {
             </div>
           </div>
           <div style="display:flex; align-items:center; gap:8px;">
-            <button class="btn-secondary" style="background:#2e7d32; color:#fff; border:none; padding:8px 16px; font-weight:700; font-size:13px;" onclick="approveLeaveRequest('${l.id}')">
+            <button class="btn-secondary" style="background:var(--ok); color:#fff; border:none; padding:8px 18px; font-weight:700; font-size:13px; box-shadow:var(--ok-glow);" onclick="approveLeaveRequest('${l.id}')">
               ✓ Approve (स्वीकृत)
             </button>
-            <button class="btn-secondary" style="background:#d32f2f; color:#fff; border:none; padding:8px 14px; font-weight:700; font-size:13px;" onclick="rejectLeaveRequest('${l.id}')">
+            <button class="btn-secondary" style="background:var(--surface); color:var(--danger); border:1px solid rgba(239, 68, 68, 0.3); padding:8px 14px; font-weight:700; font-size:13px;" onclick="rejectLeaveRequest('${l.id}')">
               ✕ Reject (अस्वीकृत)
             </button>
           </div>
@@ -4725,7 +6601,7 @@ function renderTodayView() {
         </span>
         <button class="date-nav-btn" onclick="changeDateOffset(1)" title="Next Day">▶</button>
       </div>
-      ${isSunday ? '<span class="task-tag weekly" style="background:#ffd54f;color:#e65100;font-weight:700">🎉 Holiday (छुट्टी)</span>' : ''}
+      ${isSunday ? '<span class="task-tag weekly" style="background:var(--warn-light);color:#b45309;font-weight:700;border-color:rgba(245,158,11,0.25)">🎉 Holiday (छुट्टी)</span>' : ''}
     </div>
     
     <div class="shift-toggle">
@@ -4739,6 +6615,23 @@ function renderTodayView() {
   </div>
   `;
   
+  // Zepto Mobile Quick Search Bar (Prominent on Mobile Dashboard)
+  html += `
+  <div class="mobile-search-bar">
+    <span class="header-search-icon">🔍</span>
+    <input type="text" class="header-search-input" 
+      placeholder="${isHi ? 'सब्ज़ी या राशन खोजें (उदा. आलू, टमाटर, दूध...)' : 'Search groceries (e.g. Potato, Milk...)'}" 
+      value="${esc(AppState.grocerySearch || '')}"
+      oninput="handleHeaderSearch(this.value)">
+    ${AppState.grocerySearch ? `<button class="header-search-clear" onclick="handleHeaderSearchClear()">✕</button>` : ''}
+    <button class="header-search-mic" onclick="toggleGroceryVoiceSearch()" title="Voice search">🎤</button>
+  </div>
+  `;
+
+  // Zepto "Shop by Category" Inspired Kitchen Hub Section
+  html += renderCategorySection(isHi);
+
+  
   // SUNDAY HOLIDAY SPECIAL SCREEN
   if (isSunday) {
     html += `
@@ -4746,10 +6639,10 @@ function renderTodayView() {
       <h2>${t('sundayHeroTitle')}</h2>
       <p>${t('sundayHeroSub')}</p>
       <div style="margin-top:16px; display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
-        <button class="btn-arrive" style="background:white; color:#2575fc;" onclick="setTab('grocery')">
+        <button class="btn-arrive" style="background:white; color:#4338ca; box-shadow:0 4px 14px rgba(0,0,0,0.15);" onclick="setTab('grocery')">
           🛒 ${isHi ? 'सोमवार का राशन मंगाएं' : 'Order Grocery for Monday'}
         </button>
-        <button class="btn-arrive" style="background:rgba(255,255,255,0.2); color:white;" onclick="setTab('menu')">
+        <button class="btn-arrive" style="background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.25); color:white;" onclick="setTab('menu')">
           📋 ${isHi ? 'सोमवार का मेन्यू देखें' : 'View Monday Menu'}
         </button>
       </div>
@@ -4766,7 +6659,7 @@ function renderTodayView() {
   const attRecord = AppState.attendance[attKey];
   
   html += `
-  <div class="att-card">
+  <div class="att-card" id="attSection">
     <div class="att-left">
       <div class="att-avatar">🧑‍🍳</div>
       <div>
@@ -4790,13 +6683,17 @@ function renderTodayView() {
         <button class="btn-arrive" onclick="handleArrival()">
           ${t('arriveBtn')}
         </button>
-        <button class="btn-secondary" style="border-radius:var(--radius-full); font-weight:700; color:#e65100; border-color:#ffccbc;" onclick="openLeaveApplyModal('${dateStr}')">
+        <button class="btn-secondary" style="border-radius:var(--radius-full); font-weight:700; color:var(--pri); border-color:rgba(255, 87, 34, 0.3);" onclick="openLeaveApplyModal('${dateStr}')">
           🏖️ ${isHi ? 'छुट्टी चाहिए?' : 'Apply Leave'}
         </button>
       `}
     </div>
   </div>
   `;
+
+  // Cook Attendance Calendar Sheet (Muster Roll)
+  html += renderAttendanceCalendarSheet({ isAdmin: false });
+
   
   // TODAY'S MEAL CARD WITH PHOTOGRAPHY
   const meal = AppState.menu.find(m => m.day === day && m.visit === shift);
@@ -4810,7 +6707,7 @@ function renderTodayView() {
       <span class="tag">${isHi ? (isMorning ? 'सुबह का नाश्ता/खाना' : 'शाम का खाना') : `${shift} Menu`}</span>
     </div>
     
-    <div class="meal-hero">
+    <div class="meal-hero" id="mealSection">
       <div class="meal-img-box">
         <img class="meal-img" src="${meal.img}" alt="${meal.en}" onerror="this.src='https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=700&auto=format&fit=crop&q=80'">
         <div class="meal-shift-pill">
@@ -4866,6 +6763,7 @@ function renderTodayView() {
   const progressPercent = scheduledTasks.length > 0 ? Math.round((doneTasks.length / scheduledTasks.length) * 100) : 0;
   
   html += `
+  <div id="tasksSection"></div>
   <div class="section-title">
     <h2>🧹 ${t('cleanTasks')}</h2>
     <span class="tag">${doneTasks.length}/${scheduledTasks.length} ${t('dailyDone')}</span>
@@ -4935,7 +6833,7 @@ function renderTodayView() {
 
   // SEND SHIFT REPORT & PHOTOS TO ADMIN (WHATSAPP 1-TAP ACTION)
   html += `
-  <div class="shift-send-card">
+  <div class="shift-send-card" id="reportSection">
     <div class="shift-send-info">
       <h3>
         <span>📲</span>
@@ -5020,19 +6918,19 @@ function renderGroceryView() {
   </p>
   
   <!-- Cook Taken Groceries Banner -->
-  <div style="display:flex; justify-content:space-between; align-items:center; background:linear-gradient(135deg, #f3e5f5 0%, #ede7f6 100%); border:1px solid #ce93d8; border-radius:var(--radius-md); padding:12px 14px; margin-bottom:16px; flex-wrap:wrap; gap:8px;">
+  <div style="display:flex; justify-content:space-between; align-items:center; background:linear-gradient(135deg, var(--surface) 0%, rgba(139, 92, 246, 0.05) 100%); border:1px solid rgba(139, 92, 246, 0.25); border-radius:var(--radius-xl); padding:14px 18px; margin-bottom:18px; flex-wrap:wrap; gap:10px; box-shadow:var(--shadow-xs);">
     <div style="display:flex; align-items:center; gap:10px;">
       <span style="font-size:24px;">📦</span>
       <div>
-        <div style="font-size:14px; font-weight:700; color:#4a148c;">
+        <div style="font-size:14px; font-weight:800; color:#6d28d9;">
           ${isHi ? 'घर ले जाने के लिए राशन/सब्ज़ी दर्ज करें' : 'Taking groceries or food home?'}
         </div>
-        <div style="font-size:11px; color:#6a1b9a;">
+        <div style="font-size:12px; color:var(--ink-sec);">
           ${isHi ? 'जो भी सामान घर ले जा रहे हैं, यहाँ पारदर्शी रूप से दर्ज करें' : 'Mention items you are taking home for transparent records'}
         </div>
       </div>
     </div>
-    <button class="btn-secondary" style="background:#fff; border-color:#ba68c8; color:#7b1fa2; font-weight:700; font-size:12px; padding:6px 14px;" onclick="openTakenGroceryModal()">
+    <button class="btn-secondary" style="background:var(--surface); border-color:rgba(139, 92, 246, 0.3); color:#7c3aed; font-weight:700; font-size:12px; padding:7px 16px;" onclick="openTakenGroceryModal()">
       ➕ ${isHi ? 'सामान दर्ज करें' : 'Log Taken Item'}
     </button>
   </div>
@@ -5058,6 +6956,18 @@ function renderGroceryView() {
     `;
   }
   
+  
+  // Search Bar with Voice Mic
+  html += `
+  <div class="groc-search-bar">
+    <input type="text" id="grocSearchInput" class="groc-search-input" value="${esc(AppState.grocerySearch || '')}" placeholder="${isHi ? '🔍 सब्ज़ी या राशन खोजें (उदा. आलू, टमाटर, दूध...)' : '🔍 Search groceries (e.g. Potato, Tomato, Milk...)'}" oninput="filterGrocerySearch(this.value)">
+    ${AppState.grocerySearch ? `
+      <button class="btn-icon" style="width:36px; height:36px;" onclick="filterGrocerySearch(''); document.getElementById('grocSearchInput').value='';" title="${isHi ? 'हटाएं' : 'Clear'}">✕</button>
+    ` : ''}
+    <button class="groc-mic-btn" id="grocMicBtn" onclick="toggleGroceryVoiceSearch()" title="${isHi ? 'बोलकर खोजें' : 'Voice Search'}">🎤</button>
+  </div>
+  `;
+
   // CATEGORY TABS
   const categories = [
     { id: 'all', icon: '🛒', en: 'All Items', hi: 'सभी सामान' },
@@ -5226,7 +7136,7 @@ function renderWeeklyMenuView() {
       <!-- Evening Slot -->
       <div class="meal-slot-edit">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-          <span style="font-weight:700; font-size:13px; color:#3949ab">🌆 ${isHi ? 'शाम का खाना (Evening)' : 'Evening Visit'}</span>
+          <span style="font-weight:700; font-size:13px; color:var(--indigo)">🌆 ${isHi ? 'शाम का खाना (Evening)' : 'Evening Visit'}</span>
         </div>
         ${isAdmin ? `
           <div class="input-row">
@@ -5374,6 +7284,10 @@ function renderAdminHubView() {
       <div class="stat-label">📸 ${isHi ? 'प्रमाण फोटो' : 'Work Proof Photos'}</div>
     </div>
   </div>
+
+  <!-- Admin Attendance Calendar Sheet (Muster Roll with Override Controls) -->
+  ${renderAttendanceCalendarSheet({ isAdmin: true })}
+
   
   <!-- Admin Navigation Actions -->
   <div style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;">
@@ -5492,7 +7406,7 @@ function renderAdminHubView() {
   ${renderAdminLeaveReviewSection(isHi)}
 
   <!-- Groceries Taken Home by Cook (Admin Audit Log) -->
-  <div class="day-plan-card" style="border-left: 4px solid #8e24aa;">
+  <div class="day-plan-card" style="border-top: 3px solid #8b5cf6;">
     <div class="day-plan-hdr">
       <div>
         <b style="font-size:16px; color:#4a148c; display:flex; align-items:center; gap:6px;">
@@ -5519,7 +7433,7 @@ function renderAdminHubView() {
   </div>
   
   <!-- Admin Security & Device Lock -->
-  <div class="day-plan-card" style="margin-top:16px; border-left: 4px solid var(--pri);">
+  <div class="day-plan-card" style="margin-top:16px; border-top: 3px solid var(--pri);">
     <div class="day-plan-hdr">
       <b>🔐 ${isHi ? 'एडमिन सुरक्षा एवं पासकोड सेटिंग्स' : 'Admin Security & Device Passcode'}</b>
       <span class="task-tag" style="background:var(--ok-light); color:var(--ok); font-weight:700;">Protected</span>

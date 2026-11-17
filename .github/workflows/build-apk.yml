@@ -61,8 +61,8 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: github.ref == 'refs/heads/master'
         with:
-          tag_name: v1.0.0
-          name: "Rasoi Mitra Android APK v1.0.0"
+          tag_name: v2.0.0
+          name: "Rasoi Mitra Android APK v2.0.0 – Attendance Calendar"
           draft: false
           prerelease: false
           body: |
