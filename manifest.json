@@ -5,9 +5,10 @@
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#fcf9f5",
-  "theme_color": "#d35400",
+  "background_color": "#F7F8FC",
+  "theme_color": "#FF653B",
   "orientation": "portrait",
+  "categories": ["productivity", "utilities"],
   "icons": [
     {
       "src": "assets/icon-192.png",
@@ -25,6 +26,20 @@
       "src": "assets/icon.svg",
       "sizes": "any",
       "type": "image/svg+xml"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Today's Work",
+      "short_name": "Today",
+      "url": "./index.html#today",
+      "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Grocery Order",
+      "short_name": "Grocery",
+      "url": "./index.html#grocery",
+      "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192" }]
     }
   ]
 }
